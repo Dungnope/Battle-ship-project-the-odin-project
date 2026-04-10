@@ -2,18 +2,26 @@
   "name": "battle-ship-project-the-odin-project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
     "lint": "eslint ./src",
-    "test": "jest ./test --verbose "
+    "test": "jest ./test --verbose ",
+    "build": "webpack"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.29.2",
     "@eslint/css": "^1.0.0",
     "@eslint/js": "^10.0.1",
+    "css-loader": "^7.1.4",
     "eslint": "^10.0.3",
     "globals": "^17.4.0",
-    "jest": "^30.3.0"
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.6",
+    "jest": "^30.3.0",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.106.0",
+    "webpack-cli": "^7.0.2"
   },
   "dependencies": {
     "@types/jest": "^30.0.0"
