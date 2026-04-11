@@ -1,11 +1,13 @@
 import { Ship } from "./ship";
 
 export class Gameboard {
-  constructor(ship, width, height) {
+  constructor(row, column) {
     this.shipNumber = 6;
-    this.width = width; //for board drawing
-    this.height = height; //for board drawing
-    this.cell = 30; //for board drawing
+    this.row = row; //for board drawing
+    this.column = column; //for board drawing
+    this.board = new Array(this.row)
+      .fill()
+      .map(() => Array(this.column).fill(0));
     this.missedAttacks = 0;
     this.shipOnBoard = [];
   }
@@ -22,9 +24,9 @@ export class Gameboard {
     }
   }
 
-  receiveAttack(x, y) {
-    if (this.ship.x === x && this.ship.y === y) {
-      this.ship.hit();
+  receiveAttack(ship, x, y) {
+    if (ship.x === x && ship.y === y) {
+      ship.hit();
     } else {
       this.missedAttacks++;
     }
