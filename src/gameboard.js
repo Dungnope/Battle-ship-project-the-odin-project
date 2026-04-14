@@ -1,7 +1,7 @@
 export class Gameboard {
   constructor(row, column) {
-    this.row = row; //for board drawing
-    this.column = column; //for board drawing
+    this.row = row === undefined ? 10 : row; //for board drawing
+    this.column = column === undefined ? 10 : column; //for board drawing
     this.board = new Array(this.row)
       .fill()
       .map(() => Array(this.column).fill(0));
@@ -24,6 +24,7 @@ export class Gameboard {
         this.board[x][y + i] = 1;
       }
     }
+
     //place vertical
     else if (this.board.length >= ship.length + x && !horizontal) {
       //to create vertical position and length for a ship

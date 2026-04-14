@@ -33,7 +33,38 @@ describe("board", () => {
     ]);
   });
 
+  test("more ships place", () => {
+    let baseBoard = new Gameboard();
+    baseBoard.placeShip(new Ship(3), 2, 4, false);
+    baseBoard.placeShip(new Ship(2), 2, 1);
+    baseBoard.placeShip(new Ship(3), 1, 2);
+    expect(baseBoard.board).toEqual([
+      [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+  });
+
   test("out of board", () => {
     expect(newboard.placeShip(new Ship(4), 4, 3, false)).toBe("out of board");
+  });
+
+  test("collision ship", () => {
+    newboard.placeShip(new Ship(3), 2, 4, false);
+    newboard.placeShip(new Ship(2), 2, 1);
+    newboard.placeShip(new Ship(3), 2, 2);
+    expect(newboard.board).toEqual([
+      [0, 0, 0, 0, 0],
+      [1, 1, 0, 1, 0], // 0, 1, 1, 1, 0 last ship if not be overlapped
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 1, 0],
+    ]);
   });
 });
