@@ -39,8 +39,8 @@ describe("board", () => {
     baseBoard.placeShip(new Ship(2), 2, 1);
     baseBoard.placeShip(new Ship(3), 1, 2);
     expect(baseBoard.board).toEqual([
-      [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [1, 1, 0, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
