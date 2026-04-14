@@ -12,15 +12,27 @@ export class Gameboard {
     //to work with array
     x -= 1;
     y -= 1;
-    if (x > this.board.length && horizontal) return "out of board";
 
-    if (this.board[x].length >= ship.length + y) {
-      //to create the position and lenght for a ship
+    //check coordinate out of board
+    if (x > this.board.length || y > this.board[x].length)
+      return "out of board";
+
+    //place ship horizontal
+    if (this.board[x].length >= ship.length + y && horizontal) {
+      //to create the position and length for a ship
       for (let i = 0; i < ship.length; i++) {
         this.board[x][y + i] = 1;
       }
+    }
+    //place vertical
+    else if (this.board.length >= ship.length + x && !horizontal) {
+      //to create vertical position and length for a ship
+      for (let i = 0; i < ship.length; i++) {
+        this.board[x + i][y] = 1;
+      }
     } else return "out of board";
   }
+
   receiveAttack(ship, x, y) {
     if (ship.x === x && ship.y === y) {
       ship.hit();
