@@ -20,19 +20,39 @@ export class Gameboard {
     //place ship horizontal
     if (this.board[x].length >= ship.length + y && horizontal) {
       //to create the position and length for a ship
-      for (let i = 0; i < ship.length; i++) {
-        this.board[x][y + i] = 1;
+      let collisionCheck = this.#collisionShip(x, y, ship, "horizontal");
+      if (collisionCheck) {
+        for (let i = 0; i < ship.length; i++) {
+          this.board[x][y + i] = 1;
+        }
       }
     }
 
     //place vertical
     else if (this.board.length >= ship.length + x && !horizontal) {
       //to create vertical position and length for a ship
-      for (let i = 0; i < ship.length; i++) {
-        this.board[x + i][y] = 1;
+      let collisionCheck = this.#collisionShip(x, y, ship, "vertical");
+      if (collisionCheck) {
+        for (let i = 0; i < ship.length; i++) {
+          this.board[x + i][y] = 1;
+        }
       }
     } else return "out of board";
   }
+
+  #collisionShip = function (x, y, ship, axis) {
+    for (let i = 0; i < ship.length; i++) {
+      // vertical
+      if (axis === "vertical" && this.board[x + i][y] !== 1) {
+        continue;
+      }
+      //horizontal
+      else if (axis === "horizontal" && this.board[x][y + i] !== 1) {
+        continue;
+      } else return false;
+    }
+    return true;
+  };
 
   receiveAttack(ship, x, y) {
     if (ship.x === x && ship.y === y) {

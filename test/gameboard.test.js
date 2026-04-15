@@ -59,6 +59,7 @@ describe("board", () => {
   test("collision ship", () => {
     newboard.placeShip(new Ship(3), 2, 4, false);
     newboard.placeShip(new Ship(2), 2, 1);
+    newboard.placeShip(new Ship(3), 1, 1, false);
     newboard.placeShip(new Ship(3), 2, 2);
     expect(newboard.board).toEqual([
       [0, 0, 0, 0, 0],
