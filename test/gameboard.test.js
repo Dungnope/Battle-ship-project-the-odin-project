@@ -39,7 +39,7 @@ describe("board", () => {
     baseBoard.placeShip(new Ship(2), 2, 1);
     baseBoard.placeShip(new Ship(3), 1, 2);
     expect(baseBoard.board).toEqual([
-      [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [1, 1, 0, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
@@ -58,14 +58,38 @@ describe("board", () => {
 
   test("collision ship", () => {
     newboard.placeShip(new Ship(3), 2, 4, false);
-    newboard.placeShip(new Ship(2), 2, 1);
+    newboard.placeShip(new Ship(3), 2, 1);
     newboard.placeShip(new Ship(3), 1, 1, false);
     newboard.placeShip(new Ship(3), 2, 2);
     expect(newboard.board).toEqual([
+      [1, 0, 0, 0, 0],
+      [1, 0, 0, 1, 0], // 0, 1, 1, 1, 0 last ship if not be overlapped
+      [1, 0, 0, 1, 0],
+      [0, 0, 0, 1, 0],
+    ]);
+  });
+
+  test("adjacent ship", () => {
+    newboard.placeShip(new Ship(2), 2, 2);
+    newboard.placeShip(new Ship(2), 3, 5, false);
+    newboard.placeShip(new Ship(3), 4, 2); //not show because adjacent ship above
+    expect(newboard.board).toEqual([
       [0, 0, 0, 0, 0],
-      [1, 1, 0, 1, 0], // 0, 1, 1, 1, 0 last ship if not be overlapped
-      [0, 0, 0, 1, 0],
-      [0, 0, 0, 1, 0],
+      [0, 1, 1, 0, 0], // 0, 1, 1, 1, 0 last ship if not be overlapped
+      [0, 0, 0, 0, 1],
+      [0, 0, 0, 0, 1], //if not adjacent the last ship at 0, 1, 1, 1, 1
+    ]);
+  });
+
+  test("more adjacent ship", () => {
+    newboard.placeShip(new Ship(2), 2, 2);
+    newboard.placeShip(new Ship(2), 1, 5, false);
+    newboard.placeShip(new Ship(4), 4, 2); //not show because adjacent ship above
+    expect(newboard.board).toEqual([
+      [0, 0, 0, 0, 1],
+      [0, 1, 1, 0, 1], // 0, 1, 1, 1, 0 last ship if not be overlapped
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 1], //if not adjacent the last ship at 0, 1, 1, 1, 1
     ]);
   });
 });
