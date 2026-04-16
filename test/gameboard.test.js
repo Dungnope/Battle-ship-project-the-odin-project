@@ -85,11 +85,24 @@ describe("board", () => {
     newboard.placeShip(new Ship(2), 2, 2);
     newboard.placeShip(new Ship(2), 1, 5, false);
     newboard.placeShip(new Ship(4), 4, 2); //not show because adjacent ship above
+    newboard.placeShip(new Ship(1), 3, 1); //not show because adjacent ship above
     expect(newboard.board).toEqual([
       [0, 0, 0, 0, 1],
       [0, 1, 1, 0, 1], // 0, 1, 1, 1, 0 last ship if not be overlapped
-      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0], // check diagonal if is valid will show 1, 0, 0, 0, 0 of last ship
       [0, 1, 1, 1, 1], //if not adjacent the last ship at 0, 1, 1, 1, 1
+    ]);
+  });
+
+  test("diagonal ship", () => {
+    newboard.placeShip(new Ship(2), 2, 1);
+    newboard.placeShip(new Ship(2), 3, 4);
+    newboard.placeShip(new Ship(2), 4, 1);
+    expect(newboard.board).toEqual([
+      [0, 0, 0, 0, 0],
+      [1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1],
+      [1, 1, 0, 0, 0],
     ]);
   });
 });
