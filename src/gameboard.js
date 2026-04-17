@@ -56,11 +56,11 @@ export class Gameboard {
         .map((value) => {
           let dx, dy;
           if (axis === "horizontal") {
-            dx = value[0] + x + i;
-            dy = value[1] + y;
-          } else if (axis === "vertical") {
             dx = value[0] + x;
             dy = value[1] + y + i;
+          } else if (axis === "vertical") {
+            dx = value[0] + x + i;
+            dy = value[1] + y;
           }
 
           //check whether the out of board
