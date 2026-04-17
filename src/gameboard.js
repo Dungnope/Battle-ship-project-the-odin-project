@@ -8,7 +8,10 @@ export class Gameboard {
     this.missedAttacksPos = [];
   }
 
-  placeShip(ship, x, y, horizontal = true) {
+  placeShip(ship, horizontal = true) {
+    //take ship coordinate
+    let x = ship.x;
+    let y = ship.y;
     //check coordinate out of board
     if (x > this.board.length || y > this.board[x].length)
       return "out of board";
@@ -16,7 +19,7 @@ export class Gameboard {
     //place ship horizontal
     if (this.board[x].length >= ship.length + y && horizontal) {
       //to create the position and length for a ship
-      let collisionCheck = this.#adjacentShip(x, y, ship, "horizontal");
+      let collisionCheck = this.#adjacentShip(x, y, ship.length, "horizontal");
       if (collisionCheck) {
         for (let i = 0; i < ship.length; i++) {
           this.board[x][y + i] = 1;
@@ -27,7 +30,7 @@ export class Gameboard {
     //place vertical
     else if (this.board.length >= ship.length + x && !horizontal) {
       //to create vertical position and length for a ship
-      let collisionCheck = this.#adjacentShip(x, y, ship, "vertical");
+      let collisionCheck = this.#adjacentShip(x, y, ship.length, "vertical");
       if (collisionCheck) {
         for (let i = 0; i < ship.length; i++) {
           this.board[x + i][y] = 1;
@@ -36,7 +39,7 @@ export class Gameboard {
     } else return "out of board";
   }
 
-  #adjacentShip = (x, y, ship, axis) => {
+  #adjacentShip = (x, y, shipLength, axis) => {
     let position = [
       [-1, -1],
       [-1, 0],
@@ -47,65 +50,57 @@ export class Gameboard {
       [1, 0],
       [1, 1],
     ]; //all around coordinates of a ship fragment
-    for (let i = 0; i < ship.length; i++) {
-      let adjacentFromXY; //new reference
+
+    let adjacentFromXY = (i, axis) => {
+      return position
+        .map((value) => {
+          let dx, dy;
+          if (axis === "horizontal") {
+            dx = value[0] + x + i;
+            dy = value[1] + y;
+          } else if (axis === "vertical") {
+            dx = value[0] + x;
+            dy = value[1] + y + i;
+          }
+
+          //check whether the out of board
+          if (
+            dx >= 0 &&
+            dx < this.board.length &&
+            dy >= 0 &&
+            dy < this.board[x].length
+          ) {
+            return [dx, dy];
+          }
+        })
+        .filter((value) => {
+          return value !== undefined;
+        });
+    };
+    for (let i = 0; i < shipLength; i++) {
       //horizontal
       if (axis === "horizontal" && this.board[x][y + i] !== 1) {
         //take all around positions from the x, y position
-        adjacentFromXY = position
-          .map((value) => {
-            let dx = value[0] + x;
-            let dy = value[1] + y + i;
-
-            //check whether the out of board
-            if (
-              dx >= 0 &&
-              dx < this.board.length &&
-              dy >= 0 &&
-              dy < this.board[x].length
-            ) {
-              return [dx, dy];
-            }
-          })
-          .filter((value) => {
-            return value !== undefined;
-          });
+        adjacentFromXY(i, axis);
       }
       // vertical
       else if (axis === "vertical" && this.board[x + i][y] !== 1) {
         //take all around positions from the x, y position
-        adjacentFromXY = position
-          .map((value) => {
-            let dx = value[0] + x + i;
-            let dy = value[1] + y;
-
-            //check whether the out of board
-            if (
-              dx >= 0 &&
-              dx < this.board.length &&
-              dy >= 0 &&
-              dy < this.board[x].length
-            ) {
-              return [dx, dy];
-            }
-          })
-          .filter((value) => {
-            return value !== undefined;
-          });
+        adjacentFromXY(i, axis);
       } else return false;
+    }
 
-      while (adjacentFromXY.length) {
-        let checkAround = adjacentFromXY.shift();
-        let coor = { x: checkAround[0], y: checkAround[1] };
-        if (this.board[coor.x][coor.y] !== 1) {
-          continue;
-        } else return false;
-      }
+    while (adjacentFromXY.length) {
+      let checkAround = adjacentFromXY.shift();
+      let coor = { x: checkAround[0], y: checkAround[1] };
+      if (this.board[coor.x][coor.y] !== 1) {
+        continue;
+      } else return false;
     }
     return true;
   };
 
-  receiveAttack(ship, x, y) {
+  receiveAttack(x, y) {
     if (ship.x === x && ship.y === y) {
       ship.hit();
     } else {

@@ -1,10 +1,9 @@
 export class Ship {
-  constructor(length) {
+  constructor(length, x, y) {
     this.length = length;
     this.hits = 0;
-    this.x = 0;
-    this.y = 0;
-    this.horizontal = true;
+    this.x = x;
+    this.y = y;
   }
 
   hit() {
