@@ -24,7 +24,7 @@ describe("board", () => {
   });
 
   test("place ship vertical", () => {
-    newboard.placeShip(new Ship(3, 1, 1), false);
+    newboard.placeShip(new Ship(3, 1, 1), false); //ship(lenght, x, y)
     expect(newboard.board).toEqual([
       [0, 0, 0, 0, 0],
       [0, 1, 0, 0, 0],

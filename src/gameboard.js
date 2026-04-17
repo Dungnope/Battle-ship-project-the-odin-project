@@ -6,6 +6,7 @@ export class Gameboard {
       .fill()
       .map(() => Array(this.column).fill(0));
     this.missedAttacksPos = [];
+    this.shipList = [];
   }
 
   placeShip(ship, horizontal = true) {
@@ -24,6 +25,7 @@ export class Gameboard {
         for (let i = 0; i < ship.length; i++) {
           this.board[x][y + i] = 1;
         }
+        this.shipList.push(ship);
       }
     }
 
@@ -35,6 +37,7 @@ export class Gameboard {
         for (let i = 0; i < ship.length; i++) {
           this.board[x + i][y] = 1;
         }
+        this.shipList.push(ship);
       }
     } else return "out of board";
   }
@@ -77,6 +80,7 @@ export class Gameboard {
           return value !== undefined;
         });
     };
+
     for (let i = 0; i < shipLength; i++) {
       //take all possible around coor
       let aroundCoordinates = null;
@@ -105,11 +109,14 @@ export class Gameboard {
   };
 
   receiveAttack(x, y) {
-    if (ship.x === x && ship.y === y) {
-      ship.hit();
-    } else {
-      this.missedAttacksPos.push([x, y]);
-    }
+    this.shipList.forEach((ship) => {
+      if (ship.x === x && ship.y === y) {
+        ship.hit();
+        this.board[x][y] = 2; //ship get hit will show a destroyed part
+      } else {
+        this.missedAttacksPos.push([x, y]);
+      }
+    });
   }
 
   destroyedShip(ship) {
