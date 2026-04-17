@@ -78,25 +78,29 @@ export class Gameboard {
         });
     };
     for (let i = 0; i < shipLength; i++) {
+      //take all possible around coor
+      let aroundCoordinates = null;
+
       //horizontal
       if (axis === "horizontal" && this.board[x][y + i] !== 1) {
         //take all around positions from the x, y position
-        adjacentFromXY(i, axis);
+        aroundCoordinates = adjacentFromXY(i, axis);
       }
       // vertical
       else if (axis === "vertical" && this.board[x + i][y] !== 1) {
         //take all around positions from the x, y position
-        adjacentFromXY(i, axis);
+        aroundCoordinates = adjacentFromXY(i, axis);
       } else return false;
+
+      while (aroundCoordinates.length) {
+        let checkAround = aroundCoordinates.shift();
+        let coor = { x: checkAround[0], y: checkAround[1] };
+        if (this.board[coor.x][coor.y] !== 1) {
+          continue;
+        } else return false;
+      }
     }
 
-    while (adjacentFromXY.length) {
-      let checkAround = adjacentFromXY.shift();
-      let coor = { x: checkAround[0], y: checkAround[1] };
-      if (this.board[coor.x][coor.y] !== 1) {
-        continue;
-      } else return false;
-    }
     return true;
   };
 
