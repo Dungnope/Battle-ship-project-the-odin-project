@@ -9,10 +9,6 @@ export class Gameboard {
   }
 
   placeShip(ship, x, y, horizontal = true) {
-    //to work with array
-    x -= 1;
-    y -= 1;
-
     //check coordinate out of board
     if (x > this.board.length || y > this.board[x].length)
       return "out of board";
@@ -52,7 +48,7 @@ export class Gameboard {
       [1, 1],
     ]; //all around coordinates of a ship fragment
     for (let i = 0; i < ship.length; i++) {
-      let adjacentFromXY = null; //new reference
+      let adjacentFromXY; //new reference
       //horizontal
       if (axis === "horizontal" && this.board[x][y + i] !== 1) {
         //take all around positions from the x, y position
@@ -113,7 +109,12 @@ export class Gameboard {
     if (ship.x === x && ship.y === y) {
       ship.hit();
     } else {
-      this.missedAttacks++;
+      this.missedAttacksPos.push([x, y]);
+    }
+  }
+
+  destroyedShip(ship) {
+    if (ship.isSunk()) {
     }
   }
 }
