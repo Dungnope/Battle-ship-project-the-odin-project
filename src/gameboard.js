@@ -7,6 +7,16 @@ export class Gameboard {
       .map(() => Array(this.column).fill(0));
     this.missedAttacksPos = [];
     this.shipList = [];
+    this.position = [
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+      [0, -1],
+      [0, 1],
+      [1, -1],
+      [1, 0],
+      [1, 1],
+    ]; //all around coordinates of a ship fragment
   }
 
   placeShip(ship, horizontal = true) {
@@ -42,45 +52,29 @@ export class Gameboard {
     } else return "out of board";
   }
 
+  #adjacentFromXY = (x, y) => {
+    return this.position
+      .map((value) => {
+        let dx, dy;
+        dx = value[0] + x;
+        dy = value[1] + y;
+
+        //check whether the out of board
+        if (
+          dx >= 0 &&
+          dx < this.board.length &&
+          dy >= 0 &&
+          dy < this.board[x].length
+        ) {
+          return [dx, dy];
+        }
+      })
+      .filter((value) => {
+        return value !== undefined;
+      });
+  };
+
   #adjacentShip = (x, y, shipLength, axis) => {
-    let position = [
-      [-1, -1],
-      [-1, 0],
-      [-1, 1],
-      [0, -1],
-      [0, 1],
-      [1, -1],
-      [1, 0],
-      [1, 1],
-    ]; //all around coordinates of a ship fragment
-
-    let adjacentFromXY = (i, axis) => {
-      return position
-        .map((value) => {
-          let dx, dy;
-          if (axis === "horizontal") {
-            dx = value[0] + x;
-            dy = value[1] + y + i;
-          } else if (axis === "vertical") {
-            dx = value[0] + x + i;
-            dy = value[1] + y;
-          }
-
-          //check whether the out of board
-          if (
-            dx >= 0 &&
-            dx < this.board.length &&
-            dy >= 0 &&
-            dy < this.board[x].length
-          ) {
-            return [dx, dy];
-          }
-        })
-        .filter((value) => {
-          return value !== undefined;
-        });
-    };
-
     for (let i = 0; i < shipLength; i++) {
       //take all possible around coor
       let aroundCoordinates = null;
@@ -88,12 +82,12 @@ export class Gameboard {
       //horizontal
       if (axis === "horizontal" && this.board[x][y + i] !== 1) {
         //take all around positions from the x, y position
-        aroundCoordinates = adjacentFromXY(i, axis);
+        aroundCoordinates = this.#adjacentFromXY(x, y + i);
       }
       // vertical
       else if (axis === "vertical" && this.board[x + i][y] !== 1) {
         //take all around positions from the x, y position
-        aroundCoordinates = adjacentFromXY(i, axis);
+        aroundCoordinates = this.#adjacentFromXY(x + i, y);
       } else return false;
 
       while (aroundCoordinates.length) {
