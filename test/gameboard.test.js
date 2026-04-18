@@ -105,4 +105,19 @@ describe("board", () => {
       [1, 1, 0, 0, 0],
     ]);
   });
+
+  test("receive attack", () => {
+    newboard.placeShip(new Ship(2, 0, 0));
+    newboard.placeShip(new Ship(2, 2, 3));
+    newboard.placeShip(new Ship(2, 3, 0));
+    newboard.receiveAttack(3, 0);
+    newboard.receiveAttack(2, 3);
+    newboard.receiveAttack(2, 4);
+    expect(newboard.board).toEqual([
+      [1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 2],
+      [2, 1, 0, 0, 0],
+    ]);
+  });
 });

@@ -32,6 +32,7 @@ export class Gameboard {
       //to create the position and length for a ship
       let collisionCheck = this.#adjacentShip(x, y, ship.length, "horizontal");
       if (collisionCheck) {
+        ship.axis = "horizontal";
         for (let i = 0; i < ship.length; i++) {
           this.board[x][y + i] = 1;
         }
@@ -44,6 +45,7 @@ export class Gameboard {
       //to create vertical position and length for a ship
       let collisionCheck = this.#adjacentShip(x, y, ship.length, "vertical");
       if (collisionCheck) {
+        ship.axis = "vertical";
         for (let i = 0; i < ship.length; i++) {
           this.board[x + i][y] = 1;
         }
@@ -104,9 +106,19 @@ export class Gameboard {
 
   receiveAttack(x, y) {
     this.shipList.forEach((ship) => {
+      let aroundCoordinates = this.#adjacentFromXY(ship.x, ship.y);
       if (ship.x === x && ship.y === y) {
         ship.hit();
         this.board[x][y] = 2; //ship get hit will show a destroyed part
+        while (aroundCoordinates.length) {
+          let checkAround = aroundCoordinates.shift();
+          let coor = { x: checkAround[0], y: checkAround[1] };
+          if (this.board[coor.x][coor.y] === 1) {
+            ship.x = coor.x;
+            ship.y = coor.y;
+            break;
+          }
+        }
       } else {
         this.missedAttacksPos.push([x, y]);
       }

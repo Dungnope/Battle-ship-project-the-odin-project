@@ -25,7 +25,7 @@ export default defineConfig([
       "no-undef": "warn",
       "no-empty": "off",
       "no-unused-private-class-members": "warn",
-      "no-useless-assignment": "off",
+      "no-useless-assignment": "warn",
     },
   },
 ]);
