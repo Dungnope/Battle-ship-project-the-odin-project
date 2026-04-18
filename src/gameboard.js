@@ -137,6 +137,11 @@ export class Gameboard {
         //change that coordinate to destroyed part
         if (oldhit !== this.shipList[i].hits) {
           this.board[x][y] = 2;
+          //check whether a specific ship on board is sunk or not
+          if (this.shipList[i].isSunk()) {
+            let shipIndex = this.shipList.indexOf(this.shipList[i]);
+            this.shipList.splice(shipIndex, 1);
+          }
           break;
         }
       }
@@ -146,8 +151,10 @@ export class Gameboard {
     }
   }
 
-  destroyedShip(ship) {
-    if (ship.isSunk()) {
+  isAllCollapse() {
+    if (!this.missedAttacksPos.length) {
+      return true;
     }
+    return false;
   }
 }
