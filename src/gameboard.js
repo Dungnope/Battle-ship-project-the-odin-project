@@ -152,7 +152,7 @@ export class Gameboard {
   }
 
   isAllCollapse() {
-    if (!this.missedAttacksPos.length) {
+    if (!this.shipList.length) {
       return true;
     }
     return false;

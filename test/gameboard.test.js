@@ -145,4 +145,37 @@ describe("board", () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
   });
+
+  test("sunk ship", () => {
+    newboard.placeShip(new Ship(2, 0, 0));
+    newboard.placeShip(new Ship(2, 2, 3));
+    newboard.placeShip(new Ship(2, 3, 0));
+    newboard.receiveAttack(3, 0);
+    newboard.receiveAttack(3, 1);
+    newboard.receiveAttack(2, 3);
+    newboard.receiveAttack(2, 4);
+    expect(newboard.shipList.length).toEqual(1);
+  });
+
+  test("all ship sunk", () => {
+    newboard.placeShip(new Ship(2, 0, 0));
+    newboard.placeShip(new Ship(2, 0, 3));
+    newboard.placeShip(new Ship(2, 2, 3));
+    newboard.placeShip(new Ship(2, 3, 0));
+    newboard.receiveAttack(0, 0);
+    newboard.receiveAttack(0, 1);
+    newboard.receiveAttack(3, 0);
+    newboard.receiveAttack(3, 1);
+    newboard.receiveAttack(2, 3);
+    newboard.receiveAttack(2, 4);
+    expect([newboard.board, newboard.isAllCollapse()]).toEqual([
+      [
+        [2, 2, 0, 1, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 2],
+        [2, 2, 0, 0, 0],
+      ],
+      false,
+    ]);
+  });
 });
