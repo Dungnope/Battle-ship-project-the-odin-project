@@ -2,9 +2,10 @@ export class Ship {
   constructor(length, x, y) {
     this.length = length;
     this.hits = 0;
-    this.x = x;
-    this.y = y;
+    this.x = x; //head position
+    this.y = y; //head position
     this.axis = undefined;
+    this.coordinate = [];
   }
 
   hit() {

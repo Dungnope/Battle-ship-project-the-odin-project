@@ -120,4 +120,29 @@ describe("board", () => {
       [2, 1, 0, 0, 0],
     ]);
   });
+
+  test("more receive attacks", () => {
+    let baseBoard = new Gameboard();
+    baseBoard.placeShip(new Ship(4, 0, 0));
+    baseBoard.placeShip(new Ship(2, 2, 3));
+    baseBoard.placeShip(new Ship(2, 3, 0), false);
+    baseBoard.receiveAttack(3, 0);
+    baseBoard.receiveAttack(2, 3);
+    baseBoard.receiveAttack(2, 4);
+    baseBoard.receiveAttack(2, 5);
+    baseBoard.receiveAttack(0, 2);
+    baseBoard.receiveAttack(7, 5);
+    expect(baseBoard.board).toEqual([
+      [1, 1, 2, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 2, 3, 0, 0, 0, 0],
+      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 3, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+  });
 });
