@@ -10,6 +10,7 @@
 :root{
     --player-background: #699BF7;
     --opponent-background: #FF8577;
+    --target: #F16858;
     --text: #000;
     --background: #fff;
     --click: rgba(0, 0, 0, 0.25);
@@ -18,6 +19,7 @@
 .container{
     width: min(100%, 1440px);
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin: 0 auto;
 }
@@ -25,19 +27,19 @@
 .playerBoard{
     background-color: var(--player-background);
     margin: 32px;
-    padding: 32px;
+    padding: 32px 36px 36px 32px;
     border-radius: 16px;
     border: 2px solid var(--text);
     outline: 2px solid var(--text);
     position: relative;
     height: 100%;
+    font-weight: 600;
 
     & .rowNumber{
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        font-weight: 700;
         margin-bottom: 4px;
 
         & p{
@@ -62,7 +64,6 @@
 
             & p{
                 width: 24px;
-                font-weight: 700;
             }
         }
 
@@ -78,7 +79,11 @@
     box-shadow: 4px 4px 0 0 var(--text);
     border-radius: 8px;
     border: 1px solid var(--text);
+    text-align: center;
     outline: 1px solid var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover{
         box-shadow: none;
@@ -87,6 +92,19 @@
     &:active{
         box-shadow: inset 2px 2px 0 1px var(--click);
     }
+    
+}
+
+ .dot{
+        width: 10px;
+        height: 10px;
+        background-color: var(--text);
+        border-radius: 50px;
+}
+
+.cross{
+    font-size: 20px;
+    background-color: var(--target);
 }
 
 .opponentBoard{
