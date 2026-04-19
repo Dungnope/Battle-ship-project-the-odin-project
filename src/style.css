@@ -1,5 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', monospace, sans-serif;
+}
+
+:root{
+    --player-background: #699BF7;
+    --opponent-background: #FF8577;
+    --text: #000;
+    --background: #fff;
+    --click: rgba(0, 0, 0, 0.25);
+}
+
+.container{
+    width: min(100%, 1440px);
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.playerBoard{
+    background-color: var(--player-background);
+    margin: 32px;
+    padding: 32px;
+    border-radius: 16px;
+    border: 2px solid var(--text);
+    outline: 2px solid var(--text);
+    position: relative;
+    height: 100%;
+
+    & .rowNumber{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 700;
+        margin-bottom: 4px;
+
+        & p{
+            width: 40px;
+            text-align: center;
+        }
+    }
+
+    & .grid{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        & .row_board{
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex: 1 0 100%;
+
+            & p{
+                width: 24px;
+                font-weight: 700;
+            }
+        }
+
+    }
+}
+
+
+
+.box{
+    width: 40px;
+    height: 40px;
+    background-color: var(--background);
+    box-shadow: 4px 4px 0 0 var(--text);
+    border-radius: 8px;
+    border: 1px solid var(--text);
+    outline: 1px solid var(--text);
+
+    &:hover{
+        box-shadow: none;
+    }
+
+    &:active{
+        box-shadow: inset 2px 2px 0 1px var(--click);
+    }
+}
+
+.opponentBoard{
+
 }

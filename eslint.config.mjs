@@ -22,7 +22,7 @@ export default defineConfig([
       "no-unused-vars": "warn", // show in CLI when test lint
       "array-callback-return": "off",
       semi: "warn",
-      "no-undef": "warn",
+      "no-undef": "off",
       "no-empty": "off",
       "no-unused-private-class-members": "warn",
       "no-useless-assignment": "warn",
