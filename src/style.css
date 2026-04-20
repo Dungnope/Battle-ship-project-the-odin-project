@@ -14,6 +14,7 @@
     --text: #000;
     --background: #fff;
     --click: rgba(0, 0, 0, 0.25);
+    --attention: #FFC700;
 }
 
 .container{
@@ -24,7 +25,7 @@
     margin: 0 auto;
 }
 
-.playerBoard{
+.board{
     background-color: var(--player-background);
     margin: 32px;
     padding: 32px 36px 36px 32px;
@@ -34,7 +35,6 @@
     position: relative;
     height: 100%;
     font-weight: 600;
-
     & .rowNumber{
         display: flex;
         align-items: center;
@@ -73,7 +73,7 @@
 
 
 .box{
-    width: 40px;
+    width: min(calc(50vw + 20px), 40px);
     height: 40px;
     background-color: var(--background);
     box-shadow: 4px 4px 0 0 var(--text);
@@ -95,11 +95,11 @@
     
 }
 
- .dot{
-        width: 10px;
-        height: 10px;
-        background-color: var(--text);
-        border-radius: 50px;
+.dot{
+    width: 10px;
+    height: 10px;
+    background-color: var(--text);
+    border-radius: 50px;
 }
 
 .cross{
@@ -109,4 +109,80 @@
 
 .opponentBoard{
 
+}
+
+.guide__ship{
+    width: min(100%, 800px);
+    background-color: var(--background);
+    box-shadow: 8px 8px 0 2px var(--text);
+    border-radius: 16px;
+    border: 1px solid var(--text);
+    outline: 2px solid var(--text);
+    position: absolute;
+    left: 0;
+    top: calc(100% + 48px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px;
+
+    & p{
+        margin-top: 34px;
+    }
+}
+.guide__tag{
+    padding: 12px 16px;
+    border-radius: 100px;
+    box-shadow: 4px 4px 0 0 var(--text);
+    background-color: var(--attention);
+    border: 1px solid var(--text);
+    outline: 2px solid var(--text);
+    position: absolute;
+    display: block;
+    left: 32px;
+    top: 0;
+    transform: translate(0, -50%);
+}
+
+.shipList{
+    list-style-type: none;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 10px;
+    column-gap: 48px;
+    & li{
+        display: flex;
+        flex-direction: column;
+        justify-content: baseline;
+        row-gap: 8px;
+
+        & .ship {
+            display: flex;
+            column-gap: 8px;
+
+            & .ship__name{
+                display: inline;
+            }
+
+            & .ship__fragment{
+                width: 40px;
+                height: 40px;
+                background-color: var(--background);
+                box-shadow: 4px 4px 0 0 var(--text);
+                border-radius: 8px;
+                border: 1px solid var(--text);
+                outline: 2px solid var(--text);
+                display: flex;
+                align-items: center;
+                justify-content: end;
+
+                &:last-child{
+                    justify-content: start;
+                }
+            }
+
+        }
+    }
 }

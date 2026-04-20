@@ -18,4 +18,4 @@ export class Ship {
 }
 
 //5 ship: carrier: size 5, battleship: size 4,
-// destroyer: size 3, submarine: size 3, patrol boat: size 2
+// destroyer: size 3, submarine: size 3, patrol: size 2

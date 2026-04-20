@@ -1,6 +1,7 @@
 export class Player {
-  constructor(gameboard) {
+  constructor(name, gameboard) {
     this.isWinner = false;
     this.gameboard = gameboard;
+    this.nameTag = name;
   }
 }

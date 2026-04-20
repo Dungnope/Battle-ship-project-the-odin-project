@@ -10,10 +10,9 @@
 <body>                                          
 
     <div class="container">
-        <!-- <div class="playerBoard">
+        <div class="board">
             <div class="grid">
-                <div class="row">
-                    <div class="row_board">
+                <div class="row_board">
                     <div class="box"></div>
                     <div class="box"></div>
                     <div class="box"></div>
@@ -21,10 +20,8 @@
                     <div class="box"></div>
                     <div class="box"></div>
                     <div class="box"></div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="row_board">
+                <div class="row_board">
                     <div class="box"></div>
                     <div class="box"></div>
                     <div class="box"></div>
@@ -32,10 +29,8 @@
                     <div class="box"></div>
                     <div class="box"></div>
                     <div class="box"></div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="row_board">
+                <div class="row_board">
                     <div class="box"></div>
                     <div class="box"></div>
                     <div class="box"></div>
@@ -43,10 +38,81 @@
                     <div class="box"></div>
                     <div class="box"></div>
                     <div class="box"></div>
-                    </div>
                 </div>
             </div>
-        </div> -->
+            
+            <div class="guide__ship">
+                <span class="guide__tag">Ships Guide</span>
+                <p>
+                    These are the ships you should place on your board. Remember, that ships can't be touching each other on either of the sides, including corner edges.
+                </p>
+                <ul class="shipList">
+                    <li>
+                        <span class="ship__name">Carrier</span>
+                        <div class="ship">
+                            <div class="ship__fragment">
+                                <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 12C0 12 4 -1.90735e-06 16 -1.90735e-06C28 -1.90735e-06 32 -1.90735e-06 32 -1.90735e-06V24C32 24 28 24 16 24C4 24 0 12 0 12Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 -1.90735e-06L40 -1.90735e-06V24L0 24L0 -1.90735e-06Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 -1.90735e-06L40 -1.90735e-06V24L0 24L0 -1.90735e-06Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 -1.90735e-06L40 -1.90735e-06V24L0 24L0 -1.90735e-06Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M32 12C32 12 28 24 16 24C4 24 0 24 0 24L0 6.01324e-07C0 6.01324e-07 4 6.01324e-07 16 6.01324e-07C28 6.01324e-07 32 12 32 12Z" fill="black"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="ship__name">Carrier</span>
+                        <div class="ship">
+                            <div class="ship__fragment">
+                                <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 12C0 12 4 -1.90735e-06 16 -1.90735e-06C28 -1.90735e-06 32 -1.90735e-06 32 -1.90735e-06V24C32 24 28 24 16 24C4 24 0 12 0 12Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 -1.90735e-06L40 -1.90735e-06V24L0 24L0 -1.90735e-06Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 -1.90735e-06L40 -1.90735e-06V24L0 24L0 -1.90735e-06Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 -1.90735e-06L40 -1.90735e-06V24L0 24L0 -1.90735e-06Z" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="ship__fragment">
+                                <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M32 12C32 12 28 24 16 24C4 24 0 24 0 24L0 6.01324e-07C0 6.01324e-07 4 6.01324e-07 16 6.01324e-07C28 6.01324e-07 32 12 32 12Z" fill="black"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
     </div>
     <script src="./index.js" type="module"></script>                                          
 </body>                                         
