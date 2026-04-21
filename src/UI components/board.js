@@ -22,17 +22,8 @@ const createBoard = (player) => {
   const maxWidth =
     boxSize * numberBox + characterSize + gap * numberBox + layout;
 
-  boardContainer.style.width = `min(100%, ${maxWidth}px)`;
-  window.addEventListener("resize", () => {
-    const takeABox = document.querySelector(".box");
-    const allBoxes = document.querySelectorAll(".board .box");
-    console.log(takeABox.offsetWidth);
-    allBoxes.forEach((box) => {
-      box.style.height = `${takeABox.offsetWidth}px`;
-      let relativeUnit = (takeABox.offsetWidth * gap) / boxSize;
-      box.style.borderRadius = `${relativeUnit}px`;
-    });
-  });
+  console.log(maxWidth);
+  boardContainer.style.width = `min:`;
 
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
@@ -70,6 +61,16 @@ const createBoard = (player) => {
     }
     grid.appendChild(row);
   }
+  window.addEventListener("load", () => {
+    const takeABox = document.querySelector(".box");
+    const allBoxes = document.querySelectorAll(".board .box");
+    console.log(takeABox.offsetWidth);
+    allBoxes.forEach((box) => {
+      box.style.height = `${takeABox.offsetWidth}px`;
+      let relativeUnit = (takeABox.offsetWidth * gap) / boxSize;
+      box.style.borderRadius = `${relativeUnit}px`;
+    });
+  });
 };
 
 const boardGuide = () => {
@@ -88,6 +89,10 @@ const boardGuide = () => {
 
   const shipList = document.createElement("ul");
   shipList.classList.add("shipList");
+
+  const bottomMargin = document.createElement("div");
+  bottomMargin.classList.add("bottom__margin");
+
   //add 5 ships to ship list
   shipList.innerHTML = `
     ${Battleship}
@@ -98,7 +103,7 @@ const boardGuide = () => {
   `;
 
   //add guideTag, description, list on guide box
-  guideShip.append(guideTag, paragraphContent, shipList);
+  guideShip.append(guideTag, paragraphContent, shipList, bottomMargin);
 
   return guideShip;
 };
