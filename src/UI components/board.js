@@ -1,9 +1,39 @@
+import {
+  Carrier,
+  Battleship,
+  Destroyer,
+  Submarine,
+  Patrol,
+  Content,
+} from "./assets.js";
+
 const createBoard = (player) => {
   const container = document.querySelector(".container");
 
   //board container
   const boardContainer = document.createElement("div");
   boardContainer.classList.add("board");
+  // create boardsize base on number of squares
+  const boxSize = 40;
+  const gap = 8;
+  const characterSize = 24;
+  const numberBox = player.gameboard.column;
+  const layout = 68;
+  const maxWidth =
+    boxSize * numberBox + characterSize + gap * numberBox + layout;
+
+  boardContainer.style.width = `min(100%, ${maxWidth}px)`;
+  window.addEventListener("resize", () => {
+    const takeABox = document.querySelector(".box");
+    const allBoxes = document.querySelectorAll(".board .box");
+    console.log(takeABox.offsetWidth);
+    allBoxes.forEach((box) => {
+      box.style.height = `${takeABox.offsetWidth}px`;
+      let relativeUnit = (takeABox.offsetWidth * gap) / boxSize;
+      box.style.borderRadius = `${relativeUnit}px`;
+    });
+  });
+
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
   //grid container
@@ -15,7 +45,7 @@ const createBoard = (player) => {
   rowNumber.innerHTML += `<p style="width: 24px;"></p>`;
 
   container.appendChild(boardContainer);
-  boardContainer.append(rowNumber, grid);
+  boardContainer.append(rowNumber, grid, boardGuide());
 
   //create board
   let board = player.gameboard.board;
@@ -40,6 +70,37 @@ const createBoard = (player) => {
     }
     grid.appendChild(row);
   }
+};
+
+const boardGuide = () => {
+  //ship guide box
+  const guideShip = document.createElement("div");
+  guideShip.classList.add("guide__ship");
+
+  //ship guide description
+  const guideTag = document.createElement("span");
+  guideTag.classList.add("guide__tag");
+  //add content
+  guideTag.textContent = "Ships Guide";
+
+  const paragraphContent = document.createElement("p");
+  paragraphContent.textContent = Content;
+
+  const shipList = document.createElement("ul");
+  shipList.classList.add("shipList");
+  //add 5 ships to ship list
+  shipList.innerHTML = `
+    ${Battleship}
+    ${Carrier}
+    ${Destroyer}
+    ${Submarine}
+    ${Patrol}
+  `;
+
+  //add guideTag, description, list on guide box
+  guideShip.append(guideTag, paragraphContent, shipList);
+
+  return guideShip;
 };
 
 const interactBoard = (playerBoard) => {

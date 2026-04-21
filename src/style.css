@@ -3,6 +3,7 @@
 *{
     margin: 0;
     padding: 0;
+    border: none;
     box-sizing: border-box;
     font-family: 'Inter', 'Segoe UI', monospace, sans-serif;
 }
@@ -23,11 +24,12 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 0 auto;
+    padding: 16px;
 }
 
 .board{
+    margin: 16px;
     background-color: var(--player-background);
-    margin: 32px;
     padding: 32px 36px 36px 32px;
     border-radius: 16px;
     border: 2px solid var(--text);
@@ -40,8 +42,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        margin-bottom: 4px;
-
+        margin-bottom: 12px;
         & p{
             width: 40px;
             text-align: center;
@@ -69,8 +70,6 @@
 
     }
 }
-
-
 
 .box{
     width: min(calc(50vw + 20px), 40px);
@@ -124,10 +123,11 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 32px;
+    padding: min(100em, 32px);
 
     & p{
         margin-top: 34px;
+        font-weight: 400;
     }
 }
 .guide__tag{
@@ -139,7 +139,6 @@
     outline: 2px solid var(--text);
     position: absolute;
     display: block;
-    left: 32px;
     top: 0;
     transform: translate(0, -50%);
 }
@@ -150,7 +149,7 @@
     justify-content: start;
     align-items: center;
     flex-wrap: wrap;
-    row-gap: 10px;
+    row-gap: 24px;
     column-gap: 48px;
     & li{
         display: flex;
