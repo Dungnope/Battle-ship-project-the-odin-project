@@ -4,8 +4,8 @@ import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 import { createBoard, interactBoard } from "./UI components/board.js";
 
-let playerBoard = new Player("British", new Gameboard(12, 12));
-let playerBoard2 = new Player("British", new Gameboard(6, 6));
+let playerBoard = new Player("British", new Gameboard(10, 10));
+let playerBoard2 = new Player("British", new Gameboard(10, 10));
 
 createBoard(playerBoard);
-// createBoard(playerBoard2);
+createBoard(playerBoard2);

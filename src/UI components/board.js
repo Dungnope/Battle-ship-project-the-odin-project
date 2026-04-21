@@ -22,8 +22,11 @@ const createBoard = (player) => {
   const maxWidth =
     boxSize * numberBox + characterSize + gap * numberBox + layout;
 
-  console.log(maxWidth);
-  boardContainer.style.width = `min:`;
+  boardContainer.style.width = `min(100%, ${maxWidth}px)`;
+
+  //wrapper board
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("wrapper__grid");
 
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
@@ -33,10 +36,10 @@ const createBoard = (player) => {
   //row number
   const rowNumber = document.createElement("div");
   rowNumber.classList.add("rowNumber");
-  rowNumber.innerHTML += `<p style="width: 24px;"></p>`;
 
   container.appendChild(boardContainer);
-  boardContainer.append(rowNumber, grid, boardGuide());
+  wrapper.append(rowNumber, grid);
+  boardContainer.append(wrapper, boardGuide());
 
   //create board
   let board = player.gameboard.board;
@@ -48,12 +51,15 @@ const createBoard = (player) => {
     //column alphabet
     const alphabetText = document.createElement("p");
     alphabetText.textContent = String.fromCodePoint(65 + i);
+    alphabetText.style.position = "absolute";
+    alphabetText.style.left = "-24px";
     row.appendChild(alphabetText);
     for (let j = 0; j < board[i].length; j++) {
       if (!i) {
         rowNumber.innerHTML += `<p>${j}</p>`;
       }
       const box = document.createElement("div");
+      box.style.flex = `1 1 ${board.length}%`;
       box.classList.add("box");
       box.setAttribute("X", i);
       box.setAttribute("Y", j);
@@ -61,16 +67,6 @@ const createBoard = (player) => {
     }
     grid.appendChild(row);
   }
-  window.addEventListener("load", () => {
-    const takeABox = document.querySelector(".box");
-    const allBoxes = document.querySelectorAll(".board .box");
-    console.log(takeABox.offsetWidth);
-    allBoxes.forEach((box) => {
-      box.style.height = `${takeABox.offsetWidth}px`;
-      let relativeUnit = (takeABox.offsetWidth * gap) / boxSize;
-      box.style.borderRadius = `${relativeUnit}px`;
-    });
-  });
 };
 
 const boardGuide = () => {
