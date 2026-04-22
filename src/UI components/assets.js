@@ -24,7 +24,7 @@ const shipTail = `
 
 const Carrier = `
     <li>
-      <span class="ship__name">Carrier</span>
+      <span class="ship__name" name="carrier">Carrier</span>
       <div class="ship">
         ${shipHead}
         ${shipFragment}
@@ -37,7 +37,7 @@ const Carrier = `
 
 const Battleship = `
     <li>
-      <span class="ship__name">BattleShip</span>
+      <span class="ship__name" name="battleship">BattleShip</span>
       <div class="ship">
         ${shipHead}
         ${shipFragment}
@@ -49,7 +49,7 @@ const Battleship = `
 
 const Destroyer = `
     <li>
-      <span class="ship__name">Destroyer</span>
+      <span class="ship__name" name="destroyer">Destroyer</span>
       <div class="ship">
         ${shipHead}
         ${shipFragment}
@@ -60,7 +60,7 @@ const Destroyer = `
 
 const Submarine = `
     <li>
-      <span class="ship__name">Submarine</span>
+      <span class="ship__name" name="submarine">Submarine</span>
       <div class="ship">
         ${shipHead}
         ${shipFragment}
@@ -71,7 +71,7 @@ const Submarine = `
 
 const Patrol = `
     <li>
-      <span class="ship__name">Patrol</span>
+      <span class="ship__name" name="patrol">Patrol</span>
       <div class="ship">
         ${shipHead}
         ${shipTail}
