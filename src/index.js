@@ -5,11 +5,11 @@ import { Ship } from "./ship.js";
 import {
   chooseShip,
   createBoard,
-  interactBoard,
+  interactWithBoard,
 } from "./UI components/board.js";
 
 let playerBoard = new Player("peter", new Gameboard(10, 10));
 
 createBoard(playerBoard);
 chooseShip(playerBoard);
-interactBoard(playerBoard);
+interactWithBoard(playerBoard);

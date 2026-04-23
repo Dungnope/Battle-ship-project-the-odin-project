@@ -12,6 +12,7 @@
     --player-background: #699BF7;
     --opponent-background: #FF8577;
     --target: #F16858;
+    --valid: rgb(131, 241, 88);
     --text: #000;
     --background: #fff;
     --click: rgba(0, 0, 0, 0.25);
@@ -111,6 +112,22 @@
     &:active{
         box-shadow: inset 2px 2px 0 1px var(--click);
     }
+
+    /* when the ship is placed on board */
+    & .ship__fragment{
+        width: 40px;
+        height: 40px;
+        background-color: var(--background);
+        box-shadow: 4px 4px 0 0 var(--text);
+        border-radius: 8px;
+        border: 1px solid var(--text);
+        outline: 2px solid var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        z-index: 1;
+
+    }
     
 }
 
@@ -122,8 +139,10 @@
 }
 
 .cross{
-    font-size: 20px;
+    font-size: 10px;
     background-color: var(--target);
+
+
 }
 
 .opponentBoard{
@@ -228,7 +247,6 @@
                     justify-content: start;
                 }
             }
-
         }
     }
 }

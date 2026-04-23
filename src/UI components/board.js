@@ -5,6 +5,8 @@ import {
   Submarine,
   Patrol,
   Content,
+  missShot,
+  correctShot,
 } from "./assets.js";
 
 const createBoard = (player) => {
@@ -30,7 +32,7 @@ const createBoard = (player) => {
 
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
-  boardContainer.id = `#tar${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
+  boardContainer.id = `#tar_${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
   player.id = boardContainer.id;
   //grid container
   const grid = document.createElement("div");
@@ -119,21 +121,77 @@ export const chooseShip = (player) => {
         }
       });
       e.currentTarget.classList.toggle("selected__ship");
-      let currentShip = e.currentTarget;
-      console.log(currentShip);
       e.stopPropagation();
     });
   });
 };
 
-const interactBoard = (playerBoard) => {
+const takeShipFromList = (eventTarget, eventType, shipList, boxes, board) => {
+  //take board from ship list
+  let chosenShip;
+  shipList.forEach((ship) => {
+    if (ship.classList.contains("selected__ship")) {
+      chosenShip = ship;
+    }
+  });
+  try {
+    let realShipFragment = chosenShip.children[1];
+    let shipLength = realShipFragment.children.length;
+    let getXBoard = Number(eventTarget.getAttribute("x"));
+    let getYBoard = Number(eventTarget.getAttribute("y"));
+    shipHover(
+      shipLength,
+      boxes,
+      { x: getXBoard, y: getYBoard },
+      eventType,
+      board,
+    );
+  } catch (error) {
+    // console.warn(error);
+  }
+};
+
+//hover with mark the ship size
+const shipHover = (length, boxes, currentPos, status, board) => {
+  for (let i = 0; i < length; i++) {
+    //check valid horizontal
+    let nextPos = currentPos.x * 10 + (currentPos.y + i);
+    if (status === "mouseover" && boxes[nextPos] !== undefined) {
+      boxes[nextPos].style.backgroundColor = "var(--valid)";
+    } else if (status === "mouseout" && boxes[nextPos] !== undefined) {
+      boxes[nextPos].style.removeProperty("background-color");
+    }
+  }
+};
+
+const interactWithBoard = (playerBoard) => {
   let controlBoard = document.getElementById(playerBoard.id);
   let boxes = controlBoard.querySelectorAll(".grid .box");
+  const shipList = controlBoard.querySelectorAll(".guide__ship .shipList li");
+
   boxes.forEach((box) => {
-    box.addEventListener("click", (e) => {
-      e.stopPropagation();
+    box.addEventListener("click", (e) => {});
+
+    box.addEventListener("mouseover", (e) => {
+      takeShipFromList(
+        e.currentTarget,
+        e.type,
+        shipList,
+        boxes,
+        playerBoard.gameboard,
+      );
+    });
+
+    box.addEventListener("mouseout", (e) => {
+      takeShipFromList(
+        e.currentTarget,
+        e.type,
+        shipList,
+        boxes,
+        playerBoard.gameboard,
+      );
     });
   });
 };
 
-export { createBoard, interactBoard };
+export { createBoard, interactWithBoard };
