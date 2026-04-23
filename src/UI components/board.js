@@ -30,7 +30,7 @@ const createBoard = (player) => {
 
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
-  boardContainer.id = `#${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
+  boardContainer.id = `#tar${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
   player.id = boardContainer.id;
   //grid container
   const grid = document.createElement("div");
@@ -106,22 +106,33 @@ const boardGuide = () => {
   return guideShip;
 };
 
+export const chooseShip = (player) => {
+  const playerBoard = document.getElementById(`${player.id}`);
+  const shipGuide = playerBoard.querySelector(".guide__ship .shipList");
+  let ships = shipGuide.querySelectorAll("li");
+  ships.forEach((ship) => {
+    ship.classList.remove("selected__ship");
+    ship.addEventListener("click", (e) => {
+      ships.forEach((ship) => {
+        if (!e.currentTarget.classList.contains("selected__ship")) {
+          ship.classList.remove("selected__ship");
+        }
+      });
+      e.currentTarget.classList.toggle("selected__ship");
+      let currentShip = e.currentTarget;
+      console.log(currentShip);
+      e.stopPropagation();
+    });
+  });
+};
+
 const interactBoard = (playerBoard) => {
-  let playerNameTag = `#${playerBoard.nameTag}`;
-  let controlBoard = document.querySelector(`div[name="${playerNameTag}"]`);
-  controlBoard.addEventListener("click", (e) => {
-    if (
-      e.target.classList.contains("box") &&
-      e.target.getAttribute("x") == "2" &&
-      e.target.getAttribute("y") == "4" &&
-      e.target.innerHTML === ""
-    ) {
-      e.target.innerHTML += correctShot;
-      e.target.classList.add("cross");
-    }
-    if (e.target.classList.contains("box") && e.target.innerHTML === "") {
-      e.target.innerHTML += missShot;
-    }
+  let controlBoard = document.getElementById(playerBoard.id);
+  let boxes = controlBoard.querySelectorAll(".grid .box");
+  boxes.forEach((box) => {
+    box.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
   });
 };
 
