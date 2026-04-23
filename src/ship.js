@@ -2,7 +2,6 @@ export class Ship {
   constructor(length, x, y) {
     this.length = length;
     this.hits = 0;
-
     this.axis = undefined;
     this.coordinate = [];
   }
