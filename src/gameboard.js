@@ -9,7 +9,7 @@ export class Gameboard {
     this.shipList = [];
   }
 
-  placeShip(ship, horizontal = true) {
+  placeShip(ship, x, y, horizontal = true) {
     let adjacentPosition = [
       [-1, -1],
       [-1, 0],
@@ -22,8 +22,6 @@ export class Gameboard {
     ]; //all around coordinates of a ship fragment
 
     //take ship coordinate
-    let x = ship.x;
-    let y = ship.y;
     //check coordinate out of board
     if (x > this.board.length || y > this.board[x].length)
       return "out of board";
