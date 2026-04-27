@@ -195,7 +195,7 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
       boxes[position].style.backgroundColor = "var(--target)";
     }
 
-    //mouse out
+    //mouse out or change axis will remove old axis hover color
     if (status === "mouseout" || status === "contextmenu") {
       boxes[position].style.removeProperty("background-color");
     }
@@ -206,18 +206,6 @@ const interactWithBoard = (playerBoard) => {
   let axis = ["horizontal", "vertical"];
   let current = 0;
   boardData(playerBoard).boxes.forEach((box) => {
-    //right click for change axis
-    box.addEventListener("contextmenu", (e) => {
-      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
-      if (!current) {
-        current = 1;
-      } else {
-        current = 0;
-      }
-      e.preventDefault();
-      console.log(current);
-    });
-
     //to place ship
     box.addEventListener("click", (e) => {});
 
@@ -227,6 +215,27 @@ const interactWithBoard = (playerBoard) => {
 
     box.addEventListener("mouseout", (e) => {
       takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+    });
+
+    //right click for change axis
+    box.addEventListener("contextmenu", (e) => {
+      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+      if (!current) {
+        current = 1;
+      } else {
+        current = 0;
+      }
+      e.preventDefault();
+    });
+
+    box.addEventListener("contextmenu", (e) => {
+      console.log(e);
+      takeShipFromList(
+        e.currentTarget,
+        "mouseover",
+        playerBoard,
+        axis[current],
+      );
     });
   });
 };
