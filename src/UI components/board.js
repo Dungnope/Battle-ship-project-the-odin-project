@@ -108,10 +108,23 @@ const boardGuide = () => {
   return guideShip;
 };
 
-export const chooseShip = (player) => {
+const boardData = (player) => {
   const playerBoard = document.getElementById(`${player.id}`);
+  const boxes = playerBoard.querySelectorAll(".grid .box");
   const shipGuide = playerBoard.querySelector(".guide__ship .shipList");
-  let ships = shipGuide.querySelectorAll("li");
+  const shipList = shipGuide.querySelectorAll("li");
+
+  return {
+    board: playerBoard,
+    boxes: boxes,
+    shipguide: shipGuide,
+    shiplist: shipList,
+  };
+};
+
+export const chooseShip = (player) => {
+  const boardProperty = boardData(player);
+  const ships = boardProperty.shiplist;
   ships.forEach((ship) => {
     ship.classList.remove("selected__ship");
     ship.addEventListener("click", (e) => {
@@ -126,10 +139,10 @@ export const chooseShip = (player) => {
   });
 };
 
-const takeShipFromList = (eventTarget, eventType, shipList, boxes, board) => {
+const takeShipFromList = (eventTarget, eventType, player) => {
   //take board from ship list
   let chosenShip;
-  shipList.forEach((ship) => {
+  boardData(player).shiplist.forEach((ship) => {
     if (ship.classList.contains("selected__ship")) {
       chosenShip = ship;
     }
@@ -139,12 +152,13 @@ const takeShipFromList = (eventTarget, eventType, shipList, boxes, board) => {
     let shipLength = realShipFragment.children.length;
     let getXBoard = Number(eventTarget.getAttribute("x"));
     let getYBoard = Number(eventTarget.getAttribute("y"));
+    //show hover color on grid
     shipHover(
       shipLength,
-      boxes,
-      { x: getXBoard, y: getYBoard },
+      boardData(player).boxes,
+      { x: getXBoard * 10, y: getYBoard },
       eventType,
-      board,
+      player.gameboard,
     );
   } catch (error) {
     // console.warn(error);
@@ -152,44 +166,41 @@ const takeShipFromList = (eventTarget, eventType, shipList, boxes, board) => {
 };
 
 //hover with mark the ship size
-const shipHover = (length, boxes, currentPos, status, board) => {
-  for (let i = 0; i < length; i++) {
+const shipHover = (shipLength, boxes, currentPos, status, gameboard) => {
+  let pathTracker = [];
+  for (let i = 0; i < shipLength; i++) {
     //check valid horizontal
-    let nextPos = currentPos.x * 10 + (currentPos.y + i);
-    if (status === "mouseover" && boxes[nextPos] !== undefined) {
-      boxes[nextPos].style.backgroundColor = "var(--valid)";
-    } else if (status === "mouseout" && boxes[nextPos] !== undefined) {
-      boxes[nextPos].style.removeProperty("background-color");
+    if (currentPos.y + i < gameboard.column) {
+      pathTracker.push({ x: currentPos.x, y: currentPos.y + i });
+    }
+  }
+
+  let pathLength = pathTracker.length;
+  while (pathTracker.length) {
+    let currentPos = pathTracker.shift();
+    const position = currentPos.x + currentPos.y;
+    if (pathLength === shipLength && status === "mouseover") {
+      boxes[position].style.backgroundColor = "var(--valid)";
+    } else {
+      boxes[position].style.backgroundColor = "var(--target)";
+    }
+
+    if (status === "mouseout") {
+      boxes[position].style.removeProperty("background-color");
     }
   }
 };
 
 const interactWithBoard = (playerBoard) => {
-  let controlBoard = document.getElementById(playerBoard.id);
-  let boxes = controlBoard.querySelectorAll(".grid .box");
-  const shipList = controlBoard.querySelectorAll(".guide__ship .shipList li");
-
-  boxes.forEach((box) => {
+  boardData(playerBoard).boxes.forEach((box) => {
     box.addEventListener("click", (e) => {});
 
     box.addEventListener("mouseover", (e) => {
-      takeShipFromList(
-        e.currentTarget,
-        e.type,
-        shipList,
-        boxes,
-        playerBoard.gameboard,
-      );
+      takeShipFromList(e.currentTarget, e.type, playerBoard);
     });
 
     box.addEventListener("mouseout", (e) => {
-      takeShipFromList(
-        e.currentTarget,
-        e.type,
-        shipList,
-        boxes,
-        playerBoard.gameboard,
-      );
+      takeShipFromList(e.currentTarget, e.type, playerBoard);
     });
   });
 };
