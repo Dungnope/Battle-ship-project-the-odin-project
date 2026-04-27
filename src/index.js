@@ -8,7 +8,7 @@ import {
   interactWithBoard,
 } from "./UI components/board.js";
 
-let playerBoard = new Player("peter", new Gameboard(100, 100));
+let playerBoard = new Player("peter", new Gameboard(20, 20));
 
 createBoard(playerBoard);
 chooseShip(playerBoard);

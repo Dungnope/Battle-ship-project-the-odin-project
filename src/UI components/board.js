@@ -139,7 +139,7 @@ export const chooseShip = (player) => {
   });
 };
 
-const takeShipFromList = (eventTarget, eventType, player) => {
+const takeShipFromList = (eventTarget, eventType, player, axis) => {
   //take board from ship list
   let chosenShip;
   boardData(player).shiplist.forEach((ship) => {
@@ -152,14 +152,14 @@ const takeShipFromList = (eventTarget, eventType, player) => {
     let shipLength = realShipFragment.children.length;
     let getXBoard = Number(eventTarget.getAttribute("x"));
     let getYBoard = Number(eventTarget.getAttribute("y"));
-    let boardLength = player.gameboard.row;
     //show hover color on grid
     shipHover(
       shipLength,
       boardData(player).boxes,
-      { x: getXBoard * boardLength, y: getYBoard },
+      { x: getXBoard, y: getYBoard },
       eventType,
       player.gameboard,
+      axis,
     );
   } catch (error) {
     // console.warn(error);
@@ -167,12 +167,21 @@ const takeShipFromList = (eventTarget, eventType, player) => {
 };
 
 //hover with mark the ship size
-const shipHover = (shipLength, boxes, currentPos, status, gameboard) => {
-  let pathTracker = [];
+const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
+  let pathTracker = []; //tracker by condition
   for (let i = 0; i < shipLength; i++) {
     //check valid horizontal
-    if (currentPos.y + i < gameboard.column) {
-      pathTracker.push({ x: currentPos.x, y: currentPos.y + i });
+    if (currentPos.y + i < gameboard.column && axis === "horizontal") {
+      pathTracker.push({
+        x: currentPos.x * gameboard.column,
+        y: currentPos.y + i,
+      });
+      //check valid vertical
+    } else if (currentPos.x + i < gameboard.row && axis === "vertical") {
+      pathTracker.push({
+        x: (currentPos.x + i) * gameboard.row,
+        y: currentPos.y,
+      });
     }
   }
 
@@ -182,30 +191,42 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard) => {
     const position = currentPos.x + currentPos.y;
     if (pathLength === shipLength && status === "mouseover") {
       boxes[position].style.backgroundColor = "var(--valid)";
-    } else {
+    } else if (pathLength < shipLength) {
       boxes[position].style.backgroundColor = "var(--target)";
     }
 
-    if (status === "mouseout") {
+    //mouse out
+    if (status === "mouseout" || status === "contextmenu") {
       boxes[position].style.removeProperty("background-color");
     }
   }
 };
 
 const interactWithBoard = (playerBoard) => {
+  let axis = ["horizontal", "vertical"];
+  let current = 0;
   boardData(playerBoard).boxes.forEach((box) => {
     //right click for change axis
-    box.addEventListener("contextmenu", (e) => {});
+    box.addEventListener("contextmenu", (e) => {
+      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+      if (!current) {
+        current = 1;
+      } else {
+        current = 0;
+      }
+      e.preventDefault();
+      console.log(current);
+    });
 
     //to place ship
     box.addEventListener("click", (e) => {});
 
     box.addEventListener("mouseover", (e) => {
-      takeShipFromList(e.currentTarget, e.type, playerBoard);
+      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
     });
 
     box.addEventListener("mouseout", (e) => {
-      takeShipFromList(e.currentTarget, e.type, playerBoard);
+      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
     });
   });
 };
