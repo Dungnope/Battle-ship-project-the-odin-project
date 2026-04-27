@@ -1,7 +1,7 @@
 export class Gameboard {
   constructor(row, column) {
-    this.row = row === undefined ? 10 : row; //for board drawing
-    this.column = column === undefined ? 10 : column; //for board drawing
+    this.row = row === undefined || row > 10 ? 10 : row; //for board drawing
+    this.column = column === undefined || column > 10 ? 10 : column; //for board drawing
     this.board = new Array(this.row)
       .fill()
       .map(() => Array(this.column).fill(0));

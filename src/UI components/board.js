@@ -152,11 +152,12 @@ const takeShipFromList = (eventTarget, eventType, player) => {
     let shipLength = realShipFragment.children.length;
     let getXBoard = Number(eventTarget.getAttribute("x"));
     let getYBoard = Number(eventTarget.getAttribute("y"));
+    let boardLength = player.gameboard.row;
     //show hover color on grid
     shipHover(
       shipLength,
       boardData(player).boxes,
-      { x: getXBoard * 10, y: getYBoard },
+      { x: getXBoard * boardLength, y: getYBoard },
       eventType,
       player.gameboard,
     );
