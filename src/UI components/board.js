@@ -194,6 +194,10 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard) => {
 
 const interactWithBoard = (playerBoard) => {
   boardData(playerBoard).boxes.forEach((box) => {
+    //right click for change axis
+    box.addEventListener("contextmenu", (e) => {});
+
+    //to place ship
     box.addEventListener("click", (e) => {});
 
     box.addEventListener("mouseover", (e) => {
