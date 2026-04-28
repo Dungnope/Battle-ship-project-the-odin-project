@@ -131,23 +131,6 @@
     
 }
 
-.dot{
-    width: 10px;
-    height: 10px;
-    background-color: var(--text);
-    border-radius: 50px;
-}
-
-.cross{
-    font-size: 10px;
-    background-color: var(--target);
-
-
-}
-
-.place{
-    background-color: var(--attention);
-}
 
 .opponentBoard{
 
@@ -258,6 +241,33 @@
     }
 }
 
+/* Ships guide and board property */
+
+.dot{
+    width: 10px;
+    height: 10px;
+    background-color: var(--text);
+    border-radius: 50px;
+}
+
+.cross{
+    font-size: 10px;
+    background-color: var(--target);
+
+
+}
+
+.place{
+    background-color: var(--attention) !important;
+}
+
+.had__placed{
+    background-color: var(--valid);
+    outline: 4px solid var(--text);
+    border-radius: 8px;
+    box-shadow: 8px 8px 0 0 var(--text);
+}
+
 .selected__ship{
     background-color: var(--attention);
     outline: 4px solid var(--text);
@@ -265,6 +275,8 @@
     box-shadow: 8px 8px 0 0 var(--text);
 
 }
+
+/* End ship list and board property */
 
 @media screen and (max-width: 480px) {
 

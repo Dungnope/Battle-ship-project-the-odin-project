@@ -134,7 +134,11 @@ export const chooseShip = (player) => {
           ship.classList.remove("selected__ship");
         }
       });
-      e.currentTarget.classList.toggle("selected__ship");
+
+      if (!e.currentTarget.classList.contains("had__placed")) {
+        e.currentTarget.classList.toggle("selected__ship");
+      }
+
       e.stopPropagation();
     });
   });
@@ -213,7 +217,8 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
 
 const showShipOnBoard = (shipList, playerBoard) => {
   const boxList = boardData(playerBoard).board;
-  console.log(playerBoard.gameboard);
+  const clickedShip = selectedShip(playerBoard);
+  console.log(clickedShip);
   shipList.forEach((ship) => {
     //take ship coordinate;
     const shipCoordinate = ship.coordinate;
@@ -225,6 +230,9 @@ const showShipOnBoard = (shipList, playerBoard) => {
       placeCoordinate.classList.add("place");
     });
   });
+
+  clickedShip.classList.remove("selected__ship");
+  clickedShip.classList.add("had__placed");
 };
 
 const interactWithBoard = (playerBoard) => {
