@@ -168,7 +168,10 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
       axis,
     );
   } catch (error) {
-    // console.warn(error);
+    console.warn("Not ship selected");
+    setTimeout(() => {
+      console.clear();
+    }, 1000);
   }
 };
 
@@ -208,6 +211,22 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
   }
 };
 
+const showShipOnBoard = (shipList, playerBoard) => {
+  const boxList = boardData(playerBoard).board;
+  console.log(playerBoard.gameboard);
+  shipList.forEach((ship) => {
+    //take ship coordinate;
+    const shipCoordinate = ship.coordinate;
+    shipCoordinate.forEach((coor) => {
+      //take DOM element have more than 1 attribute
+      const placeCoordinate = boxList.querySelector(
+        `[x="${coor.x}"][y="${coor.y}"]`,
+      );
+      placeCoordinate.classList.add("place");
+    });
+  });
+};
+
 const interactWithBoard = (playerBoard) => {
   let axis = ["vertical", "horizontal"];
   let current = 1;
@@ -227,7 +246,7 @@ const interactWithBoard = (playerBoard) => {
           const shipLength = takenShip.children[1].children.length; //take from ship structure
           let currentBoard = playerBoard.gameboard;
           currentBoard.placeShip(new Ship(shipLength), x, y, current);
-          console.log(currentBoard.board);
+          showShipOnBoard(currentBoard.shipList, playerBoard);
         }
       } catch {
         console.log("Not choose ship");
