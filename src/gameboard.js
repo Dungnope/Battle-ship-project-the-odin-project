@@ -64,6 +64,8 @@ export class Gameboard {
         this.shipList.push(ship);
       } else return false;
     } else return false;
+
+    return true;
   }
 
   //take all possible coors of a specific position

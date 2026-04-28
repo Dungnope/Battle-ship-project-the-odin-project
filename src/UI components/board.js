@@ -253,8 +253,9 @@ const interactWithBoard = (playerBoard) => {
           const y = Number(e.currentTarget.getAttribute("y"));
           const shipLength = takenShip.children[1].children.length; //take from ship structure
           let currentBoard = playerBoard.gameboard;
-          currentBoard.placeShip(new Ship(shipLength), x, y, current);
-          showShipOnBoard(currentBoard.shipList, playerBoard);
+          if (currentBoard.placeShip(new Ship(shipLength), x, y, current)) {
+            showShipOnBoard(currentBoard.shipList, playerBoard);
+          }
         }
       } catch {
         console.log("Not choose ship");
