@@ -23,8 +23,7 @@ export class Gameboard {
 
     //take ship coordinate
     //check coordinate out of board
-    if (x > this.board.length || y > this.board[x].length)
-      return "out of board";
+    if (x > this.board.length || y > this.board[x].length) return false;
 
     //place ship horizontal
     if (this.board[x].length >= ship.length + y && horizontal) {
@@ -43,7 +42,7 @@ export class Gameboard {
           ship.coordinate.push({ x: x, y: y + i });
         }
         this.shipList.push(ship);
-      }
+      } else return false;
     }
 
     //place vertical
@@ -63,10 +62,11 @@ export class Gameboard {
           ship.coordinate.push({ x: x + i, y: y });
         }
         this.shipList.push(ship);
-      }
-    } else return "out of board";
+      } else return false;
+    } else return false;
   }
 
+  //take all possible coors of a specific position
   #adjacentFromXY = (x, y, position) => {
     return position
       .map((value) => {
