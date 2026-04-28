@@ -1,5 +1,5 @@
 export class Ship {
-  constructor(length, x, y) {
+  constructor(length) {
     this.length = length;
     this.hits = 0;
     this.axis = undefined;
