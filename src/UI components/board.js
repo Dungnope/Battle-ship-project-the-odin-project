@@ -140,6 +140,9 @@ export const chooseShip = (player) => {
       }
 
       e.stopPropagation();
+
+      if (!e.currentTarget.classList.contains("selected__ship"))
+        console.log(player);
     });
   });
 };
@@ -172,10 +175,7 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
       axis,
     );
   } catch (error) {
-    console.warn("Not ship selected");
-    setTimeout(() => {
-      console.clear();
-    }, 1000);
+    // console.warn("Not ship selected");
   }
 };
 
