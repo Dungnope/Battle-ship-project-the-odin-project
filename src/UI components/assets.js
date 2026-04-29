@@ -102,6 +102,9 @@ export {
   Submarine,
   Patrol,
   Content,
+  shipHead,
+  shipFragment,
+  shipTail,
   missShot,
   correctShot,
 };

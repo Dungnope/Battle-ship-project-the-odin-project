@@ -8,6 +8,9 @@ import {
   Content,
   missShot,
   correctShot,
+  shipHead,
+  shipFragment,
+  shipTail,
 } from "./assets.js";
 
 const createBoard = (player) => {
@@ -123,30 +126,6 @@ const boardData = (player) => {
   };
 };
 
-export const chooseShip = (player) => {
-  const boardProperty = boardData(player);
-  const ships = boardProperty.shiplist;
-  ships.forEach((ship) => {
-    ship.classList.remove("selected__ship");
-    ship.addEventListener("click", (e) => {
-      ships.forEach((ship) => {
-        if (!e.currentTarget.classList.contains("selected__ship")) {
-          ship.classList.remove("selected__ship");
-        }
-      });
-
-      if (!e.currentTarget.classList.contains("had__placed")) {
-        e.currentTarget.classList.toggle("selected__ship");
-      }
-
-      e.stopPropagation();
-
-      if (!e.currentTarget.classList.contains("selected__ship"))
-        console.log(player);
-    });
-  });
-};
-
 const selectedShip = (player) => {
   let ans;
   boardData(player).shiplist.forEach((ship) => {
@@ -215,30 +194,75 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
   }
 };
 
+const placeShipOnBoard = (playerBoard, e, axis) => {
+  let takenShip = selectedShip(playerBoard);
+  try {
+    if (takenShip.classList.contains("selected__ship")) {
+      const x = Number(e.currentTarget.getAttribute("x"));
+      const y = Number(e.currentTarget.getAttribute("y"));
+      const shipLength = takenShip.children[1].children.length; //take from ship structure
+      let currentBoard = playerBoard.gameboard;
+      if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
+        showShipOnBoard(currentBoard.shipList, playerBoard);
+      }
+    }
+  } catch (error) {
+    console.warn("Not choose ship", error);
+  }
+};
+
 const showShipOnBoard = (shipList, playerBoard) => {
   const boxList = boardData(playerBoard).board;
   const clickedShip = selectedShip(playerBoard);
-  console.log(clickedShip);
+  console.log(clickedShip.children[1].children);
   shipList.forEach((ship) => {
     //take ship coordinate;
     const shipCoordinate = ship.coordinate;
-    shipCoordinate.forEach((coor) => {
+    for (let i = 0; i < shipCoordinate.length; i++) {
       //take DOM element have more than 1 attribute
       const placeCoordinate = boxList.querySelector(
-        `[x="${coor.x}"][y="${coor.y}"]`,
+        `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
       );
-      placeCoordinate.classList.add("place");
-    });
+
+      //place head and tail ship
+      if (i === 0) placeCoordinate.innerHTML += shipHead;
+      else if (i === shipCoordinate.length - 1)
+        placeCoordinate.innerHTML += shipTail;
+      else placeCoordinate.innerHTML += shipFragment;
+    }
   });
 
   clickedShip.classList.remove("selected__ship");
   clickedShip.classList.add("had__placed");
 };
 
+export const chooseShip = (player) => {
+  const boardProperty = boardData(player);
+  const ships = boardProperty.shiplist;
+  ships.forEach((ship) => {
+    ship.classList.remove("selected__ship");
+    ship.addEventListener("click", (e) => {
+      ships.forEach((ship) => {
+        if (!e.currentTarget.classList.contains("selected__ship")) {
+          ship.classList.remove("selected__ship");
+        }
+      });
+
+      if (!e.currentTarget.classList.contains("had__placed")) {
+        e.currentTarget.classList.toggle("selected__ship");
+      }
+
+      e.stopPropagation();
+      // if (!e.currentTarget.classList.contains("selected__ship"))
+    });
+  });
+};
+
 const interactWithBoard = (playerBoard) => {
   let axis = ["vertical", "horizontal"];
   let current = 1;
 
+  //prevent right click on board
   boardData(playerBoard).board.addEventListener("contextmenu", (e) => {
     e.preventDefault();
   });
@@ -246,20 +270,7 @@ const interactWithBoard = (playerBoard) => {
   boardData(playerBoard).boxes.forEach((box) => {
     //to place ship
     box.addEventListener("click", (e) => {
-      let takenShip = selectedShip(playerBoard);
-      try {
-        if (takenShip.classList.contains("selected__ship")) {
-          const x = Number(e.currentTarget.getAttribute("x"));
-          const y = Number(e.currentTarget.getAttribute("y"));
-          const shipLength = takenShip.children[1].children.length; //take from ship structure
-          let currentBoard = playerBoard.gameboard;
-          if (currentBoard.placeShip(new Ship(shipLength), x, y, current)) {
-            showShipOnBoard(currentBoard.shipList, playerBoard);
-          }
-        }
-      } catch {
-        console.log("Not choose ship");
-      }
+      placeShipOnBoard(playerBoard, e, current);
     });
 
     //hover to see ship location
