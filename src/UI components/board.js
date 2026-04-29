@@ -188,49 +188,57 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
     }
 
     //mouse out or change axis will remove old axis hover color
-    if (status === "mouseout" || status === "contextmenu") {
+    if (
+      status === "mouseout" ||
+      status === "contextmenu" ||
+      status === "click"
+    ) {
       boxes[position].style.removeProperty("background-color");
     }
   }
 };
 
-const placeShipOnBoard = (playerBoard, e, axis) => {
+const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
   let takenShip = selectedShip(playerBoard);
   try {
     if (takenShip.classList.contains("selected__ship")) {
-      const x = Number(e.currentTarget.getAttribute("x"));
-      const y = Number(e.currentTarget.getAttribute("y"));
+      const x = Number(boxTarget.currentTarget.getAttribute("x"));
+      const y = Number(boxTarget.currentTarget.getAttribute("y"));
       const shipLength = takenShip.children[1].children.length; //take from ship structure
       let currentBoard = playerBoard.gameboard;
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
-        showShipOnBoard(currentBoard.shipList, playerBoard);
+        let lastIdx = currentBoard.shipList.length - 1;
+        showShipOnBoard(currentBoard.shipList.at(lastIdx), playerBoard);
       }
     }
-  } catch (error) {
-    console.warn("Not choose ship", error);
+  } catch {
+    console.warn("Not choose ship");
   }
 };
 
-const showShipOnBoard = (shipList, playerBoard) => {
+const showShipOnBoard = (ship, playerBoard) => {
   const boxList = boardData(playerBoard).board;
   const clickedShip = selectedShip(playerBoard);
-  console.log(clickedShip.children[1].children);
-  shipList.forEach((ship) => {
-    //take ship coordinate;
-    const shipCoordinate = ship.coordinate;
-    for (let i = 0; i < shipCoordinate.length; i++) {
-      //take DOM element have more than 1 attribute
-      const placeCoordinate = boxList.querySelector(
-        `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
-      );
+  //take ship coordinate;
+  const shipCoordinate = ship.coordinate;
+  for (let i = 0; i < shipCoordinate.length; i++) {
+    //take DOM element have more than 1 attribute
+    const placeCoordinate = boxList.querySelector(
+      `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
+    );
 
-      //place head and tail ship
-      if (i === 0) placeCoordinate.innerHTML += shipHead;
-      else if (i === shipCoordinate.length - 1)
-        placeCoordinate.innerHTML += shipTail;
-      else placeCoordinate.innerHTML += shipFragment;
+    //place head and tail ship
+    if (i === 0) placeCoordinate.innerHTML += shipHead;
+    else if (i === shipCoordinate.length - 1)
+      placeCoordinate.innerHTML += shipTail;
+    else placeCoordinate.innerHTML += shipFragment;
+
+    if (ship.axis === "vertical") {
+      placeCoordinate.firstElementChild.classList.add("rotate__ship");
     }
-  });
+
+    placeCoordinate.style.removeProperty("background-color");
+  }
 
   clickedShip.classList.remove("selected__ship");
   clickedShip.classList.add("had__placed");
@@ -253,7 +261,6 @@ export const chooseShip = (player) => {
       }
 
       e.stopPropagation();
-      // if (!e.currentTarget.classList.contains("selected__ship"))
     });
   });
 };
