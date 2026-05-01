@@ -11,9 +11,10 @@ import {
   shipHead,
   shipFragment,
   shipTail,
+  playBtn,
 } from "./assets.js";
 
-const createBoard = (player) => {
+const createBoard = (player, boardColor, withShipList) => {
   const container = document.querySelector(".container");
 
   //board container
@@ -33,21 +34,33 @@ const createBoard = (player) => {
   //wrapper board
   const wrapper = document.createElement("div");
   wrapper.classList.add("wrapper__grid");
+  wrapper.style.backgroundColor = boardColor;
 
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
   boardContainer.id = `#tar_${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
   player.id = boardContainer.id;
+
+  const showName = document.createElement("p");
+  showName.innerHTML = `<span>(${player.id})</span> ${player.nameTag}'s board`;
+  showName.classList.add("name__display");
+
   //grid container
   const grid = document.createElement("div");
   grid.classList.add("grid");
+
   //row number
   const rowNumber = document.createElement("div");
   rowNumber.classList.add("rowNumber");
 
   container.appendChild(boardContainer);
   wrapper.append(rowNumber, grid);
-  boardContainer.append(wrapper, boardGuide());
+
+  if (withShipList) {
+    boardContainer.append(showName, wrapper, boardGuide());
+  } else {
+    boardContainer.append(showName, wrapper);
+  }
 
   //create board
   let board = player.gameboard.board;
@@ -244,73 +257,109 @@ const showShipOnBoard = (ship, playerBoard) => {
   clickedShip.classList.add("had__placed");
 };
 
-export const chooseShip = (player) => {
-  const boardProperty = boardData(player);
-  const ships = boardProperty.shiplist;
-  ships.forEach((ship) => {
-    ship.classList.remove("selected__ship");
-    ship.addEventListener("click", (e) => {
-      ships.forEach((ship) => {
-        if (!e.currentTarget.classList.contains("selected__ship")) {
-          ship.classList.remove("selected__ship");
+const chooseShip = (player) => {
+  try {
+    const boardProperty = boardData(player);
+    const ships = boardProperty.shiplist;
+    ships.forEach((ship) => {
+      ship.classList.remove("selected__ship");
+      ship.addEventListener("click", (e) => {
+        ships.forEach((ship) => {
+          if (!e.currentTarget.classList.contains("selected__ship")) {
+            ship.classList.remove("selected__ship");
+          }
+        });
+
+        if (!e.currentTarget.classList.contains("had__placed")) {
+          e.currentTarget.classList.toggle("selected__ship");
         }
+
+        //add complete place ship and save board and change to player 2 place ship
+
+        e.stopPropagation();
       });
-
-      if (!e.currentTarget.classList.contains("had__placed")) {
-        e.currentTarget.classList.toggle("selected__ship");
-      }
-
-      e.stopPropagation();
     });
-  });
+  } catch {
+    console.log("this is game play not choose ship");
+  }
+};
+
+const isAllPlace = (playerBoard) => {
+  //check all ships placed or not
+  for (let i = 0; i < boardData(playerBoard).shiplist.length; i++) {
+    if (!boardData(playerBoard).shiplist[i].classList.contains("had__placed")) {
+      return false;
+    }
+  }
+
+  //if all ships placed
+  return true;
 };
 
 const interactWithBoard = (playerBoard) => {
   let axis = ["vertical", "horizontal"];
   let current = 1;
 
-  //prevent right click on board
-  boardData(playerBoard).board.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-  });
-
-  boardData(playerBoard).boxes.forEach((box) => {
-    //to place ship
-    box.addEventListener("click", (e) => {
-      placeShipOnBoard(playerBoard, e, current);
-    });
-
-    //hover to see ship location
-    box.addEventListener("mouseover", (e) => {
-      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
-    });
-
-    //hover out a box made them become default state
-    box.addEventListener("mouseout", (e) => {
-      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
-    });
-
-    //right click for change axis
-    box.addEventListener("contextmenu", (e) => {
-      takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
-      if (!current) {
-        current = 1;
-      } else {
-        current = 0;
-      }
+  try {
+    //prevent right click on board
+    boardData(playerBoard).board.addEventListener("contextmenu", (e) => {
       e.preventDefault();
     });
 
-    //redraw mouseover immediately after change axis
-    box.addEventListener("contextmenu", (e) => {
-      takeShipFromList(
-        e.currentTarget,
-        "mouseover",
-        playerBoard,
-        axis[current],
-      );
+    boardData(playerBoard).boxes.forEach((box) => {
+      //to place ship
+      box.addEventListener("click", (e) => {
+        placeShipOnBoard(playerBoard, e, current);
+
+        //check all ship placed or not
+        if (isAllPlace(playerBoard)) {
+          //ready to battle
+          boardData(playerBoard).shipguide.innerHTML += playBtn;
+
+          boardData(playerBoard)
+            .shipguide.querySelector(".battle__btn")
+            .addEventListener("click", (e) => {
+              document.querySelector(".container").innerHTML = "";
+              createBoard(playerBoard, "red", false);
+              console.log(playerBoard.gameboard);
+            });
+        }
+      });
+
+      //hover to see ship location
+      box.addEventListener("mouseover", (e) => {
+        takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+      });
+
+      //hover out a box made them become default state
+      box.addEventListener("mouseout", (e) => {
+        takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+      });
+
+      //right click for change axis
+      box.addEventListener("contextmenu", (e) => {
+        takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+        if (!current) {
+          current = 1;
+        } else {
+          current = 0;
+        }
+        e.preventDefault();
+      });
+
+      //redraw mouseover immediately after change axis
+      box.addEventListener("contextmenu", (e) => {
+        takeShipFromList(
+          e.currentTarget,
+          "mouseover",
+          playerBoard,
+          axis[current],
+        );
+      });
     });
-  });
+  } catch {
+    console.log("play game");
+  }
 };
 
-export { createBoard, interactWithBoard };
+export { createBoard, interactWithBoard, chooseShip };

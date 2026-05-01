@@ -3,5 +3,6 @@ export class Player {
     this.isWinner = false;
     this.gameboard = gameboard;
     this.nameTag = name;
+    this.isPlaceAll = false;
   }
 }

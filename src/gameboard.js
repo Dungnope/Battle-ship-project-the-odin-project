@@ -28,7 +28,7 @@ export class Gameboard {
     //place ship horizontal
     if (this.board[x].length >= ship.length + y && horizontal) {
       //to create the position and length for a ship
-      let collisionCheck = this.#adjacentShip(
+      let collisionCheck = this.adjacentShip(
         x,
         y,
         ship.length,
@@ -48,7 +48,7 @@ export class Gameboard {
     //place vertical
     else if (this.board.length >= ship.length + x && !horizontal) {
       //to create vertical position and length for a ship
-      let collisionCheck = this.#adjacentShip(
+      let collisionCheck = this.adjacentShip(
         x,
         y,
         ship.length,
@@ -91,7 +91,8 @@ export class Gameboard {
       });
   };
 
-  #adjacentShip = (x, y, shipLength, axis, adjacentPosition) => {
+  //check around position whether adjacent with any ships
+  adjacentShip = (x, y, shipLength, axis, adjacentPosition) => {
     for (let i = 0; i < shipLength; i++) {
       //take all possible around coor
       let aroundCoordinates = null;
