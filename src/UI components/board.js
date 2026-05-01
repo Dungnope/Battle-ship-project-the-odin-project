@@ -282,6 +282,34 @@ const chooseShip = (player) => {
   }
 };
 
+const renderShip = (playerBoard) => {
+  document.querySelector(".container").innerHTML = "";
+  createBoard(playerBoard, "#699BF7", false);
+  const boxList = document.getElementById(`${playerBoard.id}`);
+  //take ship coordinate;
+
+  const allShipOnBoard = playerBoard.gameboard.shipList;
+  allShipOnBoard.forEach((ship) => {
+    const shipCoordinate = ship.coordinate;
+    for (let i = 0; i < shipCoordinate.length; i++) {
+      //take DOM element have more than 1 attribute
+      const placeCoordinate = boxList.querySelector(
+        `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
+      );
+
+      //place head and tail ship
+      if (i === 0) placeCoordinate.innerHTML += shipHead;
+      else if (i === shipCoordinate.length - 1)
+        placeCoordinate.innerHTML += shipTail;
+      else placeCoordinate.innerHTML += shipFragment;
+
+      if (ship.axis === "vertical") {
+        placeCoordinate.firstElementChild.classList.add("rotate__ship");
+      }
+    }
+  });
+};
+
 const isAllPlace = (playerBoard) => {
   //check all ships placed or not
   for (let i = 0; i < boardData(playerBoard).shiplist.length; i++) {
@@ -318,6 +346,7 @@ const interactWithBoard = (playerBoard) => {
             .shipguide.querySelector(".battle__btn")
             .addEventListener("click", (e) => {
               playerBoard.isDone = true;
+              renderShip(playerBoard);
             });
         }
       });
@@ -358,4 +387,11 @@ const interactWithBoard = (playerBoard) => {
   }
 };
 
-export { createBoard, interactWithBoard, chooseShip, isAllPlace, boardData };
+export {
+  createBoard,
+  interactWithBoard,
+  chooseShip,
+  isAllPlace,
+  boardData,
+  renderShip,
+};
