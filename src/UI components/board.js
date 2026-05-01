@@ -274,8 +274,6 @@ const chooseShip = (player) => {
           e.currentTarget.classList.toggle("selected__ship");
         }
 
-        //add complete place ship and save board and change to player 2 place ship
-
         e.stopPropagation();
       });
     });
@@ -319,9 +317,7 @@ const interactWithBoard = (playerBoard) => {
           boardData(playerBoard)
             .shipguide.querySelector(".battle__btn")
             .addEventListener("click", (e) => {
-              document.querySelector(".container").innerHTML = "";
-              createBoard(playerBoard, "red", false);
-              console.log(playerBoard.gameboard);
+              playerBoard.isDone = true;
             });
         }
       });
@@ -362,4 +358,4 @@ const interactWithBoard = (playerBoard) => {
   }
 };
 
-export { createBoard, interactWithBoard, chooseShip };
+export { createBoard, interactWithBoard, chooseShip, isAllPlace, boardData };

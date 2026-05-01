@@ -214,7 +214,7 @@ body{
   right: -20px;
   transform: translateY(-50%);
   overflow: hidden;
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
   rotate: 20deg;
 }
 
@@ -224,13 +224,13 @@ body{
 }
 
 .battle__btn svg {
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
   z-index: 2;
 }
 
 .play {
-  transition: all 0.5s ease;
-  transition-delay: 300ms;
+  transition: all 0.2s ease;
+  transition-delay: 100ms;
 }
 
 .battle__btn:hover svg {
@@ -241,18 +241,18 @@ body{
   position: absolute;
   left: 0;
   transform: translateX(-100%);
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
   z-index: 2;
 }
 
 .battle__btn:hover .now {
   transform: translateX(10px);
-  transition-delay: 300ms;
+  transition-delay: 100ms;
 }
 
 .battle__btn:hover .play {
   transform: translateX(200%);
-  transition-delay: 300ms;
+  transition-delay: 100ms;
 }
 
 
