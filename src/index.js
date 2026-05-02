@@ -9,12 +9,14 @@ import {
   isAllPlace,
 } from "./UI components/board.js";
 
-let player1 = new Player("Player1", new Gameboard(10, 10));
-let player2 = new Player("player2", new Gameboard(10, 10));
+document.addEventListener("DOMContentLoaded", (e) => {
+  let player1 = new Player("Player1", new Gameboard(10, 10));
+  let player2 = new Player("player2", new Gameboard(10, 10));
 
-createBoard(player1, "#699BF7", true);
-chooseShip(player1);
-interactWithBoard(player1);
+  createBoard(player1, "#699BF7", true);
+  chooseShip(player1);
+  interactWithBoard(player1);
+});
 
 // createBoard(playerBoard2, "yellow", true);
 // chooseShip(playerBoard2);

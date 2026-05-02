@@ -1,3 +1,5 @@
+import { Gameboard } from "../gameboard.js";
+import { Bot } from "../player.js";
 import { Ship } from "../ship.js";
 import {
   Carrier,
@@ -90,6 +92,20 @@ const createBoard = (player, boardColor, withShipList) => {
   }
 };
 
+const boardData = (player) => {
+  const playerBoard = document.getElementById(`${player.id}`);
+  const boxes = playerBoard.querySelectorAll(".grid .box");
+  const shipGuide = playerBoard.querySelector(".guide__ship .shipList");
+  const shipList = shipGuide.querySelectorAll("li");
+
+  return {
+    board: playerBoard,
+    boxes: boxes,
+    shipguide: shipGuide,
+    shiplist: shipList,
+  };
+};
+
 const boardGuide = () => {
   //ship guide box
   const guideShip = document.createElement("div");
@@ -123,20 +139,6 @@ const boardGuide = () => {
   guideShip.append(guideTag, paragraphContent, shipList, bottomMargin);
 
   return guideShip;
-};
-
-const boardData = (player) => {
-  const playerBoard = document.getElementById(`${player.id}`);
-  const boxes = playerBoard.querySelectorAll(".grid .box");
-  const shipGuide = playerBoard.querySelector(".guide__ship .shipList");
-  const shipList = shipGuide.querySelectorAll("li");
-
-  return {
-    board: playerBoard,
-    boxes: boxes,
-    shipguide: shipGuide,
-    shiplist: shipList,
-  };
 };
 
 const selectedShip = (player) => {
@@ -219,6 +221,7 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
       const y = Number(boxTarget.currentTarget.getAttribute("y"));
       const shipLength = takenShip.children[1].children.length; //take from ship structure
       let currentBoard = playerBoard.gameboard;
+      //place ship on board
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
         let lastIdx = currentBoard.shipList.length - 1;
         showShipOnBoard(currentBoard.shipList.at(lastIdx), playerBoard);
@@ -347,6 +350,8 @@ const interactWithBoard = (playerBoard) => {
             .addEventListener("click", (e) => {
               playerBoard.isDone = true;
               renderShip(playerBoard);
+              let bot = new Bot("Bot", new Gameboard(10, 10));
+              createBoard(bot, "greenyellow", false);
             });
         }
       });
