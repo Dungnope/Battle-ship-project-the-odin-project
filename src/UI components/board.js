@@ -15,6 +15,7 @@ import {
   shipTail,
   playBtn,
 } from "./assets.js";
+import { botPlayGame } from "./botplay.js";
 
 const createBoard = (player, boardColor, withShipList) => {
   const container = document.querySelector(".container");
@@ -286,7 +287,6 @@ const chooseShip = (player) => {
 };
 
 const renderShip = (playerBoard) => {
-  document.querySelector(".container").innerHTML = "";
   createBoard(playerBoard, "#699BF7", false);
   const boxList = document.getElementById(`${playerBoard.id}`);
   //take ship coordinate;
@@ -349,9 +349,12 @@ const interactWithBoard = (playerBoard) => {
             .shipguide.querySelector(".battle__btn")
             .addEventListener("click", (e) => {
               playerBoard.isDone = true;
+              document.querySelector(".container").innerHTML = "";
               renderShip(playerBoard);
               let bot = new Bot("Bot", new Gameboard(10, 10));
-              createBoard(bot, "greenyellow", false);
+              bot.arrangeAllShip();
+              renderShip(bot);
+              botPlayGame(playerBoard, bot);
             });
         }
       });
