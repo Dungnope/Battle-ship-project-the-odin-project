@@ -13,17 +13,29 @@ export class Player {
 export class Bot extends Player {
   constructor(name, gameboard) {
     super(name, gameboard);
+    this.botShip = [
+      new Ship(5), //carrier
+      new Ship(4), //battle ship
+      new Ship(3), //destroyer
+      new Ship(3), //submarine
+      new Ship(2), //patrol
+    ];
   }
 
-  autoPlaceShip() {
+  autoPlaceShip(ship) {
     let x = Math.round(Math.random() * (this.gameboard.row - 1));
     let y = Math.round(Math.random() * (this.gameboard.row - 1));
     let axis = Math.round(Math.random());
-    // while(this.gameboard.placeShip(x, y, axis));
-    console.log(x, y, axis);
+    while (!this.gameboard.placeShip(ship, x, y, axis)) {
+      x = Math.round(Math.random() * (this.gameboard.row - 1));
+      y = Math.round(Math.random() * (this.gameboard.row - 1));
+    }
+  }
+
+  arrangeAllShip() {
+    while (this.botShip.length) {
+      let currentShip = this.botShip.shift();
+      this.autoPlaceShip(currentShip);
+    }
   }
 }
-
-let bot = new Bot("haha", new Gameboard(10, 10));
-bot.gameboard.placeShip(new Ship(3), 2, 2);
-bot.autoPlaceShip();
