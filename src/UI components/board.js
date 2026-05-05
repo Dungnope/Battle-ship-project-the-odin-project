@@ -287,8 +287,8 @@ const chooseShip = (player) => {
 };
 
 const renderShip = (playerBoard) => {
-  createBoard(playerBoard, "#699BF7", false);
-  const boxList = document.getElementById(`${playerBoard.id}`);
+  const board = document.getElementById(`${playerBoard.id}`);
+  const boxList = board.querySelector(`.wrapper__grid`);
   //take ship coordinate;
 
   const allShipOnBoard = playerBoard.gameboard.shipList;
@@ -301,10 +301,10 @@ const renderShip = (playerBoard) => {
       );
 
       //place head and tail ship
-      if (i === 0) placeCoordinate.innerHTML += shipHead;
+      if (i === 0) placeCoordinate.innerHTML = shipHead;
       else if (i === shipCoordinate.length - 1)
-        placeCoordinate.innerHTML += shipTail;
-      else placeCoordinate.innerHTML += shipFragment;
+        placeCoordinate.innerHTML = shipTail;
+      else placeCoordinate.innerHTML = shipFragment;
 
       if (ship.axis === "vertical") {
         placeCoordinate.firstElementChild.classList.add("rotate__ship");
@@ -344,19 +344,24 @@ const interactWithBoard = (playerBoard) => {
         if (isAllPlace(playerBoard)) {
           //ready to battle
           boardData(playerBoard).shipguide.innerHTML += playBtn;
-
+          const colorBoard =
+            boardData(playerBoard).board.querySelector(".wrapper__grid").style
+              .backgroundColor;
+          //play with bot
           boardData(playerBoard)
             .shipguide.querySelector(".battle__btn")
             .addEventListener("click", (e) => {
-              playerBoard.isDone = true;
               document.querySelector(".container").innerHTML = "";
+              createBoard(playerBoard, colorBoard, false);
               renderShip(playerBoard);
               let bot = new Bot("Bot", new Gameboard(10, 10));
               bot.arrangeAllShip();
+              createBoard(bot, "var(--attention)", false);
               renderShip(bot);
               botPlayGame(playerBoard, bot);
             });
         }
+        e.stopImmediatePropagation();
       });
 
       //hover to see ship location

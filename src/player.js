@@ -1,4 +1,3 @@
-import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 
 export class Player {
@@ -6,7 +5,6 @@ export class Player {
     this.isWinner = false;
     this.gameboard = gameboard;
     this.nameTag = name;
-    this.isDone = false;
   }
 }
 

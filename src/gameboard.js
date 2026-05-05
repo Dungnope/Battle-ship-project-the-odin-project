@@ -5,7 +5,7 @@ export class Gameboard {
     this.board = new Array(this.row)
       .fill()
       .map(() => Array(this.column).fill(0));
-    this.missedAttacksPos = [];
+    this.missedAttacksPos = new Map();
     this.shipList = [];
   }
 
@@ -148,7 +148,7 @@ export class Gameboard {
       }
     } else if (this.board[x][y] === 0) {
       this.board[x][y] = 3;
-      this.missedAttacksPos.push([x, y]);
+      this.missedAttacksPos.set(`${x + y}`, { x, y });
     }
   }
 
