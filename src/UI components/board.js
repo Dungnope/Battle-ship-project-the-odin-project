@@ -286,31 +286,49 @@ const chooseShip = (player) => {
   }
 };
 
-const renderShip = (playerBoard) => {
+const renderShip = (playerBoard, isPrepare = true) => {
+  //prepare for place ship step, not in play
   const board = document.getElementById(`${playerBoard.id}`);
-  const boxList = board.querySelector(`.wrapper__grid`);
+  const grid = board.querySelector(`.wrapper__grid`);
   //take ship coordinate;
 
-  const allShipOnBoard = playerBoard.gameboard.shipList;
-  allShipOnBoard.forEach((ship) => {
-    const shipCoordinate = ship.coordinate;
-    for (let i = 0; i < shipCoordinate.length; i++) {
-      //take DOM element have more than 1 attribute
-      const placeCoordinate = boxList.querySelector(
-        `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
-      );
+  if (isPrepare) {
+    const allShipOnBoard = playerBoard.gameboard.shipList;
+    allShipOnBoard.forEach((ship) => {
+      const shipCoordinate = ship.coordinate;
+      for (let i = 0; i < shipCoordinate.length; i++) {
+        //take DOM element have more than 1 attribute
+        const placeCoordinate = grid.querySelector(
+          `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
+        );
 
-      //place head and tail ship
-      if (i === 0) placeCoordinate.innerHTML = shipHead;
-      else if (i === shipCoordinate.length - 1)
-        placeCoordinate.innerHTML = shipTail;
-      else placeCoordinate.innerHTML = shipFragment;
+        //place head and tail ship
+        if (i === 0) placeCoordinate.innerHTML = shipHead;
+        else if (i === shipCoordinate.length - 1)
+          placeCoordinate.innerHTML = shipTail;
+        else placeCoordinate.innerHTML = shipFragment;
 
-      if (ship.axis === "vertical") {
-        placeCoordinate.firstElementChild.classList.add("rotate__ship");
+        if (ship.axis === "vertical") {
+          placeCoordinate.firstElementChild.classList.add("rotate__ship");
+        }
       }
-    }
-  });
+    });
+  } else {
+    const boxList = grid.querySelectorAll(".grid .box");
+    boxList.forEach((box) => {
+      let x = Number(box.getAttribute("x"));
+      let y = Number(box.getAttribute("y"));
+      let statusBoxLocation = playerBoard.gameboard.board[x][y];
+      //check status location 0: blank location 1: ship fragment, 2: ship fragment was hiited, 3: ship miss hit, check location 2 and 3 only
+      if (statusBoxLocation === 2) {
+        // ship is hitted
+        console.log("Hitted");
+      } else if (statusBoxLocation === 3) {
+        // miss shotted
+        console.log("Missed");
+      }
+    });
+  }
 };
 
 const isAllPlace = (playerBoard) => {
@@ -356,7 +374,7 @@ const interactWithBoard = (playerBoard) => {
               renderShip(playerBoard);
               let bot = new Bot("Bot", new Gameboard(10, 10));
               bot.arrangeAllShip();
-              createBoard(bot, "var(--attention)", false);
+              createBoard(bot, "var(--opponent-background)", false);
               renderShip(bot);
               botPlayGame(playerBoard, bot);
             });
