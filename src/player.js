@@ -1,10 +1,36 @@
 import { Ship } from "./ship.js";
 
+let tempList = [
+  new Ship(5), //carrier
+  new Ship(4), //battle ship
+  new Ship(3), //destroyer
+  new Ship(3), //submarine
+  new Ship(2), //patrol
+];
+
 export class Player {
   constructor(name, gameboard) {
     this.isWinner = false;
     this.gameboard = gameboard;
     this.nameTag = name;
+  }
+
+  autoPlaceShip(ship) {
+    let x = Math.round(Math.random() * (this.gameboard.row - 1));
+    let y = Math.round(Math.random() * (this.gameboard.row - 1));
+    let axis = Math.round(Math.random());
+    while (!this.gameboard.placeShip(ship, x, y, axis)) {
+      x = Math.round(Math.random() * (this.gameboard.row - 1));
+      y = Math.round(Math.random() * (this.gameboard.row - 1));
+    }
+  }
+
+  arrangeAllShip() {
+    let temp = tempList;
+    while (temp.length) {
+      let currentShip = temp.shift();
+      this.autoPlaceShip(currentShip);
+    }
   }
 }
 

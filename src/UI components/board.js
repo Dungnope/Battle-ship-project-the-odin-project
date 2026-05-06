@@ -286,7 +286,7 @@ const chooseShip = (player) => {
   }
 };
 
-const renderShip = (playerBoard, isPrepare = true) => {
+function renderShip(playerBoard, isPrepare = true) {
   //prepare for place ship step, not in play
   const board = document.getElementById(`${playerBoard.id}`);
   const grid = board.querySelector(`.wrapper__grid`);
@@ -314,22 +314,19 @@ const renderShip = (playerBoard, isPrepare = true) => {
       }
     });
   } else {
-    const boxList = grid.querySelectorAll(".grid .box");
-    boxList.forEach((box) => {
-      let x = Number(box.getAttribute("x"));
-      let y = Number(box.getAttribute("y"));
-      let statusBoxLocation = playerBoard.gameboard.board[x][y];
-      //check status location 0: blank location 1: ship fragment, 2: ship fragment was hiited, 3: ship miss hit, check location 2 and 3 only
-      if (statusBoxLocation === 2) {
-        // ship is hitted
-        console.log("Hitted");
-      } else if (statusBoxLocation === 3) {
-        // miss shotted
-        console.log("Missed");
-      }
-    });
+    // in game battle, use call() from user input to take x, y position
+    const boxStatus = grid.querySelector(`[x="${this.x}"][y="${this.y}"]`);
+    const positionStated = playerBoard.gameboard.board[this.x][this.y];
+    console.log(boxStatus, positionStated);
+    if (positionStated === 2) {
+      boxStatus.innerHTML = "2";
+    } else if (positionStated === 3) {
+      boxStatus.innerHTML = "3";
+    } else if (boxStatus === null) {
+      debugger;
+    }
   }
-};
+}
 
 const isAllPlace = (playerBoard) => {
   //check all ships placed or not

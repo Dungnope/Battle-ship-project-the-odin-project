@@ -148,7 +148,7 @@ export class Gameboard {
       }
     } else if (this.board[x][y] === 0) {
       this.board[x][y] = 3;
-      this.missedAttacksPos.set(`${x + y}`, { x, y });
+      this.missedAttacksPos.set(`${x * this.row + y}`, { x, y });
     }
   }
 

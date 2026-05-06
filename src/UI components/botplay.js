@@ -13,19 +13,19 @@ export const botPlayGame = (player, bot) => {
     box.addEventListener("click", (e) => {
       if (turn === "Player" && !hasClicked) {
         //attack bot
-        let x = Number(e.currentTarget.getAttribute("x"));
-        let y = Number(e.currentTarget.getAttribute("y"));
-        bot.gameboard.receiveAttack(x, y);
+        let dx = Number(e.currentTarget.getAttribute("x"));
+        let dy = Number(e.currentTarget.getAttribute("y"));
+        bot.gameboard.receiveAttack(dx, dy);
         console.log("player fire: ");
-        renderShip(bot, false);
+        renderShip.call({ x: dx, y: dy }, bot, false);
         hasClicked = !hasClicked;
         turn = "Bot";
         setTimeout(() => {
-          let xRan = Math.round(Math.random() * player.gameboard.row);
-          let yRan = Math.round(Math.random() * player.gameboard.row);
+          let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
+          let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
           player.gameboard.receiveAttack(xRan, yRan);
           console.log("bot fire: ");
-          renderShip(player, false);
+          renderShip.call({ x: xRan, y: yRan }, player, false);
           hasClicked = !hasClicked;
           turn = "Player";
         }, 1000);
