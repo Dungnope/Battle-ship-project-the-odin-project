@@ -317,13 +317,10 @@ function renderShip(playerBoard, isPrepare = true) {
     // in game battle, use call() from user input to take x, y position
     const boxStatus = grid.querySelector(`[x="${this.x}"][y="${this.y}"]`);
     const positionStated = playerBoard.gameboard.board[this.x][this.y];
-    console.log(boxStatus, positionStated);
     if (positionStated === 2) {
       boxStatus.innerHTML = "2";
     } else if (positionStated === 3) {
       boxStatus.innerHTML = "3";
-    } else if (boxStatus === null) {
-      debugger;
     }
   }
 }
