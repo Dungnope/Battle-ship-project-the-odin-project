@@ -18,7 +18,7 @@ export const botPlayGame = (player, bot) => {
   const botBoard = document.getElementById(`${bot.id}`);
 
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
-  let clickNumber = 0;
+  let clickNumber = 0; //avoid stackoverflow when can not find any position
   // play turn by turn
   botField.forEach((box) => {
     box.addEventListener("click", (e) => {
@@ -41,8 +41,9 @@ export const botPlayGame = (player, bot) => {
             let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
             //check position has used or not
             while (
-              player.gameboard.board[xRan][yRan] === 2 ||
-              player.gameboard.board[xRan][yRan] === 3
+              clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
+              (player.gameboard.board[xRan][yRan] === 2 ||
+                player.gameboard.board[xRan][yRan] === 3)
             ) {
               xRan = Math.round(Math.random() * (player.gameboard.row - 1));
               yRan = Math.round(Math.random() * (player.gameboard.row - 1));
