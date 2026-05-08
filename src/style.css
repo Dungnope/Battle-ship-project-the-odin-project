@@ -112,6 +112,8 @@ body{
 }
 
 .box{
+    font-size: 1.4em;
+    font-weight: 700;
     height: 40px;
     background-color: var(--background);
     box-shadow: 4px 4px 0 0 var(--text);

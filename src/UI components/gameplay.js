@@ -1,4 +1,15 @@
-import { renderShip } from "./board.js";
+import {
+  createBoard,
+  chooseShip,
+  interactWithBoard,
+  renderShip,
+} from "./board.js";
+
+export const playerSetup = (player) => {
+  createBoard(player, "var(--attention)", true);
+  chooseShip(player);
+  interactWithBoard(player);
+};
 
 export const botPlayGame = (player, bot) => {
   let turn = player.constructor.name;
@@ -11,7 +22,7 @@ export const botPlayGame = (player, bot) => {
   // play turn by turn
   botField.forEach((box) => {
     box.addEventListener("click", (e) => {
-      if (turn === "Player" && !hasClicked) {
+      if (turn === "Player" && !hasClicked && !player.isWinner) {
         //attack bot
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
@@ -51,11 +62,13 @@ export const botPlayGame = (player, bot) => {
 
 const checkWinner = (player1, player2) => {
   //check whether all ship collapsed or not
-  if (player1.gameboard.isAllCollapse()) player2.isWinner = true;
-  if (player2.gameboard.isAllCollapse()) player1.isWinner = true;
+  if (!player1.isWinner && !player2.isWinner) {
+    if (player1.gameboard.isAllCollapse()) player2.isWinner = true;
+    if (player2.gameboard.isAllCollapse()) player1.isWinner = true;
 
-  if (player1.isWinner)
-    console.log(`${player1.nameTag}(${player1.id}) win the game`);
-  if (player2.isWinner)
-    console.log(`${player2.nameTag}(${player2.id}) win the game`);
+    if (player1.isWinner)
+      console.log(`${player1.nameTag}(${player1.id}) win the game`);
+    if (player2.isWinner)
+      console.log(`${player2.nameTag}(${player2.id}) win the game`);
+  }
 };

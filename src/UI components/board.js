@@ -15,7 +15,7 @@ import {
   shipTail,
   playBtn,
 } from "./assets.js";
-import { botPlayGame } from "./botplay.js";
+import { botPlayGame } from "./gameplay.js";
 
 const createBoard = (player, boardColor, withShipList) => {
   const container = document.querySelector(".container");
@@ -318,9 +318,10 @@ function renderShip(playerBoard, isPrepare = true) {
     const boxStatus = grid.querySelector(`[x="${this.x}"][y="${this.y}"]`);
     const positionStated = playerBoard.gameboard.board[this.x][this.y];
     if (positionStated === 2) {
-      boxStatus.innerHTML = "2";
+      boxStatus.innerHTML = "X";
+      boxStatus.style.backgroundColor = "var(--target)";
     } else if (positionStated === 3) {
-      boxStatus.innerHTML = "3";
+      boxStatus.innerHTML = missShot;
     }
   }
 }
