@@ -1,6 +1,8 @@
+import { Bot, Player } from "../player.js";
+import { Gameboard } from "../gameboard.js";
 import {
-  createBoard,
   chooseShip,
+  createBoard,
   interactWithBoard,
   renderShip,
 } from "./board.js";
@@ -9,6 +11,18 @@ export const playerSetup = (player) => {
   createBoard(player, "var(--attention)", true);
   chooseShip(player);
   interactWithBoard(player);
+};
+
+export const fastPlayGame = () => {
+  let player1 = new Player("Parker", new Gameboard(10, 10));
+  let bot = new Bot("Bot1", new Gameboard(10, 10));
+  player1.arrangeAllShip();
+  bot.arrangeAllShip();
+  createBoard(player1, "var(--target)", false);
+  createBoard(bot, "orange", false);
+  renderShip(player1);
+  renderShip(bot);
+  botPlayGame(player1, bot);
 };
 
 export const botPlayGame = (player, bot) => {
@@ -22,7 +36,13 @@ export const botPlayGame = (player, bot) => {
   // play turn by turn
   botField.forEach((box) => {
     box.addEventListener("click", (e) => {
-      if (turn === "Player" && !hasClicked && !player.isWinner) {
+      //only clickable if not winner and right turn
+      if (
+        turn === "Player" &&
+        !hasClicked &&
+        !player.isWinner &&
+        !bot.isWinner
+      ) {
         //attack bot
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
@@ -33,43 +53,81 @@ export const botPlayGame = (player, bot) => {
         ) {
           bot.gameboard.receiveAttack(dx, dy);
           renderShip.call({ x: dx, y: dy }, bot, false);
-          checkWinner(player, bot);
+          if (checkWinner(player, bot)) {
+            showEndGame(player, bot);
+          }
           hasClicked = !hasClicked;
           turn = "Bot";
-          setTimeout(() => {
-            let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
-            let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
-            //check position has used or not
-            while (
-              clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
-              (player.gameboard.board[xRan][yRan] === 2 ||
-                player.gameboard.board[xRan][yRan] === 3)
-            ) {
-              xRan = Math.round(Math.random() * (player.gameboard.row - 1));
-              yRan = Math.round(Math.random() * (player.gameboard.row - 1));
-            }
-            player.gameboard.receiveAttack(xRan, yRan);
-            renderShip.call({ x: xRan, y: yRan }, player, false);
-            checkWinner(player, bot);
-            hasClicked = !hasClicked;
-            turn = "Player";
-            clickNumber++;
-          }, 500);
+          if (!player.isWinner && !bot.isWinner && turn === "Bot")
+            setTimeout(() => {
+              let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
+              let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
+              //check position has used or not
+              while (
+                clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
+                (player.gameboard.board[xRan][yRan] === 2 ||
+                  player.gameboard.board[xRan][yRan] === 3)
+              ) {
+                xRan = Math.round(Math.random() * (player.gameboard.row - 1));
+                yRan = Math.round(Math.random() * (player.gameboard.row - 1));
+              }
+              player.gameboard.receiveAttack(xRan, yRan);
+              renderShip.call({ x: xRan, y: yRan }, player, false);
+              if (checkWinner(player, bot)) {
+                showEndGame(bot, player);
+              }
+              hasClicked = !hasClicked;
+              turn = "Player";
+              clickNumber++;
+            }, 500);
         }
+      } else if (player.isWinner || bot.isWinner) {
       }
     });
   });
 };
 
-const checkWinner = (player1, player2) => {
+const checkWinner = (entity1, entity2) => {
   //check whether all ship collapsed or not
-  if (!player1.isWinner && !player2.isWinner) {
-    if (player1.gameboard.isAllCollapse()) player2.isWinner = true;
-    if (player2.gameboard.isAllCollapse()) player1.isWinner = true;
+  if (!entity1.isWinner && !entity2.isWinner) {
+    if (entity1.gameboard.isAllCollapse()) entity2.isWinner = true;
+    if (entity2.gameboard.isAllCollapse()) entity1.isWinner = true;
 
-    if (player1.isWinner)
-      console.log(`${player1.nameTag}(${player1.id}) win the game`);
-    if (player2.isWinner)
-      console.log(`${player2.nameTag}(${player2.id}) win the game`);
+    if (entity1.isWinner) return true;
+    if (entity2.isWinner) return true;
+
+    return false;
   }
+};
+
+const showEndGame = (entity1, entity2) => {
+  const entity1Board = document.getElementById(`${entity1.id}`);
+  const entity2Board = document.getElementById(`${entity2.id}`);
+
+  const entity1Color =
+    entity1Board.querySelector(".wrapper__grid").style.backgroundColor;
+  const entity2Color =
+    entity2Board.querySelector(".wrapper__grid").style.backgroundColor;
+  console.log(entity1Color, entity2Color);
+  let winInfo;
+  let loseInfo;
+  let blur__screenWin;
+  let blur__screenLose;
+  winInfo = { name: entity1.nameTag, id: entity1.id, status: "Winner" };
+  loseInfo = { name: entity2.nameTag, id: entity2.id, status: "Loser" };
+  blur__screenWin = `
+    <div class = "blur__screen">
+      <p>${winInfo.name}(${winInfo.id})</p>
+      <p style="color: ${entity1Color}">${winInfo.status}</p>
+    </div>;
+  `;
+
+  blur__screenLose = `
+    <div class = "blur__screen">
+      <p>${loseInfo.name}(${loseInfo.id})</p>
+      <p style="color: ${entity2Color}">${loseInfo.status}</p>
+    </div>;
+  `;
+  entity1Board.innerHTML += blur__screenWin;
+  entity2Board.innerHTML += blur__screenLose;
 };
