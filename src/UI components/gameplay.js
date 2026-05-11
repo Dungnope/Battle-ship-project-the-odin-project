@@ -86,7 +86,6 @@ export const botPlayGame = (player, bot) => {
               }
             }, 500);
         }
-      } else if (player.isWinner || bot.isWinner) {
       }
     });
   });
@@ -107,7 +106,7 @@ export const singlePlay = function () {
       renderShip(this.player);
       this.bot.arrangeAllShip();
       createBoard(this.bot, "var(--opponent-background)", false);
-      renderShip(this.bot);
+      // renderShip(this.bot); make ship on board not show
       botPlayGame(this.player, this.bot);
     });
 };
