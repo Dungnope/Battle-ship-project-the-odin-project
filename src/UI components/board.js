@@ -13,9 +13,9 @@ import {
   shipHead,
   shipFragment,
   shipTail,
-  playBtn,
+  playBtnStyle,
 } from "./assets.js";
-import { botPlayGame } from "./gameplay.js";
+import { botPlayGame, singlePlay } from "./gameplay.js";
 
 const createBoard = (player, boardColor, withShipList) => {
   const container = document.querySelector(".container");
@@ -41,8 +41,12 @@ const createBoard = (player, boardColor, withShipList) => {
 
   const playerID = `#${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
-  boardContainer.id = `#tar_${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
-  player.id = boardContainer.id;
+  if (player.id === undefined || player.id === null) {
+    boardContainer.id = `#tar_${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
+    player.id = boardContainer.id;
+  } else {
+    boardContainer.id = player.id;
+  }
 
   const showName = document.createElement("p");
   showName.innerHTML = `<span>(${player.id})</span> ${player.nameTag}'s board`;
@@ -60,7 +64,11 @@ const createBoard = (player, boardColor, withShipList) => {
   wrapper.append(rowNumber, grid);
 
   if (withShipList) {
-    boardContainer.append(showName, wrapper, boardGuide());
+    boardContainer.append(
+      showName,
+      wrapper,
+      boardGuide.call({ player: player }, boardColor),
+    );
   } else {
     boardContainer.append(showName, wrapper);
   }
@@ -96,7 +104,7 @@ const createBoard = (player, boardColor, withShipList) => {
 const boardData = (player) => {
   const playerBoard = document.getElementById(`${player.id}`);
   const boxes = playerBoard.querySelectorAll(".grid .box");
-  const shipGuide = playerBoard.querySelector(".guide__ship .shipList");
+  const shipGuide = playerBoard.querySelector(".guide__ship");
   const shipList = shipGuide.querySelectorAll("li");
 
   return {
@@ -107,7 +115,48 @@ const boardData = (player) => {
   };
 };
 
-const boardGuide = () => {
+const autoPlaceShip = (player) => {
+  clearAllShip(player);
+  player.arrangeAllShip();
+
+  boardData(player).shiplist.forEach((ship) => {
+    ship.classList.add("had__placed");
+  });
+
+  renderShip(player);
+  singlePlay.apply({
+    player: player,
+    bot: new Bot("Bot1", new Gameboard(10, 10)),
+  });
+};
+
+const clearAllShip = (player) => {
+  boardData(player).boxes.forEach((box) => {
+    box.innerHTML = "";
+  });
+
+  //delete all ship from board
+  player.gameboard.shipList.forEach((ship) => {
+    ship.coordinate.forEach((coor) => {
+      player.gameboard.board[coor.x][coor.y] = 0;
+    });
+  });
+  player.gameboard.shipList = [];
+
+  boardData(player).shiplist.forEach((ship) => {
+    ship.classList.remove("had__placed", "selected__ship");
+  });
+
+  //check whether the battle button show or not to remove it
+  if (!isAllPlace(player)) {
+    let shipguide = boardData(player).shipguide.lastElementChild;
+    if (shipguide.classList.contains("battle__btn")) {
+      boardData(player).shipguide.removeChild(shipguide);
+    }
+  }
+};
+
+const boardGuide = function (color) {
   //ship guide box
   const guideShip = document.createElement("div");
   guideShip.classList.add("guide__ship");
@@ -117,6 +166,7 @@ const boardGuide = () => {
   guideTag.classList.add("guide__tag");
   //add content
   guideTag.textContent = "Ships Guide";
+  guideTag.style.backgroundColor = color;
 
   const paragraphContent = document.createElement("p");
   paragraphContent.textContent = Content;
@@ -124,6 +174,43 @@ const boardGuide = () => {
   const shipList = document.createElement("ul");
   shipList.classList.add("shipList");
 
+  //add clear and autoplace function button
+  const functionBox = document.createElement("div");
+  functionBox.classList.add("function__btn--box");
+
+  const autoPlaceBtn = document.createElement("button");
+  autoPlaceBtn.classList.add("function__btn--autoplace");
+  autoPlaceBtn.textContent = "Auto place";
+  autoPlaceBtn.style.backgroundColor = color;
+
+  autoPlaceBtn.addEventListener("click", (e) => {
+    autoPlaceShip(this.player);
+    e.stopImmediatePropagation();
+  });
+
+  const clearBoardBtn = document.createElement("button");
+  clearBoardBtn.classList.add("function__btn--clear");
+  clearBoardBtn.textContent = "Clear All";
+  clearBoardBtn.setAttribute(
+    "style",
+    `border: 1px solid ${color}; outline: 1px solid ${color};color: ${color};`,
+  );
+  clearBoardBtn.addEventListener("mouseover", function (e) {
+    e.currentTarget.style.backgroundColor = color;
+    e.currentTarget.style.color = "var(--background)";
+  });
+  clearBoardBtn.addEventListener("mouseout", function (e) {
+    e.currentTarget.style.backgroundColor = "transparent";
+    e.currentTarget.style.color = `${color}`;
+  });
+  clearBoardBtn.addEventListener("click", (e) => {
+    clearAllShip(this.player);
+    e.stopImmediatePropagation();
+  });
+
+  functionBox.append(autoPlaceBtn, clearBoardBtn);
+
+  //add margin bottom for shiplist
   const bottomMargin = document.createElement("div");
   bottomMargin.classList.add("bottom__margin");
 
@@ -137,7 +224,13 @@ const boardGuide = () => {
   `;
 
   //add guideTag, description, list on guide box
-  guideShip.append(guideTag, paragraphContent, shipList, bottomMargin);
+  guideShip.append(
+    guideTag,
+    paragraphContent,
+    shipList,
+    functionBox,
+    bottomMargin,
+  );
 
   return guideShip;
 };
@@ -273,11 +366,9 @@ const chooseShip = (player) => {
             ship.classList.remove("selected__ship");
           }
         });
-
         if (!e.currentTarget.classList.contains("had__placed")) {
           e.currentTarget.classList.toggle("selected__ship");
         }
-
         e.stopPropagation();
       });
     });
@@ -338,6 +429,18 @@ const isAllPlace = (playerBoard) => {
   return true;
 };
 
+export const createPlayBtn = (color) => {
+  let shipGuide = document.querySelector(".guide__ship");
+  //ready to battle and check it appeared or not
+  if (!shipGuide.lastElementChild.classList.contains("battle__btn")) {
+    let playBtn = document.createElement("button");
+    playBtn.classList.add("battle__btn");
+    playBtn.style.backgroundColor = color;
+    playBtn.innerHTML += playBtnStyle;
+    shipGuide.appendChild(playBtn);
+  }
+};
+
 const interactWithBoard = (playerBoard) => {
   let axis = ["vertical", "horizontal"];
   let current = 1;
@@ -355,26 +458,11 @@ const interactWithBoard = (playerBoard) => {
 
         //check all ship placed or not
         if (isAllPlace(playerBoard)) {
-          //ready to battle
-          boardData(playerBoard).shipguide.innerHTML += playBtn;
-          const colorBoard =
-            boardData(playerBoard).board.querySelector(".wrapper__grid").style
-              .backgroundColor;
-          //play with bot
-          boardData(playerBoard)
-            .shipguide.querySelector(".battle__btn")
-            .addEventListener("click", (e) => {
-              document.querySelector(".container").innerHTML = "";
-              createBoard(playerBoard, colorBoard, false);
-              renderShip(playerBoard);
-              let bot = new Bot("Bot", new Gameboard(10, 10));
-              bot.arrangeAllShip();
-              createBoard(bot, "var(--opponent-background)", false);
-              renderShip(bot);
-              botPlayGame(playerBoard, bot);
-            });
+          singlePlay.apply({
+            player: playerBoard,
+            bot: new Bot("Bot1", new Gameboard(10, 10)),
+          });
         }
-        e.stopImmediatePropagation();
       });
 
       //hover to see ship location

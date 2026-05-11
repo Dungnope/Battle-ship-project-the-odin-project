@@ -1,13 +1,5 @@
 import { Ship } from "./ship.js";
 
-let tempList = [
-  new Ship(5), //carrier
-  new Ship(4), //battle ship
-  new Ship(3), //destroyer
-  new Ship(3), //submarine
-  new Ship(2), //patrol
-];
-
 export class Player {
   constructor(name, gameboard) {
     this.isWinner = false;
@@ -26,9 +18,16 @@ export class Player {
   }
 
   arrangeAllShip() {
-    let temp = tempList;
-    while (temp.length) {
-      let currentShip = temp.shift();
+    let tempList = [
+      new Ship(5), //carrier
+      new Ship(4), //battle ship
+      new Ship(3), //destroyer
+      new Ship(3), //submarine
+      new Ship(2), //patrol
+    ];
+
+    while (tempList.length) {
+      let currentShip = tempList.shift();
       this.autoPlaceShip(currentShip);
     }
   }

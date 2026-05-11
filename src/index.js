@@ -1,4 +1,6 @@
 // import "./style.css";
+import { Gameboard } from "./gameboard.js";
+import { Player } from "./player.js";
 import {
   botPlayGame,
   fastPlayGame,
@@ -6,5 +8,6 @@ import {
 } from "./UI components/gameplay.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
-  fastPlayGame();
+  let player1 = new Player("Peter", new Gameboard(10, 10));
+  playerSetup(player1);
 });

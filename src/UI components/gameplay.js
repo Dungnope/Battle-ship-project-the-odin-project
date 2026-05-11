@@ -3,12 +3,14 @@ import { Gameboard } from "../gameboard.js";
 import {
   chooseShip,
   createBoard,
+  createPlayBtn,
   interactWithBoard,
   renderShip,
+  boardData,
 } from "./board.js";
 
 export const playerSetup = (player) => {
-  createBoard(player, "var(--attention)", true);
+  createBoard(player, "var(--valid)", true);
   chooseShip(player);
   interactWithBoard(player);
 };
@@ -55,9 +57,11 @@ export const botPlayGame = (player, bot) => {
           renderShip.call({ x: dx, y: dy }, bot, false);
           if (checkWinner(player, bot)) {
             showEndGame(player, bot);
+          } else {
+            hasClicked = !hasClicked;
+            turn = "Bot";
           }
-          hasClicked = !hasClicked;
-          turn = "Bot";
+
           if (!player.isWinner && !bot.isWinner && turn === "Bot")
             setTimeout(() => {
               let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
@@ -75,16 +79,37 @@ export const botPlayGame = (player, bot) => {
               renderShip.call({ x: xRan, y: yRan }, player, false);
               if (checkWinner(player, bot)) {
                 showEndGame(bot, player);
+              } else {
+                hasClicked = !hasClicked;
+                turn = "Player";
+                clickNumber++;
               }
-              hasClicked = !hasClicked;
-              turn = "Player";
-              clickNumber++;
             }, 500);
         }
       } else if (player.isWinner || bot.isWinner) {
       }
     });
   });
+};
+
+export const singlePlay = function () {
+  //show play button and click to navigation to game
+  const colorBoard = boardData(this.player).board.querySelector(
+    ".wrapper__grid",
+  ).style.backgroundColor;
+  createPlayBtn(colorBoard);
+  //play with bot
+  boardData(this.player)
+    .shipguide.querySelector(".battle__btn")
+    .addEventListener("click", (e) => {
+      document.querySelector(".container").innerHTML = "";
+      createBoard(this.player, colorBoard, false);
+      renderShip(this.player);
+      this.bot.arrangeAllShip();
+      createBoard(this.bot, "var(--opponent-background)", false);
+      renderShip(this.bot);
+      botPlayGame(this.player, this.bot);
+    });
 };
 
 const checkWinner = (entity1, entity2) => {
@@ -108,7 +133,6 @@ const showEndGame = (entity1, entity2) => {
     entity1Board.querySelector(".wrapper__grid").style.backgroundColor;
   const entity2Color =
     entity2Board.querySelector(".wrapper__grid").style.backgroundColor;
-  console.log(entity1Color, entity2Color);
   let winInfo;
   let loseInfo;
   let blur__screenWin;
@@ -128,6 +152,8 @@ const showEndGame = (entity1, entity2) => {
       <p style="color: ${entity2Color}">${loseInfo.status}</p>
     </div>;
   `;
-  entity1Board.innerHTML += blur__screenWin;
-  entity2Board.innerHTML += blur__screenLose;
+  setTimeout(() => {
+    entity1Board.innerHTML += blur__screenWin;
+    entity2Board.innerHTML += blur__screenLose;
+  }, 1000);
 };
