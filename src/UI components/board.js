@@ -9,7 +9,6 @@ import {
   Patrol,
   Content,
   missShot,
-  correctShot,
   shipHead,
   shipFragment,
   shipTail,
