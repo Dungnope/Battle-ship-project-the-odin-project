@@ -207,6 +207,10 @@ const boardGuide = function (color) {
     e.stopImmediatePropagation();
   });
 
+  const warnSign = document.createElement("span");
+  warnSign.classList.add("warn__sign");
+  warnSign.textContent = "Right click to change axis";
+
   functionBox.append(autoPlaceBtn, clearBoardBtn);
 
   //add margin bottom for shiplist
@@ -228,6 +232,7 @@ const boardGuide = function (color) {
     paragraphContent,
     shipList,
     functionBox,
+    warnSign,
     bottomMargin,
   );
 

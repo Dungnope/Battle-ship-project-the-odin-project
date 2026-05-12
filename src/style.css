@@ -235,6 +235,31 @@ body{
     }
 }
 
+.warn__sign{
+    padding: 20px 24px;
+    border-radius: 100px;
+    background-color: var(--attention);
+    outline: 4px solid var(--text);
+    border-radius: 100px;
+    position: relative;
+    width: fit-content;
+    &::before{
+        content: " ";
+        display: block;
+        width: 50.35px;
+        height: 59.39px;
+        top: 60%;
+        right: -20px;
+        transform: scale(0.8) translateY(-60%);
+        position: absolute;
+        aspect-ratio: 0.976;;
+        background-color: var(--text);
+	    clip-path: shape(from 35.75% 16.06%,line to 45.74% 8.15%,move to 22.7% 11.94%,line to 20.03% 0%,move to 12.58% 20.61%,line to 0% 17.1%,move to 15.92% 33%,line to 6.58% 41.57%,close,move to 25.41% 24.26%,line to 100% 61.61%,line to 62.6% 67.37%,line to 48.37% 100%,line to 25.41% 24.26%,close);
+    }
+
+
+}
+
 /* battle .battle__btn */
 /* From Uiverse.io by barisdogansutcu */ 
 .battle__btn {
@@ -390,12 +415,34 @@ body{
     box-shadow: 8px 8px 0 0 var(--text);
 }
 
-.selected__ship{
+.selected__ship, .play__again{
     background-color: var(--attention);
     outline: 4px solid var(--text);
     border-radius: 8px;
     box-shadow: 8px 8px 0 0 var(--text);
+}
 
+.play__again{
+    position: absolute;
+    display: block;
+    padding: 20px 36px;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.6em;
+    font-weight: 600;
+
+    &:hover{
+        transition: box-shadow 0.2s ease-in, padding 0.1s ease-out;
+        box-shadow: none;
+        padding: 22px 40px;
+    }
+
+    &:active{
+        box-shadow: inset 2px 2px 0 1px var(--click);
+    }
+    
 }
 
 .rotate__ship{

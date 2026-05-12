@@ -9,10 +9,12 @@ import {
   boardData,
 } from "./board.js";
 
-export const playerSetup = (player) => {
-  createBoard(player, "var(--valid)", true);
-  chooseShip(player);
-  interactWithBoard(player);
+export const playerSetup = () => {
+  document.querySelector(".container").innerHTML = "";
+  let newPlayer = new Player("Spiderman", new Gameboard(10, 10));
+  createBoard(newPlayer, "var(--valid)", true);
+  chooseShip(newPlayer);
+  interactWithBoard(newPlayer);
 };
 
 export const fastPlayGame = () => {
@@ -136,6 +138,10 @@ const showEndGame = (entity1, entity2) => {
   let loseInfo;
   let blur__screenWin;
   let blur__screenLose;
+  let playAgain = document.createElement("button");
+  playAgain.textContent = "Play again";
+  playAgain.classList.add("play__again");
+
   winInfo = { name: entity1.nameTag, id: entity1.id, status: "Winner" };
   loseInfo = { name: entity2.nameTag, id: entity2.id, status: "Loser" };
   blur__screenWin = `
@@ -151,7 +157,10 @@ const showEndGame = (entity1, entity2) => {
       <p style="color: ${entity2Color}">${loseInfo.status}</p>
     </div>;
   `;
+
+  playAgain.addEventListener("click", playerSetup);
   setTimeout(() => {
+    document.querySelector(".container").appendChild(playAgain);
     entity1Board.innerHTML += blur__screenWin;
     entity2Board.innerHTML += blur__screenLose;
   }, 1000);
