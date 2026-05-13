@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 *{
     margin: 0;
     padding: 0;
@@ -22,6 +22,108 @@
 body{
     min-height: 100vh;
     place-content: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.main{
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.header__menu{
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: max(3rem,12vw);
+}
+
+.user__name--input{
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 12px 18px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 4px 4px 0 0 var(--text);
+    color: var(--text);
+    outline: 1px solid var(--text);
+    border: 1px solid var(--text);
+    font-family: "Bangers", system-ui;
+    font-size: 1.6rem;
+    width: max(120px, 40vw);
+}
+
+#enter__battle{
+  padding: 16px 32px;
+  display: block;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 16px auto;
+  background-color: var(--attention);
+  box-shadow: 4px 4px 0 0 var(--text);
+  color: var(--text);
+  outline: 1px solid var(--text);
+  border: 1px solid var(--text)
+}
+
+/* for neow effect */
+
+.neon__title-hollow {
+  letter-spacing: 5px;
+  
+  /* 1. Make the inside of the text invisible to merge with the background */
+  color: transparent; 
+  
+  /* 2. Create the solid "glass tube" outline of the neon light */
+  -webkit-text-stroke: 3px #e3edf5; 
+  
+  /* 3. Add the glowing emission spreading outward */
+  text-shadow: 
+    0 0 10px var(--attention),
+    0 0 20px var(--attention),
+    0 0 40px var(--attention),
+    0 0 80px var(--attention);
+    
+  animation: battleship-flicker 5s infinite; 
+}
+
+
+/* The Keyframes: 
+  The percentages represent the timeline of the 5-second animation.
+  It stays fully lit most of the time, then drops opacity and shadow 
+  rapidly at specific intervals to create a stuttering flicker.
+*/
+@keyframes battleship-flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 1;
+    text-shadow: 
+      0 0 5px #ffffff,
+      0 0 10px #ffffff,
+      0 0 20px var(--attention),
+      0 0 40px var(--attention),
+      0 0 80px var(--attention),
+      0 0 20px var(--attention);
+  }
+  
+  /* First quick flicker */
+  20%, 21.999% {
+    opacity: 0.4;
+    text-shadow: 
+      0 0 2px #ffffff,
+      0 0 5px var(--opponent-background);
+  }
+
+  /* Second longer flicker block */
+  63%, 63.999%, 65%, 69.999% {
+    opacity: 0.3;
+    text-shadow: none; /* Completely kills the glow for a split second */
+  }
 }
 
 .container{

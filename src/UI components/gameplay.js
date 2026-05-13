@@ -9,9 +9,32 @@ import {
   boardData,
 } from "./board.js";
 
-export const playerSetup = () => {
+export const main = () => {
+  let mainMenu = `
+    <div class="main">
+      <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
+      <input type="text" class="user__name--input" placeholder="Your name...">
+      <button id="enter__battle">Enter</button>
+    </div>
+  `;
+  document.querySelector(".container").setHTMLUnsafe(mainMenu);
+  //refert name input when refresh page
+  document.querySelector(".user__name--input").value = "";
+  let background = document.querySelector("body");
+  background.style.backgroundImage = "url(./assets/battle_ship_bacground.webp)";
+  let playerName = document.querySelector(".user__name--input");
+  document.querySelector("#enter__battle").addEventListener("click", (e) => {
+    background.removeAttribute("style");
+    playerSetup(playerName.value);
+  });
+};
+
+export const playerSetup = (playerName) => {
   document.querySelector(".container").innerHTML = "";
-  let newPlayer = new Player("Spiderman", new Gameboard(10, 10));
+  if (playerName === "" || playerName === " ") {
+    playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
+  }
+  let newPlayer = new Player(playerName, new Gameboard(10, 10));
   createBoard(newPlayer, "var(--valid)", true);
   chooseShip(newPlayer);
   interactWithBoard(newPlayer);
@@ -158,7 +181,9 @@ const showEndGame = (entity1, entity2) => {
     </div>;
   `;
 
-  playAgain.addEventListener("click", playerSetup);
+  playAgain.addEventListener("click", (e) => {
+    playerSetup(entity1.nameTag);
+  });
   setTimeout(() => {
     document.querySelector(".container").appendChild(playAgain);
     entity1Board.innerHTML += blur__screenWin;
