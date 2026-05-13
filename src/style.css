@@ -572,6 +572,9 @@ justify-content: center;
 flex-direction: column;
 font-size: 3em;
 
+    & p{
+        text-align: center;
+    }
     & p:last-child{
     font-size: 1.5em;
 }
