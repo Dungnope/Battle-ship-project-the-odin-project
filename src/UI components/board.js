@@ -259,7 +259,7 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
   let takenShip = selectedShip(player);
   try {
     let realShipFragment = takenShip.children[1];
-    let shipLength = realShipFragment.children.length;
+    let shipLength = Number(realShipFragment.getAttribute("length"));
     let getXBoard = Number(eventTarget.getAttribute("x"));
     let getYBoard = Number(eventTarget.getAttribute("y"));
     //show hover color on grid
@@ -322,7 +322,7 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
     if (takenShip.classList.contains("selected__ship")) {
       const x = Number(boxTarget.currentTarget.getAttribute("x"));
       const y = Number(boxTarget.currentTarget.getAttribute("y"));
-      const shipLength = takenShip.children[1].children.length; //take from ship structure
+      const shipLength = Number(takenShip.children[1].getAttribute("length")); //take from ship structure
       let currentBoard = playerBoard.gameboard;
       //place ship on board
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
