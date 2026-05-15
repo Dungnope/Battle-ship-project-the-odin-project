@@ -1,6 +1,7 @@
 import { Gameboard } from "../gameboard.js";
 import { Bot } from "../player.js";
 import { Ship } from "../ship.js";
+
 import {
   Carrier,
   Battleship,
@@ -46,6 +47,10 @@ const createBoard = (player, boardColor, withShipList) => {
   } else {
     boardContainer.id = player.id;
   }
+
+  //create canvas
+  const canvas = document.createElement("canvas");
+  canvas.id = "canvas1";
 
   const showName = document.createElement("p");
   showName.innerHTML = `<span>(${player.id})</span> ${player.nameTag}'s board`;

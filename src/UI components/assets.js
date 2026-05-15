@@ -69,59 +69,52 @@ const playBtnStyle = `
 
 `;
 
+import carrier from "../assets/carrier.png";
 const Carrier = `
     <li>
       <span class="ship__name" name="carrier">Carrier</span>
-      <div class="ship">
-        ${shipHead}
-        ${shipFragment}
-        ${shipFragment}
-        ${shipFragment}
-        ${shipTail}
+      <div class="ship" length="4">
+        <img src="${carrier}">
       </div>
     </li>
 `;
 
-const Battleship = `
-    <li>
-      <span class="ship__name" name="battleship">BattleShip</span>
-      <div class="ship">
-        ${shipHead}
-        ${shipFragment}
-        ${shipFragment}
-        ${shipTail}
-      </div>
-    </li>
-`;
-
-const Destroyer = `
-    <li>
-      <span class="ship__name" name="destroyer">Destroyer</span>
-      <div class="ship">
-        ${shipHead}
-        ${shipFragment}
-        ${shipTail}
-      </div>
-    </li>
-`;
-
-const Submarine = `
-    <li>
-      <span class="ship__name" name="submarine">Submarine</span>
-      <div class="ship">
-        ${shipHead}
-        ${shipFragment}
-        ${shipTail}
-      </div>
-    </li>
-`;
-
+import patrol from "../assets/patrol.png";
 const Patrol = `
     <li>
       <span class="ship__name" name="patrol">Patrol</span>
-      <div class="ship">
-        ${shipHead}
-        ${shipTail}
+      <div class="ship" length="2">
+        <img src="${patrol}">
+      </div>
+    </li>
+`;
+
+import battleship from "../assets/battle_ship.png";
+const Battleship = `
+    <li>
+      <span class="ship__name" name="battleship">BattleShip</span>
+      <div class="ship" length="5">
+        <img src="${battleship}">
+      </div>
+    </li>
+`;
+
+import destroyer from "../assets/destroyer.png";
+const Destroyer = `
+    <li>
+      <span class="ship__name" name="destroyer">Destroyer</span>
+      <div class="ship" length="3">
+        <img src="${destroyer}">
+      </div>
+    </li>
+`;
+
+import submarine from "../assets/submarine.png";
+const Submarine = `
+    <li>
+      <span class="ship__name" name="submarine">Submarine</span>
+      <div class="ship" length="3">
+        <img src="${submarine}">
       </div>
     </li>
 `;

@@ -1,7 +1,7 @@
-// import "./style.css";
+import "./style.css";
 
-import { main } from "./UI components/gameplay.js";
+import { fastPlayGame, main, playerSetup } from "./UI components/gameplay.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
-  main();
+  playerSetup("peter");
 });

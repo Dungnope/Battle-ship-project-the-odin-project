@@ -186,7 +186,20 @@ body{
         -ms-user-select: none;
         -o-user-select: none;
         user-select: none;
-
+        position: relative;
+    }
+    
+    & #canvas1{
+        width: calc(100% - calc(36px + 60px));
+        height: calc(100% - calc(19.5px + 12px + 52px/2 + 36px + 4px));
+        background-color: var(--attention);
+        z-index: 3;
+        /* opacity: 0; */
+        position: absolute;
+        top: calc(32px + calc(19.5px + 12px));
+        right: 32px;
+        bottom: 0;
+        left: 60px;
     }
 
     & .grid{
@@ -227,6 +240,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
     &:hover{
         box-shadow: none;
     }
@@ -433,6 +447,7 @@ body{
     flex-wrap: wrap;
     row-gap: 24px;
     column-gap: 48px;
+    
     & li{
         display: flex;
         flex-direction: column;
@@ -441,8 +456,8 @@ body{
         row-gap: 8px;
 
         &:hover{
-            transition: transform ease-in 0.12s;
-            transform: scale(0.8);
+            transition: scale ease-in 0.12s;
+            scale: 0.8;
             box-shadow: none;
         }
 
@@ -458,13 +473,14 @@ body{
         }
 
         &:active{
-            transform: scale(1);
+            scale: 1;
         }
 
         & .ship__name{
             display: inline-block;
-            margin: 4px 0px 0px 8px;
+            margin: 4px 0px 0px 0px;
             -webkit-user-select: none;
+            text-align: center;
         }
 
         & .ship {
@@ -489,6 +505,9 @@ body{
                     justify-content: start;
                 }
             }
+        }
+
+        & img{
         }
     }
 }
@@ -583,7 +602,15 @@ font-size: 3em;
 
 /* End ship list and board property */
 
-@media screen and (max-width: 480px) {
+@media screen and (width <= 550px) {
+    .board{
+        & .box{
+            height: 34px;
+        }
+    }
+}
+
+@media screen and (width <= 480px) {
 
     .board{
 
@@ -615,6 +642,7 @@ font-size: 3em;
 
     }
 }
+
 
 @media screen and (max-width: 375px) {
 
