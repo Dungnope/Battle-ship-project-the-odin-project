@@ -48,10 +48,7 @@ const createBoard = (player, boardColor, withShipList) => {
     boardContainer.id = player.id;
   }
 
-  //create canvas
-  const canvas = document.createElement("canvas");
-  canvas.id = "canvas1";
-
+  //show player info
   const showName = document.createElement("p");
   showName.innerHTML = `<span>(${player.id})</span> ${player.nameTag}'s board`;
   showName.classList.add("name__display");
@@ -59,6 +56,10 @@ const createBoard = (player, boardColor, withShipList) => {
   //grid container
   const grid = document.createElement("div");
   grid.classList.add("grid");
+
+  //canvas for animation
+  const canvasDraw = document.createElement("canvas");
+  canvasDraw.id = "canvas1";
 
   //row number
   const rowNumber = document.createElement("div");
@@ -101,7 +102,7 @@ const createBoard = (player, boardColor, withShipList) => {
       box.setAttribute("Y", j);
       row.appendChild(box);
     }
-    grid.appendChild(row);
+    grid.append(row, canvasDraw);
   }
 };
 
@@ -127,7 +128,7 @@ const autoPlaceShip = (player) => {
     ship.classList.add("had__placed");
   });
 
-  renderShip(player);
+  renderShip.call({ join__game: false }, player);
   singlePlay.apply({
     player: player,
     bot: new Bot("Bot1", new Gameboard(10, 10)),
@@ -326,70 +327,13 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
       let currentBoard = playerBoard.gameboard;
       //place ship on board
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
-        let lastIdx = currentBoard.shipList.length - 1;
-        showShipOnBoard(currentBoard.shipList.at(lastIdx), playerBoard);
+        renderShip.call({ join__game: true }, playerBoard);
+        // let lastIdx = currentBoard.shipList.length - 1;
+        // showShipOnBoard(currentBoard.shipList.at(lastIdx), playerBoard);
       }
     }
   } catch {
     console.warn("Not choose ship");
-  }
-};
-
-const showShipOnBoard = (ship, playerBoard) => {
-  const boxList = boardData(playerBoard).board;
-  const clickedShip = selectedShip(playerBoard);
-  //take ship coordinate;
-  const shipCoordinate = ship.coordinate;
-  for (let i = 0; i < shipCoordinate.length; i++) {
-    //take DOM element have more than 1 attribute
-    const placeCoordinate = boxList.querySelector(
-      `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
-    );
-
-    // change ship was show on board
-    //place head and tail ship
-    if (i === 0) {
-      const spriteSelected = document.createElement("canvas");
-      spriteSelected.classList.add("canvas__draw");
-      console.log(placeCoordinate.style.compute);
-      spriteSelected.style.width = `${100 * shipCoordinate.length}%`;
-      spriteSelected.style.height = "100%";
-      placeCoordinate.appendChild(spriteSelected);
-    } else if (i === shipCoordinate.length - 1)
-      placeCoordinate.innerHTML += shipTail;
-    else placeCoordinate.innerHTML += shipFragment;
-
-    if (ship.axis === "vertical") {
-      placeCoordinate.firstElementChild.classList.add("rotate__ship");
-    }
-
-    placeCoordinate.style.removeProperty("background-color");
-  }
-
-  clickedShip.classList.remove("selected__ship");
-  clickedShip.classList.add("had__placed");
-};
-
-const chooseShip = (player) => {
-  try {
-    const boardProperty = boardData(player);
-    const ships = boardProperty.shiplist;
-    ships.forEach((ship) => {
-      ship.classList.remove("selected__ship");
-      ship.addEventListener("click", (e) => {
-        ships.forEach((ship) => {
-          if (!e.currentTarget.classList.contains("selected__ship")) {
-            ship.classList.remove("selected__ship");
-          }
-        });
-        if (!e.currentTarget.classList.contains("had__placed")) {
-          e.currentTarget.classList.toggle("selected__ship");
-        }
-        e.stopPropagation();
-      });
-    });
-  } catch {
-    console.log("this is game play not choose ship");
   }
 };
 
@@ -418,8 +362,16 @@ function renderShip(playerBoard, isPrepare = true) {
         if (ship.axis === "vertical") {
           placeCoordinate.firstElementChild.classList.add("rotate__ship");
         }
+        placeCoordinate.style.removeProperty("background-color");
       }
     });
+
+    //just show interactive of choosen ship in prepare step, render at play game step is not allow use this
+    if (this !== undefined && this !== null && this.join__game) {
+      const clickedShip = selectedShip(playerBoard);
+      clickedShip.classList.remove("selected__ship");
+      clickedShip.classList.add("had__placed");
+    }
   } else {
     // in game battle, use call() from user input to take x, y position
     const boxStatus = grid.querySelector(`[x="${this.x}"][y="${this.y}"]`);
@@ -432,6 +384,29 @@ function renderShip(playerBoard, isPrepare = true) {
     }
   }
 }
+
+const chooseShip = (player) => {
+  try {
+    const boardProperty = boardData(player);
+    const ships = boardProperty.shiplist;
+    ships.forEach((ship) => {
+      ship.classList.remove("selected__ship");
+      ship.addEventListener("click", (e) => {
+        ships.forEach((ship) => {
+          if (!e.currentTarget.classList.contains("selected__ship")) {
+            ship.classList.remove("selected__ship");
+          }
+        });
+        if (!e.currentTarget.classList.contains("had__placed")) {
+          e.currentTarget.classList.toggle("selected__ship");
+        }
+        e.stopPropagation();
+      });
+    });
+  } catch {
+    console.log("this is game play not choose ship");
+  }
+};
 
 const isAllPlace = (playerBoard) => {
   //check all ships placed or not
