@@ -346,9 +346,16 @@ const showShipOnBoard = (ship, playerBoard) => {
       `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
     );
 
+    // change ship was show on board
     //place head and tail ship
-    if (i === 0) placeCoordinate.innerHTML += shipHead;
-    else if (i === shipCoordinate.length - 1)
+    if (i === 0) {
+      const spriteSelected = document.createElement("canvas");
+      spriteSelected.classList.add("canvas__draw");
+      console.log(placeCoordinate.style.compute);
+      spriteSelected.style.width = `${100 * shipCoordinate.length}%`;
+      spriteSelected.style.height = "100%";
+      placeCoordinate.appendChild(spriteSelected);
+    } else if (i === shipCoordinate.length - 1)
       placeCoordinate.innerHTML += shipTail;
     else placeCoordinate.innerHTML += shipFragment;
 

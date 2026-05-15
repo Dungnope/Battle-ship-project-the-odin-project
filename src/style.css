@@ -241,6 +241,7 @@ body{
     align-items: center;
     justify-content: center;
     z-index: 2;
+    position: relative;
     &:hover{
         box-shadow: none;
     }
@@ -266,7 +267,13 @@ body{
         }
     }
     
-    
+    & .canvas__draw{
+        background-color: var(--target);
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.4;
+    }
 }
 
 
