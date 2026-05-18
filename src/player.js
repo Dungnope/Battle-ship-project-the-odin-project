@@ -37,10 +37,10 @@ export class Bot extends Player {
   constructor(name, gameboard) {
     super(name, gameboard);
     this.botShip = [
-      // new Ship(5), //carrier
-      // new Ship(4), //battle ship
-      // new Ship(3), //destroyer
-      // new Ship(3), //submarine
+      new Ship(5), //carrier
+      new Ship(4), //battle ship
+      new Ship(3), //destroyer
+      new Ship(3), //submarine
       new Ship(2), //patrol
     ];
   }

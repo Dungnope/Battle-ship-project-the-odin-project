@@ -9,6 +9,8 @@ import {
   boardData,
 } from "./board.js";
 
+import backgroundImg from "../assets/battle_ship_background.webp";
+
 export const main = () => {
   let mainMenu = `
     <div class="main">
@@ -21,7 +23,7 @@ export const main = () => {
   //refert name input when refresh page
   document.querySelector(".user__name--input").value = "";
   let background = document.querySelector("body");
-  background.style.backgroundImage = "url(./assets/battle_ship_bacground.webp)";
+  background.style.backgroundImage = `url(${backgroundImg})`;
   let playerName = document.querySelector(".user__name--input");
   document.querySelector("#enter__battle").addEventListener("click", (e) => {
     background.removeAttribute("style");
@@ -131,7 +133,7 @@ export const singlePlay = function () {
       renderShip(this.player);
       this.bot.arrangeAllShip();
       createBoard(this.bot, "var(--opponent-background)", false);
-      renderShip(this.bot); //make ship on board not show
+      //renderShip(this.bot); //make ship on board not show
       botPlayGame(this.player, this.bot);
     });
 };

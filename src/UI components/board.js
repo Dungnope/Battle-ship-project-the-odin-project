@@ -57,10 +57,6 @@ const createBoard = (player, boardColor, withShipList) => {
   const grid = document.createElement("div");
   grid.classList.add("grid");
 
-  //canvas for animation
-  const canvasDraw = document.createElement("canvas");
-  canvasDraw.id = "canvas1";
-
   //row number
   const rowNumber = document.createElement("div");
   rowNumber.classList.add("rowNumber");
@@ -102,7 +98,7 @@ const createBoard = (player, boardColor, withShipList) => {
       box.setAttribute("Y", j);
       row.appendChild(box);
     }
-    grid.append(row, canvasDraw);
+    grid.append(row);
   }
 };
 
