@@ -49,8 +49,8 @@ export const fastPlayGame = () => {
   bot.arrangeAllShip();
   createBoard(player1, "var(--target)", false);
   createBoard(bot, "orange", false);
-  renderShip(player1);
-  renderShip(bot);
+  renderShip({ autoPlace: true }, player1);
+  renderShip({ autoPlace: true }, bot);
   botPlayGame(player1, bot);
 };
 
@@ -130,10 +130,10 @@ export const singlePlay = function () {
     .addEventListener("click", (e) => {
       document.querySelector(".container").innerHTML = "";
       createBoard(this.player, colorBoard, false);
-      renderShip(this.player);
+      renderShip.call({ autoPlace: true }, this.player);
       this.bot.arrangeAllShip();
       createBoard(this.bot, "var(--opponent-background)", false);
-      //renderShip(this.bot); //make ship on board not show
+      //renderShip.call({ autoPlace: true }, this.bot); //make ship on board not show
       botPlayGame(this.player, this.bot);
     });
 };

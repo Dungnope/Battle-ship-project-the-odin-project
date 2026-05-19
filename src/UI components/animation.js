@@ -1,16 +1,10 @@
-import carrierShip from "../assets/carrier.svg";
-import destroyerShip from "../assets/destroyer.svg";
-import battleShip from "../assets/battle_ship.svg";
-import patrolShip from "../assets/patrol.svg";
-import submarine from "../assets/submarine.svg";
-
-export const shipAppeal = (placePosition, shipSize, axis) => {
+export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const wrapperBox = document.createElement("div");
   const drawBox = document.createElement("div");
   let oneGridWidth = placePosition.getBoundingClientRect().width;
   let oneGridHeight = placePosition.getBoundingClientRect().height;
   const shipTexture = document.createElement("img");
-  shipTexture.src = battleShip;
+  shipTexture.src = texture;
   shipTexture.classList.add("texture");
 
   wrapperBox.append(drawBox);

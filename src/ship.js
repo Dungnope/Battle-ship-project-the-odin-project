@@ -4,6 +4,7 @@ export class Ship {
     this.hits = 0;
     this.axis = undefined;
     this.coordinate = [];
+    this.texture = undefined;
   }
 
   hit() {

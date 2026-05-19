@@ -124,8 +124,8 @@ const autoPlaceShip = (player) => {
   boardData(player).shiplist.forEach((ship) => {
     ship.classList.add("had__placed");
   });
+  renderShip.call({ autoPlace: true }, player);
 
-  renderShip.call({ join__game: false }, player);
   singlePlay.apply({
     player: player,
     bot: new Bot("Bot1", new Gameboard(10, 10)),
@@ -325,7 +325,16 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
       let currentBoard = playerBoard.gameboard;
       //place ship on board
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
-        renderShip.call({ join__game: true }, playerBoard);
+        //get texture and render them
+        let getTextureSrc = takenShip.querySelector("img").src;
+        renderShip.call(
+          {
+            ship: playerBoard.gameboard.shipList.at(-1),
+            autoPlace: false,
+            texture: getTextureSrc,
+          },
+          playerBoard,
+        );
       }
     }
   } catch (error) {
@@ -339,7 +348,52 @@ function renderShip(playerBoard, isPrepare = true) {
   const grid = board.querySelector(`.wrapper__grid`);
   //take ship coordinate;
 
-  if (isPrepare) {
+  if (isPrepare && !this.autoPlace) {
+    const shipCoordinate = this.ship.coordinate; //use call for take ship parameter
+    //take DOM element have more than 1 attribute
+    for (let i = 0; i < shipCoordinate.length; i++) {
+      const placeCoordinate = grid.querySelector(
+        `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
+      );
+
+      if (
+        this.ship.axis === "horizontal" &&
+        placeCoordinate.innerHTML === "" &&
+        i === 0
+      ) {
+        //place head and tail ship
+        shipAppeal(
+          this.texture,
+          placeCoordinate,
+          shipCoordinate.length,
+          this.ship.axis,
+        );
+      } else if (
+        this.ship.axis === "vertical" &&
+        placeCoordinate.innerHTML === "" &&
+        i === 0
+      ) {
+        shipAppeal(
+          this.texture,
+          placeCoordinate,
+          shipCoordinate.length,
+          this.ship.axis,
+        );
+      }
+      placeCoordinate.style.removeProperty("background-color");
+    }
+    // if (i === shipCoordinate.length - 1)
+    //   placeCoordinate.innerHTML = shipTail;
+    // else if (placeCoordinate.innerHTML === "")
+    //   placeCoordinate.innerHTML = shipFragment;
+
+    //just show interactive of choosen ship in prepare step, render at play game step is not allow use this
+    // if (this !== undefined && this !== null && this.join__game) {
+    const clickedShip = selectedShip(playerBoard);
+    clickedShip.classList.remove("selected__ship");
+    clickedShip.classList.add("had__placed");
+    // }
+  } else if (isAllPlace && this.autoPlace) {
     const allShipOnBoard = playerBoard.gameboard.shipList;
     allShipOnBoard.forEach((ship) => {
       const shipCoordinate = ship.coordinate;
@@ -355,30 +409,26 @@ function renderShip(playerBoard, isPrepare = true) {
           i === 0
         ) {
           //place head and tail ship
-          shipAppeal(placeCoordinate, shipCoordinate.length, ship.axis);
+          shipAppeal(
+            ship.texture,
+            placeCoordinate,
+            shipCoordinate.length,
+            ship.axis,
+          );
         } else if (
           ship.axis === "vertical" &&
           placeCoordinate.innerHTML === "" &&
           i === 0
         ) {
-          shipAppeal(placeCoordinate, shipCoordinate.length, ship.axis);
+          shipAppeal(
+            ship.texture,
+            placeCoordinate,
+            shipCoordinate.length,
+            ship.axis,
+          );
         }
-        placeCoordinate.style.removeProperty("background-color");
-        placeCoordinate.classList.add("ship__shadow");
-
-        // if (i === shipCoordinate.length - 1)
-        //   placeCoordinate.innerHTML = shipTail;
-        // else if (placeCoordinate.innerHTML === "")
-        //   placeCoordinate.innerHTML = shipFragment;
       }
     });
-
-    //just show interactive of choosen ship in prepare step, render at play game step is not allow use this
-    if (this !== undefined && this !== null && this.join__game) {
-      const clickedShip = selectedShip(playerBoard);
-      clickedShip.classList.remove("selected__ship");
-      clickedShip.classList.add("had__placed");
-    }
   } else {
     // in game battle, use call() from user input to take x, y position
     const boxStatus = grid.querySelector(`[x="${this.x}"][y="${this.y}"]`);
