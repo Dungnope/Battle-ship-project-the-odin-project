@@ -1,11 +1,16 @@
 import carrierShip from "../assets/carrier.svg";
+import destroyerShip from "../assets/destroyer.svg";
+import battleShip from "../assets/battle_ship.svg";
+import patrolShip from "../assets/patrol.svg";
+import submarine from "../assets/submarine.svg";
 
-export const shipAppeal = (placePosition, x, y, shipSize) => {
+export const shipAppeal = (placePosition, shipSize, axis) => {
   const wrapperBox = document.createElement("div");
   const drawBox = document.createElement("div");
   let oneGridWidth = placePosition.getBoundingClientRect().width;
+  let oneGridHeight = placePosition.getBoundingClientRect().height;
   const shipTexture = document.createElement("img");
-  shipTexture.src = carrierShip;
+  shipTexture.src = battleShip;
   shipTexture.classList.add("texture");
 
   wrapperBox.append(drawBox);
@@ -14,8 +19,22 @@ export const shipAppeal = (placePosition, x, y, shipSize) => {
   drawBox.classList.add("drawing");
   drawBox.style.width = `${oneGridWidth * shipSize + 8 * (shipSize - 1)}px`;
   drawBox.style.height = `${(drawBox.style.width * 66) / 133}px`;
-  drawBox.style.top = `50%`;
-  drawBox.style.transform = `translateY(-50%)`;
+
+  if (axis === "horizontal") {
+    drawBox.style.top = `50%`;
+    drawBox.style.left = `0`;
+    drawBox.style.transform = `translateY(-50%)`;
+    drawBox.style.zIndex = 1;
+    drawBox.style.height = `${(drawBox.style.width * 66) / 133}px`;
+  } else if (axis === "vertical") {
+    let newHeight = `${oneGridHeight * shipSize + 8 * (shipSize - 1)}px`;
+    drawBox.style.height = `${(newHeight * 66) / 133}px`;
+    drawBox.style.left = `50%`;
+    drawBox.style.top = `-50%`;
+    drawBox.style.transform = `translate(-50%, 50%) rotate(90deg)`;
+    drawBox.style.zIndex = 1;
+  }
+
   placePosition.innerHTML = wrapperBox.innerHTML;
 
   window.addEventListener("resize", (e) => {

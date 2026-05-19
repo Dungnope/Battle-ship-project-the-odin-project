@@ -214,12 +214,11 @@ body{
 
         & .drawing
         {
-            z-index: 3 !important;
-            top: 0;
-            left: 0;
+
             position: absolute;
             display: flex;
             align-items: center;
+
         }
 
         & .texture{
@@ -230,17 +229,12 @@ body{
     }
 }
 
-.horizontal__axis{
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
 
 .box{
     font-size: 1.4em;
     font-weight: 700;
     height: 40px;
+    width: 40px;
     background-color: var(--background);
     box-shadow: 4px 4px 0 0 var(--text);
     border-radius: 4px;
@@ -251,7 +245,6 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 0;
     position: relative;
     &:hover{
         box-shadow: none;
@@ -270,7 +263,6 @@ body{
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        z-index: 1;
 
         & svg{
             width: 100%;
@@ -278,12 +270,6 @@ body{
         }
     }
 
-}
-
-
-
-.vertical__axis{
-    transform: rotate(90deg);
 }
 
 .opponentBoard{
@@ -516,7 +502,6 @@ body{
                 display: flex;
                 align-items: center;
                 justify-content: end;
-                z-index: 1;
                 &:last-child{
                     justify-content: start;
                 }
@@ -543,6 +528,10 @@ body{
     background-color: var(--target);
 
 
+}
+
+.ship__shadow{
+   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
 .place{
@@ -619,6 +608,7 @@ font-size: 3em;
     .board{
         & .box{
             height: 34px;
+            width: 34px;
         }
     }
 }
@@ -633,6 +623,7 @@ font-size: 3em;
 
         & .box{
             height: 30px;
+            width: 30px;
             border-radius: 4px;
             box-shadow: 2px 2px 0 1px var(--text);
 
@@ -674,7 +665,7 @@ font-size: 3em;
         }
 
         & .box{
-            width: 20px;
+            width: 24px;
             height: 24px;
             box-shadow: 1.5px 1.5px 0 1px var(--text);
 

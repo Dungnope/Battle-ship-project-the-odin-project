@@ -16,7 +16,7 @@ import {
   shipTail,
   playBtnStyle,
 } from "./assets.js";
-import { botPlayGame, singlePlay } from "./gameplay.js";
+import { singlePlay } from "./gameplay.js";
 
 const createBoard = (player, boardColor, withShipList) => {
   const container = document.querySelector(".container");
@@ -336,7 +336,6 @@ function renderShip(playerBoard, isPrepare = true) {
   //prepare for place ship step, not in play
   const board = document.getElementById(`${playerBoard.id}`);
   const grid = board.querySelector(`.wrapper__grid`);
-  const innerGrid = board.querySelector(`.wrapper__grid .grid`);
   //take ship coordinate;
 
   if (isPrepare) {
@@ -349,23 +348,27 @@ function renderShip(playerBoard, isPrepare = true) {
           `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
         );
 
-        //place head and tail ship
-        if (i === 0 && placeCoordinate.innerHTML === "") {
-          shipAppeal(
-            placeCoordinate,
-            shipCoordinate[i].x,
-            shipCoordinate[i].y,
-            shipCoordinate.length,
-          );
-        } else if (i === shipCoordinate.length - 1)
-          placeCoordinate.innerHTML = shipTail;
-        else if (placeCoordinate.innerHTML === "")
-          placeCoordinate.innerHTML = shipFragment;
-
-        if (ship.axis === "vertical") {
-          placeCoordinate.classList.add("rotate__ship");
+        if (
+          ship.axis === "horizontal" &&
+          placeCoordinate.innerHTML === "" &&
+          i === 0
+        ) {
+          //place head and tail ship
+          shipAppeal(placeCoordinate, shipCoordinate.length, ship.axis);
+        } else if (
+          ship.axis === "vertical" &&
+          placeCoordinate.innerHTML === "" &&
+          i === 0
+        ) {
+          shipAppeal(placeCoordinate, shipCoordinate.length, ship.axis);
         }
         placeCoordinate.style.removeProperty("background-color");
+        placeCoordinate.classList.add("ship__shadow");
+
+        // if (i === shipCoordinate.length - 1)
+        //   placeCoordinate.innerHTML = shipTail;
+        // else if (placeCoordinate.innerHTML === "")
+        //   placeCoordinate.innerHTML = shipFragment;
       }
     });
 
