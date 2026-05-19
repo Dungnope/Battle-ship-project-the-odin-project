@@ -214,11 +214,17 @@ body{
 
         & .drawing
         {
-            /* background-color: var(--attention); */
-            z-index: 2;
+            z-index: 3 !important;
             top: 0;
             left: 0;
             position: absolute;
+            display: flex;
+            align-items: center;
+        }
+
+        & .texture{
+            width: 100%;
+            height: 100%;
         }
 
     }
@@ -245,7 +251,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2;
+    z-index: 0;
     position: relative;
     &:hover{
         box-shadow: none;

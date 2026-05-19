@@ -336,6 +336,7 @@ function renderShip(playerBoard, isPrepare = true) {
   //prepare for place ship step, not in play
   const board = document.getElementById(`${playerBoard.id}`);
   const grid = board.querySelector(`.wrapper__grid`);
+  const innerGrid = board.querySelector(`.wrapper__grid .grid`);
   //take ship coordinate;
 
   if (isPrepare) {
@@ -349,16 +350,20 @@ function renderShip(playerBoard, isPrepare = true) {
         );
 
         //place head and tail ship
-        if (i === 0) {
-          placeCoordinate.innerHTML = shipHead;
+        if (i === 0 && placeCoordinate.innerHTML === "") {
+          shipAppeal(
+            placeCoordinate,
+            shipCoordinate[i].x,
+            shipCoordinate[i].y,
+            shipCoordinate.length,
+          );
         } else if (i === shipCoordinate.length - 1)
           placeCoordinate.innerHTML = shipTail;
-        else placeCoordinate.innerHTML = shipFragment;
+        else if (placeCoordinate.innerHTML === "")
+          placeCoordinate.innerHTML = shipFragment;
 
         if (ship.axis === "vertical") {
-          placeCoordinate.firstElementChild.firstElementChild.classList.add(
-            "rotate__ship",
-          );
+          placeCoordinate.classList.add("rotate__ship");
         }
         placeCoordinate.style.removeProperty("background-color");
       }
