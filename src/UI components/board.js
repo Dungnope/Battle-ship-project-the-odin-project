@@ -135,6 +135,7 @@ const autoPlaceShip = (player) => {
 const clearAllShip = (player) => {
   boardData(player).boxes.forEach((box) => {
     box.innerHTML = "";
+    box.classList.remove("ship__shadow");
   });
 
   //delete all ship from board
