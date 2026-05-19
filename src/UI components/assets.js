@@ -69,7 +69,7 @@ const playBtnStyle = `
 
 `;
 
-import carrier from "../assets/carrier.png";
+import carrier from "../assets/carrier.svg";
 const Carrier = `
     <li>
       <span class="ship__name" name="carrier">Carrier</span>
@@ -79,7 +79,7 @@ const Carrier = `
     </li>
 `;
 
-import patrol from "../assets/patrol.png";
+import patrol from "../assets/patrol.svg";
 const Patrol = `
     <li>
       <span class="ship__name" name="patrol">Patrol</span>
@@ -89,7 +89,7 @@ const Patrol = `
     </li>
 `;
 
-import battleship from "../assets/battle_ship.png";
+import battleship from "../assets/battle_ship.svg";
 const Battleship = `
     <li>
       <span class="ship__name" name="battleship">BattleShip</span>
@@ -99,7 +99,7 @@ const Battleship = `
     </li>
 `;
 
-import destroyer from "../assets/destroyer.png";
+import destroyer from "../assets/destroyer.svg";
 const Destroyer = `
     <li>
       <span class="ship__name" name="destroyer">Destroyer</span>
@@ -109,7 +109,7 @@ const Destroyer = `
     </li>
 `;
 
-import submarine from "../assets/submarine.png";
+import submarine from "../assets/submarine.svg";
 const Submarine = `
     <li>
       <span class="ship__name" name="submarine">Submarine</span>

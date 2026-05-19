@@ -212,19 +212,23 @@ body{
             }
         }
 
-        & #canvas1{
-            background-color: var(--attention);
-            z-index: 3;
-            /* opacity: 0; */
-            position: absolute;
-            width: 100%;
-            height: 100%;
+        & .drawing
+        {
+            /* background-color: var(--attention); */
+            z-index: 2;
             top: 0;
             left: 0;
-            z-index: 0;
+            position: absolute;
         }
 
     }
+}
+
+.horizontal__axis{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .box{
@@ -267,8 +271,14 @@ body{
             height: 100%;
         }
     }
+
 }
 
+
+
+.vertical__axis{
+    transform: rotate(90deg);
+}
 
 .opponentBoard{
 
@@ -568,10 +578,6 @@ body{
         box-shadow: inset 2px 2px 0 1px var(--click);
     }
     
-}
-
-.rotate__ship{
-    transform: rotate(90deg);
 }
 
 .blur__screen{

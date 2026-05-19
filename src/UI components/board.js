@@ -1,6 +1,7 @@
 import { Gameboard } from "../gameboard.js";
 import { Bot } from "../player.js";
 import { Ship } from "../ship.js";
+import { shipAppeal } from "./animation.js";
 
 import {
   Carrier,
@@ -92,7 +93,7 @@ const createBoard = (player, boardColor, withShipList) => {
         rowNumber.innerHTML += `<p>${j}</p>`;
       }
       const box = document.createElement("div");
-      box.style.flex = `1 1 ${board.length}%`;
+      box.style.flex = `1 1 40px`;
       box.classList.add("box");
       box.setAttribute("X", i);
       box.setAttribute("Y", j);
@@ -324,12 +325,10 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
       //place ship on board
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
         renderShip.call({ join__game: true }, playerBoard);
-        // let lastIdx = currentBoard.shipList.length - 1;
-        // showShipOnBoard(currentBoard.shipList.at(lastIdx), playerBoard);
       }
     }
-  } catch {
-    console.warn("Not choose ship");
+  } catch (error) {
+    console.warn(error);
   }
 };
 
@@ -350,13 +349,16 @@ function renderShip(playerBoard, isPrepare = true) {
         );
 
         //place head and tail ship
-        if (i === 0) placeCoordinate.innerHTML = shipHead;
-        else if (i === shipCoordinate.length - 1)
+        if (i === 0) {
+          placeCoordinate.innerHTML = shipHead;
+        } else if (i === shipCoordinate.length - 1)
           placeCoordinate.innerHTML = shipTail;
         else placeCoordinate.innerHTML = shipFragment;
 
         if (ship.axis === "vertical") {
-          placeCoordinate.firstElementChild.classList.add("rotate__ship");
+          placeCoordinate.firstElementChild.firstElementChild.classList.add(
+            "rotate__ship",
+          );
         }
         placeCoordinate.style.removeProperty("background-color");
       }
