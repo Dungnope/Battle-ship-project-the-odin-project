@@ -327,11 +327,12 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
       if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
         //get texture and render them
         let getTextureSrc = takenShip.querySelector("img").src;
+        let currentShip = playerBoard.gameboard.shipList.at(-1);
+        currentShip.texture = getTextureSrc;
         renderShip.call(
           {
-            ship: playerBoard.gameboard.shipList.at(-1),
+            ship: currentShip,
             autoPlace: false,
-            texture: getTextureSrc,
           },
           playerBoard,
         );
@@ -363,7 +364,7 @@ function renderShip(playerBoard, isPrepare = true) {
       ) {
         //place head and tail ship
         shipAppeal(
-          this.texture,
+          this.ship.texture,
           placeCoordinate,
           shipCoordinate.length,
           this.ship.axis,
@@ -374,7 +375,7 @@ function renderShip(playerBoard, isPrepare = true) {
         i === 0
       ) {
         shipAppeal(
-          this.texture,
+          this.ship.texture,
           placeCoordinate,
           shipCoordinate.length,
           this.ship.axis,
