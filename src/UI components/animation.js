@@ -38,9 +38,9 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   });
 };
 
-export const getHit = (texture, placePosition) => {
+export const getHit = (texture, boxPosition) => {
   const damageTexture = document.createElement("img");
   damageTexture.src = texture;
   damageTexture.classList.add("texture__damage");
-  placePosition.append(damageTexture);
+  boxPosition.append(damageTexture);
 };

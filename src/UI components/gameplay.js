@@ -48,9 +48,9 @@ export const fastPlayGame = () => {
   player1.arrangeAllShip();
   bot.arrangeAllShip();
   createBoard(player1, "var(--target)", false);
-  createBoard(bot, "orange", false);
+  createBoard(bot, "aqua", false);
   renderShip.call({ autoPlace: true }, player1);
-  // renderShip.call({ autoPlace: true }, bot); to show or hide ship
+  // renderShip.call({ autoPlace: true }, bot); //to show or hide ship
   botPlayGame(player1, bot);
 };
 
@@ -59,7 +59,7 @@ export const botPlayGame = (player, bot) => {
   let hasClicked = false;
   const playerBoard = document.getElementById(`${player.id}`);
   const botBoard = document.getElementById(`${bot.id}`);
-
+  
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
   let clickNumber = 0; //avoid stackoverflow when can not find any position
   // play turn by turn

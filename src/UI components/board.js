@@ -2,7 +2,7 @@ import { Gameboard } from "../gameboard.js";
 import { Bot } from "../player.js";
 import { Ship } from "../ship.js";
 import { getHit, shipAppeal } from "./animation.js";
-import fireHit from "../assets/hit animations"
+import fireHit from "../assets/hit_animations/fire_ship.svg";
 import {
   Carrier,
   Battleship,
@@ -433,12 +433,12 @@ function renderShip(playerBoard, isPrepare = true) {
     const positionStated = playerBoard.gameboard.board[this.x][this.y];
     //use fire effect for hit target
     if (positionStated === 2) {
-      getHit(boxStatus)
-      boxStatus.style.backgroundColor = "var(--target)";
+      getHit(fireHit, boxStatus);
     } else if (positionStated === 3) {
       boxStatus.innerHTML = missShot;
     }
   }
+  console.log(playerBoard);
 }
 
 const chooseShip = (player) => {

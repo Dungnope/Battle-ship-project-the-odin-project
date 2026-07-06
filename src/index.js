@@ -3,7 +3,7 @@ import "./style.css";
 import { fastPlayGame, main, playerSetup } from "./UI components/gameplay.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
-   fastPlayGame("aaa"); // play immediately
+  fastPlayGame(); // play immediately
   //playerSetup("pepter"); //no need name input at screen
   //main(); // type your name to enter the game
 });
