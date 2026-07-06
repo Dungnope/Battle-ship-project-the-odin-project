@@ -31,9 +31,10 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
 
   placePosition.innerHTML = wrapperBox.innerHTML;
 
-  window.addEventListener("resize", (e) => {
+  window.addEventListener("resize", () => {
     oneGridWidth = placePosition.getBoundingClientRect().width;
     drawBox.style.width = `${oneGridWidth * shipSize + 8 * (shipSize - 1)}px`;
     drawBox.style.height = `${(drawBox.style.width * 66) / 133}px`;
   });
 };
+

@@ -219,7 +219,7 @@ body{
             display: flex;
             align-items: center;
             &:hover{
-                opacity: 0.8;
+                opacity: 0.88;
                 transition: opacity 0.15s ease-in;
             }
 
