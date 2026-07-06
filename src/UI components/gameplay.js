@@ -49,8 +49,8 @@ export const fastPlayGame = () => {
   bot.arrangeAllShip();
   createBoard(player1, "var(--target)", false);
   createBoard(bot, "orange", false);
-  renderShip({ autoPlace: true }, player1);
-  renderShip({ autoPlace: true }, bot);
+  renderShip.call({ autoPlace: true }, player1);
+  renderShip.call({ autoPlace: true }, bot);
   botPlayGame(player1, bot);
 };
 
