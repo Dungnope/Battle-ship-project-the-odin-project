@@ -50,7 +50,7 @@ export const fastPlayGame = () => {
   createBoard(player1, "var(--target)", false);
   createBoard(bot, "orange", false);
   renderShip.call({ autoPlace: true }, player1);
-  renderShip.call({ autoPlace: true }, bot);
+  // renderShip.call({ autoPlace: true }, bot); to show or hide ship
   botPlayGame(player1, bot);
 };
 
