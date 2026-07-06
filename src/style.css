@@ -223,11 +223,15 @@ body{
                 transition: opacity 0.15s ease-in;
             }
 
-        }
+            & .texture{
+                width: 100%;
+                height: 100%;
+            }
 
-        & .texture{
-            width: 100%;
-            height: 100%;
+            & .texture__damage{
+                width: 100%;
+                height: 100%;
+            }
         }
 
     }

@@ -1,8 +1,8 @@
 import { Gameboard } from "../gameboard.js";
 import { Bot } from "../player.js";
 import { Ship } from "../ship.js";
-import { shipAppeal } from "./animation.js";
-
+import { getHit, shipAppeal } from "./animation.js";
+import fireHit from "../assets/hit animations"
 import {
   Carrier,
   Battleship,
@@ -11,9 +11,6 @@ import {
   Patrol,
   Content,
   missShot,
-  shipHead,
-  shipFragment,
-  shipTail,
   playBtnStyle,
 } from "./assets.js";
 import { singlePlay } from "./gameplay.js";
@@ -434,8 +431,9 @@ function renderShip(playerBoard, isPrepare = true) {
     // in game battle, use call() from user input to take x, y position
     const boxStatus = grid.querySelector(`[x="${this.x}"][y="${this.y}"]`);
     const positionStated = playerBoard.gameboard.board[this.x][this.y];
+    //use fire effect for hit target
     if (positionStated === 2) {
-      boxStatus.innerHTML = "X";
+      getHit(boxStatus)
       boxStatus.style.backgroundColor = "var(--target)";
     } else if (positionStated === 3) {
       boxStatus.innerHTML = missShot;
