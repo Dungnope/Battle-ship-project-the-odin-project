@@ -438,7 +438,10 @@ function renderShip(playerBoard, isPrepare = true) {
       boxStatus.innerHTML = missShot;
     }
   }
-  console.log(playerBoard);
+  //show enemy boat when it sunk and hidden them when it still float to see the damaged ship
+  if(playerBoard.constructor.name === "Bot"){
+    
+  }
 }
 
 const chooseShip = (player) => {
