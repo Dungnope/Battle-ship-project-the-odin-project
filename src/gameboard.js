@@ -7,6 +7,7 @@ export class Gameboard {
       .map(() => Array(this.column).fill(0));
     this.missedAttacksPos = new Map();
     this.shipList = [];
+    this.sunkShip = [];
   }
 
   placeShip(ship, x, y, horizontal = true) {
@@ -141,6 +142,7 @@ export class Gameboard {
           //check whether a specific ship on board is sunk or not
           if (this.shipList[i].isSunk()) {
             let shipIndex = this.shipList.indexOf(this.shipList[i]);
+            this.sunkShip.push(this.shipList.at(shipIndex));
             this.shipList.splice(shipIndex, 1);
           }
           break;
