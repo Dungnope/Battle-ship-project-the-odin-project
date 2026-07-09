@@ -560,12 +560,6 @@ body{
     box-shadow: 8px 8px 0 0 var(--text);
 }
 
-.hidden__blur{
-    background-color: var(--target);
-    outline: 4px solid var(--text);
-    border-radius: 8px;
-    box-shadow: 8px 8px 0 0 var(--text);
-}
 
 .play__again{
     position: absolute;
@@ -590,30 +584,58 @@ body{
     
 }
 
-.blur__screen{
-/* From https://css.glass */
-background: rgba(255, 255, 255, 0.15);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(9.1px);
--webkit-backdrop-filter: blur(9.1px);
-border: 1px solid rgba(255, 255, 255, 0.6);
-width: 110%;
-height: 100%;
-position: absolute;
-z-index: 2;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-font-size: 2em;
+.hidden__blur{
+    background-color: var(--target);
+    outline: 4px solid var(--text);
+    border-radius: 8px;
+    box-shadow: 8px 8px 0 0 var(--text);
+    display: block;
+    padding: 12px 18px;
+    z-index: 2;
+    font-size: 1.2em;
+    font-weight: 600;
+    position: absolute;
+    right: 0;
+    top: 0;
 
-    & p{
-        text-align: center;
+    &:hover{
+        transition: box-shadow 0.2s ease-in, padding 0.1s ease-out;
+        box-shadow: none;
+        padding: 14px 20px;
     }
-    & p:last-child{
-    font-size: 1.5em;
+
+    &:active{
+        box-shadow: inset 2px 2px 0 1px var(--click);
+    }
 }
+
+.end__screen{
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    width: 110%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 2em;
+
+        & p{
+            text-align: center;
+        }
+        & p:last-child{
+        font-size: 1.5em;
+    }
+}
+
+.blur__screen{
+    backdrop-filter: blur(9.1px);
+    -webkit-backdrop-filter: blur(9.1px);
 }
 
 

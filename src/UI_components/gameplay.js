@@ -188,23 +188,23 @@ const showEndGame = (entity1, entity2) => {
   let hiddenBlur = document.createElement("button");
   playAgain.textContent = "Play again";
   playAgain.classList.add("play__again");
-  hiddenBlur.textContent = "Hidden blur";
+  hiddenBlur.textContent = "Lose reveal: off";
   hiddenBlur.classList.add("hidden__blur");
 
   winInfo = { name: entity1.nameTag, id: entity1.id, status: "Winner" };
   loseInfo = { name: entity2.nameTag, id: entity2.id, status: "Loser" };
   blur__screenWin = `
-    <div class = "blur__screen">
+    <div class = "end__screen blur__screen">
       <p>${winInfo.name}(${winInfo.id})</p>
       <p style="color: ${entity1Color}">${winInfo.status}</p>
-    </div>;
+    </div>
   `;
 
   blur__screenLose = `
-    <div class = "blur__screen">
+    <div class = "end__screen blur__screen">
       <p>${loseInfo.name}(${loseInfo.id})</p>
       <p style="color: ${entity2Color}">${loseInfo.status}</p>
-    </div>;
+    </div>
   `;
 
   playAgain.addEventListener("click", (e) => {
@@ -212,12 +212,23 @@ const showEndGame = (entity1, entity2) => {
   });
 
   hiddenBlur.addEventListener("click", (e) => {
-    console.log("hello");
+    let takeBlurScreen = e.currentTarget.parentNode.querySelector(".end__screen");
+    takeBlurScreen.classList.toggle("blur__screen");
+    if(!takeBlurScreen.classList.contains("blur__screen")){
+      hiddenBlur.textContent = "Lose reveal: on";
+      takeBlurScreen.style.opacity = 0.2;
+    }
+    else {
+      hiddenBlur.textContent = "Lose reveal: off";
+      takeBlurScreen.style.removeProperty("opacity");
+    }
   });
 
   setTimeout(() => {
-    document.querySelector(".container").appendChild(playAgain);
+    document.querySelector(".container").append(playAgain);
     entity1Board.innerHTML += blur__screenWin;
     entity2Board.innerHTML += blur__screenLose;
-  }, 1000);
+    entity2Board.append(hiddenBlur);
+
+  }, 1500);
 };
