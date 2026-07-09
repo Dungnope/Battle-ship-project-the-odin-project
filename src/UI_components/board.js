@@ -1,6 +1,6 @@
-import { Gameboard } from "../gameboard.js";
-import { Bot } from "../player.js";
-import { Ship } from "../ship.js";
+import { Gameboard } from "../models/gameboard.js";
+import { Bot } from "../models/player.js";
+import { Ship } from "../models/ship.js";
 import { getHit, shipAppeal } from "./animation.js";
 import fireHit from "../assets/hit_animations/fire_ship.svg";
 import {

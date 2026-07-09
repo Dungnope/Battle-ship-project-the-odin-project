@@ -1,5 +1,5 @@
-import { Bot, Player } from "../player.js";
-import { Gameboard } from "../gameboard.js";
+import { Bot, Player } from "../models/player.js";
+import { Gameboard } from "../models/gameboard.js";
 import {
   chooseShip,
   createBoard,

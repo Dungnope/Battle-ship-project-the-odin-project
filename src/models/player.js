@@ -1,9 +1,9 @@
 import { Ship } from "./ship.js";
-import carrierShip from "./assets/carrier.svg";
-import destroyerShip from "./assets/destroyer.svg";
-import battleShip from "./assets/battle_ship.svg";
-import patrolShip from "./assets/patrol.svg";
-import Submarine from "./assets/submarine.svg";
+import carrierShip from "../assets/carrier.svg";
+import destroyerShip from "../assets/destroyer.svg";
+import battleShip from "../assets/battle_ship.svg";
+import patrolShip from "../assets/patrol.svg";
+import Submarine from "../assets/submarine.svg";
 import { Gameboard } from "./gameboard.js";
 
 export class Player {
