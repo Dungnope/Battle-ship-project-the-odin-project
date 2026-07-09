@@ -10,6 +10,8 @@ import {
 } from "./board.js";
 
 import backgroundImg from "../assets/battle_ship_background.webp";
+import { getHit, shipAppeal } from "./animation.js";
+import fireHit from "../assets/hit_animations/fire_ship.svg";
 
 export const main = () => {
   let mainMenu = `
@@ -49,7 +51,7 @@ export const fastPlayGame = () => {
   bot.arrangeAllShip();
   createBoard(player1, "var(--target)", false);
   createBoard(bot, "aqua", false);
-  renderShip.call({ autoPlace: true }, player1);
+  renderShip.call({ autoPlace: true }, player1, true);
   //renderShip.call({ autoPlace: true }, bot); //to show or hide ship
   botPlayGame(player1, bot);
 };
@@ -82,6 +84,8 @@ export const botPlayGame = (player, bot) => {
         ) {
           bot.gameboard.receiveAttack(dx, dy);
           renderShip.call({ x: dx, y: dy }, bot, false);
+          //show bot ship in case a ship sunk
+          updateShipOnGame(bot);
           if (checkWinner(player, bot)) {
             showEndGame(player, bot);
           } else {
@@ -117,6 +121,24 @@ export const botPlayGame = (player, bot) => {
     });
   });
 };
+
+export const updateShipOnGame = function (playerboard){
+  if(playerboard.gameboard.sunkShip.length !== 0 && playerboard.constructor.name === "Bot"){
+    const board = document.getElementById(`${playerboard.id}`);
+    const grid = board.querySelector(`.wrapper__grid`);
+    let sunkShipInfo = {
+      texture: playerboard.gameboard.sunkShip[0].texture,
+      shipSize: playerboard.gameboard.sunkShip[0].length,
+      axis: playerboard.gameboard.sunkShip[0].axis,
+      //take first coordinate of first ship on sunkShip list
+      coordinate: playerboard.gameboard.sunkShip[0].coordinate[0],
+    };
+    let placeCoordinate = grid.querySelector(
+    `[x="${sunkShipInfo.coordinate.x}"][y="${sunkShipInfo.coordinate.y}"]`);
+    shipAppeal(sunkShipInfo.texture, placeCoordinate, sunkShipInfo.shipSize, sunkShipInfo.axis);
+    playerboard.gameboard.sunkShip.pop();
+  }
+}
 
 export const singlePlay = function () {
   //show play button and click to navigation to game

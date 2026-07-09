@@ -1,5 +1,4 @@
 export const shipAppeal = (texture, placePosition, shipSize, axis) => {
-  const wrapperBox = document.createElement("div");
   const drawBox = document.createElement("div");
   let oneGridWidth = placePosition.getBoundingClientRect().width;
   let oneGridHeight = placePosition.getBoundingClientRect().height;
@@ -7,7 +6,6 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   shipTexture.src = texture;
   shipTexture.classList.add("texture");
 
-  wrapperBox.append(drawBox);
 
   drawBox.append(shipTexture);
   drawBox.classList.add("drawing");
@@ -29,7 +27,7 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
     drawBox.style.zIndex = 1;
   }
 
-  placePosition.innerHTML = wrapperBox.innerHTML;
+  placePosition.append(drawBox);
 
   window.addEventListener("resize", () => {
     oneGridWidth = placePosition.getBoundingClientRect().width;

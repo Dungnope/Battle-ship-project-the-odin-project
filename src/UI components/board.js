@@ -391,7 +391,7 @@ function renderShip(playerBoard, isPrepare = true) {
     clickedShip.classList.remove("selected__ship");
     clickedShip.classList.add("had__placed");
     // }
-  } else if (isAllPlace && this.autoPlace) {
+  } else if (this.autoPlace) {
     const allShipOnBoard = playerBoard.gameboard.shipList;
     allShipOnBoard.forEach((ship) => {
       const shipCoordinate = ship.coordinate;
@@ -400,7 +400,7 @@ function renderShip(playerBoard, isPrepare = true) {
         const placeCoordinate = grid.querySelector(
           `[x="${shipCoordinate[i].x}"][y="${shipCoordinate[i].y}"]`,
         );
-
+        
         if (
           ship.axis === "horizontal" &&
           placeCoordinate.innerHTML === "" &&
@@ -437,10 +437,6 @@ function renderShip(playerBoard, isPrepare = true) {
     } else if (positionStated === 3) {
       boxStatus.innerHTML = missShot;
     }
-  }
-  //show enemy boat when it sunk and hidden them when it still float to see the damaged ship
-  if(playerBoard.constructor.name === "Bot"){
-    
   }
 }
 
