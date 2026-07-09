@@ -10,8 +10,7 @@ import {
 } from "./board.js";
 
 import backgroundImg from "../assets/battle_ship_background.webp";
-import { getHit, shipAppeal } from "./animation.js";
-import fireHit from "../assets/hit_animations/fire_ship.svg";
+import {shipAppeal } from "./animation.js";
 
 export const main = () => {
   let mainMenu = `
