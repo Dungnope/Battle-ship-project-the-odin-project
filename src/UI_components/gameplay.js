@@ -185,8 +185,11 @@ const showEndGame = (entity1, entity2) => {
   let blur__screenWin;
   let blur__screenLose;
   let playAgain = document.createElement("button");
+  let hiddenBlur = document.createElement("button");
   playAgain.textContent = "Play again";
   playAgain.classList.add("play__again");
+  hiddenBlur.textContent = "Hidden blur";
+  hiddenBlur.classList.add("hidden__blur");
 
   winInfo = { name: entity1.nameTag, id: entity1.id, status: "Winner" };
   loseInfo = { name: entity2.nameTag, id: entity2.id, status: "Loser" };
@@ -207,6 +210,11 @@ const showEndGame = (entity1, entity2) => {
   playAgain.addEventListener("click", (e) => {
     playerSetup(entity1.nameTag);
   });
+
+  hiddenBlur.addEventListener("click", (e) => {
+    console.log("hello");
+  });
+
   setTimeout(() => {
     document.querySelector(".container").appendChild(playAgain);
     entity1Board.innerHTML += blur__screenWin;
