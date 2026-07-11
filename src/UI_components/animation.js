@@ -1,3 +1,4 @@
+import smExplosive from "../assets/hit_animations/small_explosive.svg";
 export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const drawBox = document.createElement("div");
   let oneGridWidth = placePosition.getBoundingClientRect().width;
@@ -36,7 +37,30 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   });
 };
 
-export const getHit = (texture, boxPosition) => {
+//add small explosion when hit the boat
+export const getHit = async (texture, boxPosition) => {
+  //hit create an small explosion
+  const smallExplosionTexture = document.createElement("img");
+  smallExplosionTexture.src = smExplosive;
+  smallExplosionTexture.classList.add("texture__explosion");
+
+  const explosionAnimation = [
+    { width: '100%' },
+    { width: '160%' }
+  ];
+
+  const timeAnimation = {
+    duration: 200,
+    iterations: 1,
+  };
+
+  //create animation explosion
+  boxPosition.append(smallExplosionTexture);
+
+  await smallExplosionTexture.animate(explosionAnimation, timeAnimation).finished;
+  boxPosition.removeChild(smallExplosionTexture); //after that disappear
+
+  //after explosive create an small fire
   const damageTexture = document.createElement("img");
   damageTexture.src = texture;
   damageTexture.classList.add("texture__damage");

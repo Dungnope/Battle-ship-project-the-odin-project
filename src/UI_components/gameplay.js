@@ -122,7 +122,7 @@ export const botPlayGame = (player, bot) => {
 };
 
 export const updateShipOnGame = function (playerboard){
-  if(playerboard.gameboard.sunkShip.length !== 0 && playerboard.constructor.name === "Bot"){
+  if(playerboard.gameboard.sunkShip.length !== 0){
     const board = document.getElementById(`${playerboard.id}`);
     const grid = board.querySelector(`.wrapper__grid`);
     let sunkShipInfo = {
