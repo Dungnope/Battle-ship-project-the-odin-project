@@ -65,8 +65,8 @@ export const getHit = async (texture, boxPosition) => {
   boxPosition.append(newAudio);
   newAudio.play();
 
-  newAudio.addEventListener("ended", (endAudio) => {
-    boxPosition.removeChild(endAudio.currentTarget);
+  newAudio.addEventListener("ended", () => {
+    boxPosition.removeChild(newAudio);
   });
 
 
