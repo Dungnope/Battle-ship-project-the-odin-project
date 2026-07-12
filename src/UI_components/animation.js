@@ -1,4 +1,5 @@
 import smExplosive from "../assets/hit_animations/small_explosive.svg";
+import explosiveSound from "../assets/audio/explosive.ogg";
 export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const drawBox = document.createElement("div");
   let oneGridWidth = placePosition.getBoundingClientRect().width;
@@ -56,6 +57,18 @@ export const getHit = async (texture, boxPosition) => {
 
   //create animation explosion
   boxPosition.append(smallExplosionTexture);
+
+  //play explosive sound
+  const newAudio = document.createElement("audio");
+  newAudio.src = explosiveSound;
+  newAudio.volume = 0.2;
+  boxPosition.append(newAudio);
+  newAudio.play();
+
+  newAudio.addEventListener("ended", (endAudio) => {
+    boxPosition.removeChild(endAudio.currentTarget);
+  });
+
 
   await smallExplosionTexture.animate(explosionAnimation, timeAnimation).finished;
   boxPosition.removeChild(smallExplosionTexture); //after that disappear

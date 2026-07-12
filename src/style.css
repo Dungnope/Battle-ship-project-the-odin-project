@@ -230,7 +230,7 @@ body{
 
         /* fire texture overlapped on top ship*/
         & .texture__damage{
-            width: calc(120% + 46px);
+            width: calc(120% + 42px);
             height: 120%;
             z-index: 2;
         }
