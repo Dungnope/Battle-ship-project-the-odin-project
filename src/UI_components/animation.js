@@ -51,7 +51,7 @@ export const getHit = async (texture, boxPosition) => {
   ];
 
   const timeAnimation = {
-    duration: 200,
+    duration: 300,
     iterations: 1,
   };
 
@@ -61,7 +61,7 @@ export const getHit = async (texture, boxPosition) => {
   //play explosive sound
   const newAudio = document.createElement("audio");
   newAudio.src = explosiveSound;
-  newAudio.volume = 0.2;
+  newAudio.volume = 0.15;
   boxPosition.append(newAudio);
   newAudio.play();
 

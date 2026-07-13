@@ -114,7 +114,7 @@ export const botPlayGame = (player, bot) => {
                 turn = "Player";
                 clickNumber++;
               }
-            }, 500);
+            }, 1000);
         }
       }
     });
@@ -137,7 +137,7 @@ export const updateShipOnGame = function (playerboard){
     shipAppeal(sunkShipInfo.texture, placeCoordinate, sunkShipInfo.shipSize, sunkShipInfo.axis);
     playerboard.gameboard.sunkShip.pop();
   }
-}
+};
 
 export const singlePlay = function () {
   //show play button and click to navigation to game
