@@ -1,5 +1,7 @@
 import smExplosive from "../assets/hit_animations/small_explosive.svg";
+import fireSound from "../assets/audio/fire_sound.ogg";
 import explosiveSound from "../assets/audio/explosive.ogg";
+
 export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const drawBox = document.createElement("div");
   let oneGridWidth = placePosition.getBoundingClientRect().width;
@@ -7,7 +9,6 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const shipTexture = document.createElement("img");
   shipTexture.src = texture;
   shipTexture.classList.add("texture");
-
 
   drawBox.append(shipTexture);
   drawBox.classList.add("drawing");
@@ -51,7 +52,7 @@ export const getHit = async (texture, boxPosition) => {
   ];
 
   const timeAnimation = {
-    duration: 300,
+    duration: 250,
     iterations: 1,
   };
 
@@ -61,7 +62,7 @@ export const getHit = async (texture, boxPosition) => {
   //play explosive sound
   const newAudio = document.createElement("audio");
   newAudio.src = explosiveSound;
-  newAudio.volume = 0.15;
+  newAudio.volume = 0.5;
   boxPosition.append(newAudio);
   newAudio.play();
 
@@ -78,4 +79,18 @@ export const getHit = async (texture, boxPosition) => {
   damageTexture.src = texture;
   damageTexture.classList.add("texture__damage");
   boxPosition.append(damageTexture);
+};
+
+//fire sound and effect
+export const fireEffect = (boxPosition) => {
+  return new Promise((resolve) => {
+    const fireAudio = document.createElement("audio");
+    fireAudio.src = fireSound;
+    boxPosition.append(fireAudio);
+    fireAudio.play();
+    fireAudio.addEventListener("ended", () => {
+      boxPosition.removeChild(fireAudio);
+      resolve();
+    });
+  });
 };

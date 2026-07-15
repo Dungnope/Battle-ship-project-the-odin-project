@@ -1,7 +1,7 @@
 import { Gameboard } from "../models/gameboard.js";
 import { Bot } from "../models/player.js";
 import { Ship } from "../models/ship.js";
-import { getHit, shipAppeal } from "./animation.js";
+import { fireEffect, getHit, shipAppeal } from "./animation.js";
 import fireHit from "../assets/hit_animations/fire_ship.svg";
 import {
   Carrier,
@@ -433,9 +433,9 @@ function renderShip(playerBoard, isPrepare = true) {
     const positionStated = playerBoard.gameboard.board[this.x][this.y];
     //use fire effect for hit target
     if (positionStated === 2) {
-      getHit(fireHit, boxStatus);
+        fireEffect(boxStatus).then(() => getHit(fireHit, boxStatus));
     } else if (positionStated === 3) {
-      boxStatus.innerHTML = missShot;
+      fireEffect(boxStatus).then(() => boxStatus.innerHTML = missShot);
     }
   }
 }

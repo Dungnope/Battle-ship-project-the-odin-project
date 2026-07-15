@@ -9,6 +9,7 @@ import {
   boardData,
 } from "./board.js";
 
+
 import backgroundImg from "../assets/battle_ship_background.webp";
 import {shipAppeal } from "./animation.js";
 
@@ -81,16 +82,21 @@ export const botPlayGame = (player, bot) => {
           bot.gameboard.board[dx][dy] === 0 ||
           bot.gameboard.board[dx][dy] === 1
         ) {
+
           bot.gameboard.receiveAttack(dx, dy);
           renderShip.call({ x: dx, y: dy }, bot, false);
+
           //show bot ship in case a ship sunk
-          updateShipOnGame(bot);
+          setTimeout(() => {updateShipOnGame(bot)}, 1000);
+          
           if (checkWinner(player, bot)) {
-            showEndGame(player, bot);
+            //add time before show end game
+            setTimeout(() =>{showEndGame(player, bot);}, 2000);
           } else {
             hasClicked = !hasClicked;
             turn = "Bot";
           }
+          
 
           if (!player.isWinner && !bot.isWinner && turn === "Bot")
             setTimeout(() => {
@@ -108,13 +114,14 @@ export const botPlayGame = (player, bot) => {
               player.gameboard.receiveAttack(xRan, yRan);
               renderShip.call({ x: xRan, y: yRan }, player, false);
               if (checkWinner(player, bot)) {
-                showEndGame(bot, player);
+                //add time before show end game
+                setTimeout(() =>{showEndGame(player, bot);}, 2000);
               } else {
                 hasClicked = !hasClicked;
                 turn = "Player";
                 clickNumber++;
               }
-            }, 1000);
+            }, 1500);
         }
       }
     });
