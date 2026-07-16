@@ -121,7 +121,7 @@ export const botPlayGame = (player, bot) => {
                 turn = "Player";
                 clickNumber++;
               }
-            }, 1500);
+            }, 2500);
         }
       }
     });

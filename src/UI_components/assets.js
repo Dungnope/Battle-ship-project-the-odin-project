@@ -49,7 +49,7 @@ import carrier from "../assets/carrier.svg";
 const Carrier = `
     <li>
       <span class="ship__name" name="carrier">Carrier</span>
-      <div class="ship" length="4">
+      <div class="ship" length="5">
         <img src="${carrier}">
       </div>
     </li>
@@ -69,7 +69,7 @@ import battleship from "../assets/battle_ship.svg";
 const Battleship = `
     <li>
       <span class="ship__name" name="battleship">BattleShip</span>
-      <div class="ship" length="5">
+      <div class="ship" length="4">
         <img src="${battleship}">
       </div>
     </li>
