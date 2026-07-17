@@ -85,6 +85,7 @@ export const getHit = async (texture, boxPosition) => {
 export const fireEffect = (boxPosition) => {
   return new Promise((resolve) => {
     const fireAudio = document.createElement("audio");
+    fireAudio.classList.add("fire__audio");
     fireAudio.src = fireSound;
     boxPosition.append(fireAudio);
     fireAudio.play();

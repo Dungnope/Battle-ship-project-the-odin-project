@@ -435,7 +435,7 @@ function renderShip(playerBoard, isPrepare = true) {
     if (positionStated === 2) {
         fireEffect(boxStatus).then(() => getHit(fireHit, boxStatus));
     } else if (positionStated === 3) {
-      fireEffect(boxStatus).then(() => boxStatus.innerHTML = missShot);
+      fireEffect(boxStatus).then(() => boxStatus.innerHTML = missShot); //show water pop effect
     }
   }
 }

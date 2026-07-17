@@ -721,4 +721,8 @@ body{
             }
         }
     }
+
+    .play__again{
+        top: 44%;
+    }
 }

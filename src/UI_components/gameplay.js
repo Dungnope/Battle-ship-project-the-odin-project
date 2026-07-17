@@ -61,7 +61,6 @@ export const botPlayGame = (player, bot) => {
   let hasClicked = false;
   const playerBoard = document.getElementById(`${player.id}`);
   const botBoard = document.getElementById(`${bot.id}`);
-  
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
   let clickNumber = 0; //avoid stackoverflow when can not find any position
   // play turn by turn
@@ -97,7 +96,6 @@ export const botPlayGame = (player, bot) => {
             turn = "Bot";
           }
           
-
           if (!player.isWinner && !bot.isWinner && turn === "Bot")
             setTimeout(() => {
               let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
@@ -117,11 +115,11 @@ export const botPlayGame = (player, bot) => {
                 //add time before show end game
                 setTimeout(() =>{showEndGame(player, bot);}, 2000);
               } else {
-                hasClicked = !hasClicked;
                 turn = "Player";
+                hasClicked = !hasClicked;
                 clickNumber++;
               }
-            }, 2500);
+            }, 1500);
         }
       }
     });
