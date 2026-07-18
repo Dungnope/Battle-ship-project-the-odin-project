@@ -11,30 +11,53 @@ import {
 
 
 import backgroundImg from "../assets/battle_ship_background.webp";
+import beachBackgroundImg from "../assets/beach_background.webp";
 import {shipAppeal } from "./animation.js";
 
-export const main = () => {
+export const gameMenu = (playerName) => {
   let mainMenu = `
+    <button id="single__player">Singleplayer</button>
+    <button id="multi__player">Multiplayer</button>
+  `;
+  document.querySelector(".container").innerHTML = "";
+  document.querySelector(".container").setHTMLUnsafe(mainMenu);
+  const singlePlayerBtn = document.getElementById("single__player");
+  const multiPlayerBtn = document.getElementById("multi__player");
+
+  singlePlayerBtn.addEventListener("click", (e) => {
+    console.log("play singleplayer");
+    let background = document.querySelector("body");
+    background.style.backgroundImage = `url(${beachBackgroundImg})`;
+    playerSetup(playerName);
+  });
+
+  multiPlayerBtn.addEventListener("click", (e) => {
+    console.log("play multiplayer");    
+  });
+}
+
+export const main = () => {
+  let fieldName = `
     <div class="main">
       <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
       <input type="text" class="user__name--input" placeholder="Your name...">
       <button id="enter__battle">Enter</button>
     </div>
   `;
-  document.querySelector(".container").setHTMLUnsafe(mainMenu);
+  document.querySelector(".container").setHTMLUnsafe(fieldName);
   //refert name input when refresh page
   document.querySelector(".user__name--input").value = "";
   let background = document.querySelector("body");
   background.style.backgroundImage = `url(${backgroundImg})`;
   let playerName = document.querySelector(".user__name--input");
   document.querySelector("#enter__battle").addEventListener("click", (e) => {
-    background.removeAttribute("style");
-    playerSetup(playerName.value);
+    gameMenu(playerName.value);
   });
 };
 
 export const playerSetup = (playerName) => {
   document.querySelector(".container").innerHTML = "";
+  document.querySelector(".container").style.zoom = "0.69";
   if (playerName === "" || playerName === " ") {
     playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
   }
@@ -158,6 +181,7 @@ export const singlePlay = function () {
     .shipguide.querySelector(".battle__btn")
     .addEventListener("click", (e) => {
       document.querySelector(".container").innerHTML = "";
+      document.querySelector(".container").removeAttribute("style");
       createBoard(this.player, colorBoard, false);
       renderShip.call({ autoPlace: true }, this.player);
       this.bot.arrangeAllShip();

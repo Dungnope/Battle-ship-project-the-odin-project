@@ -57,7 +57,9 @@ body{
     width: max(120px, 40vw);
 }
 
-#enter__battle{
+/* Game main menu */
+
+#enter__battle, #single__player, #multi__player{
   padding: 16px 32px;
   display: block;
   border-radius: 8px;
@@ -69,8 +71,19 @@ body{
   box-shadow: 4px 4px 0 0 var(--text);
   color: var(--text);
   outline: 1px solid var(--text);
-  border: 1px solid var(--text)
+  border: 1px solid var(--text);
+  transition: box-shadow ease-out 0.05s;
+  &:hover{
+    box-shadow: none;
+  }
 }
+
+#single__player, #multi__player{
+    display: block;
+    width: min(100%, 480px);
+    margin: 8px auto;
+}
+
 
 /* for neow effect */
 

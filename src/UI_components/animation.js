@@ -11,7 +11,7 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const shipTexture = document.createElement("img");
   shipTexture.src = texture;
   shipTexture.classList.add("texture");
-
+  
   drawBox.append(shipTexture);
   drawBox.classList.add("drawing");
   drawBox.style.width = `${oneGridWidth * shipSize + 8 * (shipSize - 1)}px`;

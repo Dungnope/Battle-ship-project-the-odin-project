@@ -291,7 +291,7 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
       });
     }
   }
-
+   
   let pathLength = pathTracker.length;
   while (pathTracker.length) {
     let currentPos = pathTracker.shift();
@@ -337,7 +337,8 @@ const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
       }
     }
   } catch (error) {
-    console.warn(error);
+    //console.warn(error);
+    console.warn("Go to github respository for more information this error");
   }
 };
 
