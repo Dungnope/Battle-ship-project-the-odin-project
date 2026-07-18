@@ -1,8 +1,9 @@
 import { Gameboard } from "../models/gameboard.js";
 import { Bot } from "../models/player.js";
 import { Ship } from "../models/ship.js";
-import { fireEffect, getHit, shipAppeal } from "./animation.js";
+import { fireEffect, getHit, shipAppeal, waterSplashEffect } from "./animation.js";
 import fireHit from "../assets/hit_animations/fire_ship.svg";
+import waterSpashTexture from "../assets/hit_animations/water_splash.svg";
 import {
   Carrier,
   Battleship,
@@ -435,7 +436,10 @@ function renderShip(playerBoard, isPrepare = true) {
     if (positionStated === 2) {
         fireEffect(boxStatus).then(() => getHit(fireHit, boxStatus));
     } else if (positionStated === 3) {
-      fireEffect(boxStatus).then(() => boxStatus.innerHTML = missShot); //show water pop effect
+      fireEffect(boxStatus).then(async() => {
+         await waterSplashEffect(waterSpashTexture, boxStatus);
+         boxStatus.innerHTML = missShot;
+      }); //show water pop effect
     }
   }
 }

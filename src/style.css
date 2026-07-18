@@ -235,10 +235,14 @@ body{
             z-index: 2;
         }
 
-        & .texture__explosion{
+        & .texture__explosion, & .texture__water{
             /* width: 100%; */
             z-index: 3;
             position: absolute;
+        }
+
+        & .texture__water{
+            width: 240%;
         }
     }
 }

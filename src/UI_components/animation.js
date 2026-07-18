@@ -1,6 +1,8 @@
 import smExplosive from "../assets/hit_animations/small_explosive.svg";
+import splashWaterTexture from "../assets/hit_animations/water_splash.svg";
 import fireSound from "../assets/audio/fire_sound.ogg";
 import explosiveSound from "../assets/audio/explosive.ogg";
+import waterSplashSound from "../assets/audio/water_splash.ogg";
 
 export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   const drawBox = document.createElement("div");
@@ -94,4 +96,44 @@ export const fireEffect = (boxPosition) => {
       resolve();
     });
   });
+};
+
+//water splash sound and effect
+export const waterSplashEffect = async (texture, boxPosition) => {
+  //hit create an small explosion
+  const waterSplashTexture = document.createElement("img");
+  waterSplashTexture.src = splashWaterTexture;
+  waterSplashTexture.classList.add("texture__water");
+
+  const waterShowAnimation = [
+    { opacity: 1, easing: "ease-out"},
+    { opacity: 0.5, easing: "ease-in"},
+    { opacity: 0, easing: "ease-out"},
+  ];
+
+  const timeAnimation = {
+    duration: 800,
+    iterations: 1,
+  };
+
+  //create animation explosion
+  boxPosition.append(waterSplashTexture);
+
+  //play explosive sound
+  const newAudio = document.createElement("audio");
+  newAudio.src = waterSplashSound;
+  newAudio.volume = 0.5;
+  boxPosition.append(newAudio);
+  newAudio.play();
+
+  newAudio.addEventListener("ended", () => {
+    boxPosition.removeChild(newAudio);
+  });
+
+  await waterSplashTexture.animate(waterShowAnimation, timeAnimation).finished.then(
+    () => {
+      boxPosition.removeChild(waterSplashTexture); //after that disappear
+      return new Promise((resolve) => resolve());
+    }
+  );
 };

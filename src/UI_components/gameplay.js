@@ -115,7 +115,10 @@ export const botPlayGame = (player, bot) => {
                 //add time before show end game
                 setTimeout(() =>{showEndGame(player, bot);}, 2000);
               } else {
-                turn = "Player";
+                //add more time before can continue fire
+                setTimeout(() => {
+                  turn = "Player";
+                }, 1500);
                 hasClicked = !hasClicked;
                 clickNumber++;
               }
