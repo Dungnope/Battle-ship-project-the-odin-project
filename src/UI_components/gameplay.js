@@ -57,7 +57,6 @@ export const main = () => {
 
 export const playerSetup = (playerName) => {
   document.querySelector(".container").innerHTML = "";
-  document.querySelector(".container").style.zoom = "0.69";
   if (playerName === "" || playerName === " ") {
     playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
   }
