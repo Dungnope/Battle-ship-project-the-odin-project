@@ -1,9 +1,10 @@
 import "./style.css";
 
-import { fastPlayGame, main, playerSetup } from "./UI_components/gameplay.js";
+import { fastPlayGameBot, main, playerSetup, fastPlayGameLocal } from "./UI_components/gameplay.js";
 
 document.addEventListener("DOMContentLoaded", (e) => {
-  //fastPlayGame(); // play immediately
+  //fastPlayGameBot(); // play immediately
   //playerSetup("pepter"); //no need name input at screen
-  main(); // type your name to enter the game
+  //main(); // type your name to enter the game
+  fastPlayGameLocal(); //play game with two players one device pass
 });

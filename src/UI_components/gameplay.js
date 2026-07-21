@@ -66,7 +66,7 @@ export const playerSetup = (playerName) => {
   interactWithBoard(newPlayer);
 };
 
-export const fastPlayGame = () => {
+export const fastPlayGameBot = () => {
   let player1 = new Player("Parker", new Gameboard(10, 10));
   let bot = new Bot("Bot1", new Gameboard(10, 10));
   player1.arrangeAllShip();
@@ -78,10 +78,20 @@ export const fastPlayGame = () => {
   botPlayGame(player1, bot);
 };
 
+export const fastPlayGameLocal = () => {
+  let player1 = new Player("Player1", new Gameboard(10, 10));
+  let player2 = new Bot("Player2", new Gameboard(10, 10));
+  player1.arrangeAllShip();
+  player2.arrangeAllShip();
+  createBoard(player1, "var(--target)", false);
+  createBoard(player2, "aqua", false);
+  renderShip.call({ autoPlace: true }, player1, true);
+  renderShip.call({ autoPlace: true }, player2, true); //to show or hide ship
+};
+
 export const botPlayGame = (player, bot) => {
   let turn = player.constructor.name;
   let hasClicked = false;
-  const playerBoard = document.getElementById(`${player.id}`);
   const botBoard = document.getElementById(`${bot.id}`);
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
   let clickNumber = 0; //avoid stackoverflow when can not find any position
@@ -189,6 +199,8 @@ export const singlePlay = function () {
       botPlayGame(this.player, this.bot);
     });
 };
+
+export const singlePlay2P = function() {}
 
 const checkWinner = (entity1, entity2) => {
   //check whether all ship collapsed or not
