@@ -14,45 +14,109 @@ import backgroundImg from "../assets/battle_ship_background.webp";
 import beachBackgroundImg from "../assets/beach_background.webp";
 import {shipAppeal } from "./animation.js";
 
-export const gameMenu = (playerName) => {
+//main menu of game
+export const gameMenu = () => {
+  let background = document.querySelector("body");
+  background.style.backgroundImage = `url(${backgroundImg})`;
   let mainMenu = `
     <button id="single__player">Singleplayer</button>
     <button id="multi__player">Multiplayer</button>
+    <button id="setting__game">Setting</button>
   `;
-  document.querySelector(".container").innerHTML = "";
   document.querySelector(".container").setHTMLUnsafe(mainMenu);
   const singlePlayerBtn = document.getElementById("single__player");
   const multiPlayerBtn = document.getElementById("multi__player");
+  const settingBtn = document.getElementById("setting__game");
 
+  //show singleplay UI
   singlePlayerBtn.addEventListener("click", (e) => {
     console.log("play singleplayer");
     let background = document.querySelector("body");
     background.style.backgroundImage = `url(${beachBackgroundImg})`;
-    playerSetup(playerName);
+    mainForSinglePlayer(); //for one player with bot
   });
 
+  //show multiplayer UI
   multiPlayerBtn.addEventListener("click", (e) => {
     console.log("play multiplayer");    
   });
-}
 
-export const main = () => {
-  let fieldName = `
-    <div class="main">
-      <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
-      <input type="text" class="user__name--input" placeholder="Your name...">
-      <button id="enter__battle">Enter</button>
-    </div>
-  `;
-  document.querySelector(".container").setHTMLUnsafe(fieldName);
-  //refert name input when refresh page
-  document.querySelector(".user__name--input").value = "";
-  let background = document.querySelector("body");
-  background.style.backgroundImage = `url(${backgroundImg})`;
-  let playerName = document.querySelector(".user__name--input");
-  document.querySelector("#enter__battle").addEventListener("click", (e) => {
-    gameMenu(playerName.value);
+  //show setting UI
+  settingBtn.addEventListener("click", (e) => {
+    console.log("setting");
   });
+};
+
+export const mainForSinglePlayer = () => {
+  let selectMode = `
+    <button id="bot__player" title="player vs bot">👥 VS 🤖</button>
+    <button id="two__player" title="player vs player">👥 VS 👥</button>
+  `;
+  document.querySelector(".container").innerHTML = "";
+  document.querySelector(".container").setHTMLUnsafe(selectMode);
+  const botPlayerBtn = document.querySelector("#bot__player");
+  const versusPlayerBtn = document.querySelector("#two__player");
+
+  botPlayerBtn.addEventListener("click", (e) => {
+    e.stopImmediatePropagation();
+    console.log("bot mode");
+    botMode();
+  });
+
+  versusPlayerBtn.addEventListener("click", (e) => {
+    e.stopImmediatePropagation();
+    console.log("vs one device mode");
+    versusMode();
+  });
+
+  //for play with bot
+  const botMode = function(){
+    let fieldName = `
+      <div class="main">
+        <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
+        <input type="text" class="user__name--input" placeholder="Your name...">
+        <button id="enter__battle">Enter</button>
+      </div>
+  `;
+    document.querySelector(".container").setHTMLUnsafe(fieldName);
+    //reset name input when refresh page
+    document.querySelector(".user__name--input").value = "";
+    let playerName = document.querySelector(".user__name--input");
+    document.querySelector("#enter__battle").addEventListener("click", (e) => {
+      playerSetup(playerName.value);
+    });
+  };
+
+  //for 2 player mode
+  const versusMode = function(){
+    let fieldName = `
+      <div class="main">
+        <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
+        <div>
+          <label for="player1">Player1</lable>      
+          <input type="text" class="user__name--input p1__name" id="player1" placeholder="Your name...">
+        </div>
+
+        <div>
+          <label for="player2">Player2</lable>
+          <input type="text" class="user__name--input p2__name" id="player2" placeholder="Your name...">
+        </div>
+        <button id="enter__battle">Enter</button>
+      </div>
+    `;
+
+    document.querySelector(".container").setHTMLUnsafe(fieldName);
+    //reset name input when refresh page
+    document.querySelector(".user__name--input.p1__name").value = "";
+    document.querySelector(".user__name--input.p2__name").value = "";
+    let player1Name = document.querySelector(".user__name--input.p1__name");
+    let player2Name = document.querySelector(".user__name--input.p2__name");
+    document.querySelector("#enter__battle").addEventListener("click", (e) => {
+      //place ship for two player
+      console.log(player1Name.value, player2Name.value);
+      playerSetup();
+    });
+  };
 };
 
 export const playerSetup = (playerName) => {
@@ -200,7 +264,6 @@ export const singlePlay = function () {
     });
 };
 
-export const singlePlay2P = function() {}
 
 const checkWinner = (entity1, entity2) => {
   //check whether all ship collapsed or not

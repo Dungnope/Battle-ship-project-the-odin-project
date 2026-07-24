@@ -29,37 +29,61 @@ body{
 .main{
     text-align: center;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    & > div:first-of-type{
+        grid-column: 1 / 2;
+    }
+
+    & > div:last-of-type{
+        grid-column: 2 / 3;
+    }
+
+    & div label{
+        font-family: "Bangers", "Inter", monospace, sans-serif, system-ui;
+        display: inline-block;
+        text-align: left;
+        margin-bottom: 16px;
+        font-size: 1.2rem;
+    }
+
 }
 
 
 .header__menu{
+  grid-column: 1 / span 2;
   font-family: "Bangers", system-ui;
   font-weight: 400;
   font-style: normal;
   font-size: max(3rem,12vw);
 }
 
+
+
 .user__name--input{
     border: 1px solid black;
     border-radius: 4px;
     padding: 12px 18px;
     display: block;
-    margin: 0 auto;
+    margin: 12px auto;
     box-shadow: 4px 4px 0 0 var(--text);
     color: var(--text);
     outline: 1px solid var(--text);
     border: 1px solid var(--text);
     font-family: "Bangers", system-ui;
     font-size: 1.6rem;
-    width: max(120px, 40vw);
+    width: max(120px, 32vw);
 }
 
 /* Game main menu */
 
-#enter__battle, #single__player, #multi__player{
+#enter__battle{
+    grid-column: 1 / span 2;
+}
+
+#enter__battle, #single__player, #multi__player, #setting__game,
+#bot__player, #two__player{
   padding: 16px 32px;
   display: block;
   border-radius: 8px;
@@ -78,11 +102,13 @@ body{
   }
 }
 
-#single__player, #multi__player{
+#single__player, #multi__player, #setting__game,
+#bot__player, #two__player{
     display: block;
     width: min(100%, 480px);
-    margin: 8px auto;
+    margin: 8px 120px;
 }
+
 
 
 /* for neow effect */
@@ -143,7 +169,7 @@ body{
     width: min(100%, 1440px);
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
     margin: 0 auto;
     padding: 16px;
     position: relative;
