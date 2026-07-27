@@ -40,6 +40,7 @@ body{
         grid-column: 2 / 3;
     }
 
+
     & div label{
         font-family: "Bangers", "Inter", monospace, sans-serif, system-ui;
         display: inline-block;
@@ -170,6 +171,7 @@ body{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 12px 120px;
     margin: 0 auto;
     padding: 16px;
     position: relative;

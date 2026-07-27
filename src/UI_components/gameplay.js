@@ -8,11 +8,32 @@ import {
   renderShip,
   boardData,
 } from "./board.js";
-
-
 import backgroundImg from "../assets/battle_ship_background.webp";
 import beachBackgroundImg from "../assets/beach_background.webp";
 import {shipAppeal } from "./animation.js";
+
+export const fastPlayGameBot = () => {
+  let player1 = new Player("Parker", new Gameboard(10, 10));
+  let bot = new Bot("Bot1", new Gameboard(10, 10));
+  player1.arrangeAllShip();
+  bot.arrangeAllShip();
+  createBoard(player1, "var(--target)", false);
+  createBoard(bot, "aqua", false);
+  renderShip.call({ autoPlace: true }, player1, true);
+  //renderShip.call({ autoPlace: true }, bot); //to show or hide ship
+  botPlayGame(player1, bot);
+};
+
+export const fastPlayGameLocal = () => {
+  let player1 = new Player("Player1", new Gameboard(10, 10));
+  let player2 = new Bot("Player2", new Gameboard(10, 10));
+  player1.arrangeAllShip();
+  player2.arrangeAllShip();
+  createBoard(player1, "var(--target)", false);
+  createBoard(player2, "aqua", false);
+  renderShip.call({ autoPlace: true }, player1, true);
+  renderShip.call({ autoPlace: true }, player2, true); //to show or hide ship
+};
 
 //main menu of game
 export const gameMenu = () => {
@@ -45,112 +66,6 @@ export const gameMenu = () => {
   settingBtn.addEventListener("click", (e) => {
     console.log("setting");
   });
-};
-
-export const mainForSinglePlayer = () => {
-  let selectMode = `
-    <button id="bot__player" title="player vs bot">👥 VS 🤖</button>
-    <button id="two__player" title="player vs player">👥 VS 👥</button>
-  `;
-  document.querySelector(".container").innerHTML = "";
-  document.querySelector(".container").setHTMLUnsafe(selectMode);
-  const botPlayerBtn = document.querySelector("#bot__player");
-  const versusPlayerBtn = document.querySelector("#two__player");
-
-  botPlayerBtn.addEventListener("click", (e) => {
-    e.stopImmediatePropagation();
-    console.log("bot mode");
-    botMode();
-  });
-
-  versusPlayerBtn.addEventListener("click", (e) => {
-    e.stopImmediatePropagation();
-    console.log("vs one device mode");
-    versusMode();
-  });
-
-  //for play with bot
-  const botMode = function(){
-    let fieldName = `
-      <div class="main">
-        <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
-        <input type="text" class="user__name--input" placeholder="Your name...">
-        <button id="enter__battle">Enter</button>
-      </div>
-  `;
-    document.querySelector(".container").setHTMLUnsafe(fieldName);
-    //reset name input when refresh page
-    document.querySelector(".user__name--input").value = "";
-    let playerName = document.querySelector(".user__name--input");
-    document.querySelector("#enter__battle").addEventListener("click", (e) => {
-      playerSetup(playerName.value);
-    });
-  };
-
-  //for 2 player mode
-  const versusMode = function(){
-    let fieldName = `
-      <div class="main">
-        <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
-        <div>
-          <label for="player1">Player1</lable>      
-          <input type="text" class="user__name--input p1__name" id="player1" placeholder="Your name...">
-        </div>
-
-        <div>
-          <label for="player2">Player2</lable>
-          <input type="text" class="user__name--input p2__name" id="player2" placeholder="Your name...">
-        </div>
-        <button id="enter__battle">Enter</button>
-      </div>
-    `;
-
-    document.querySelector(".container").setHTMLUnsafe(fieldName);
-    //reset name input when refresh page
-    document.querySelector(".user__name--input.p1__name").value = "";
-    document.querySelector(".user__name--input.p2__name").value = "";
-    let player1Name = document.querySelector(".user__name--input.p1__name");
-    let player2Name = document.querySelector(".user__name--input.p2__name");
-    document.querySelector("#enter__battle").addEventListener("click", (e) => {
-      //place ship for two player
-      console.log(player1Name.value, player2Name.value);
-      playerSetup();
-    });
-  };
-};
-
-export const playerSetup = (playerName) => {
-  document.querySelector(".container").innerHTML = "";
-  if (playerName === "" || playerName === " ") {
-    playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
-  }
-  let newPlayer = new Player(playerName, new Gameboard(10, 10));
-  createBoard(newPlayer, "var(--valid)", true);
-  chooseShip(newPlayer);
-  interactWithBoard(newPlayer);
-};
-
-export const fastPlayGameBot = () => {
-  let player1 = new Player("Parker", new Gameboard(10, 10));
-  let bot = new Bot("Bot1", new Gameboard(10, 10));
-  player1.arrangeAllShip();
-  bot.arrangeAllShip();
-  createBoard(player1, "var(--target)", false);
-  createBoard(bot, "aqua", false);
-  renderShip.call({ autoPlace: true }, player1, true);
-  //renderShip.call({ autoPlace: true }, bot); //to show or hide ship
-  botPlayGame(player1, bot);
-};
-
-export const fastPlayGameLocal = () => {
-  let player1 = new Player("Player1", new Gameboard(10, 10));
-  let player2 = new Bot("Player2", new Gameboard(10, 10));
-  player1.arrangeAllShip();
-  player2.arrangeAllShip();
-  createBoard(player1, "var(--target)", false);
-  createBoard(player2, "aqua", false);
-  renderShip.call({ autoPlace: true }, player1, true);
-  renderShip.call({ autoPlace: true }, player2, true); //to show or hide ship
 };
 
 export const botPlayGame = (player, bot) => {
@@ -243,25 +158,161 @@ export const updateShipOnGame = function (playerboard){
   }
 };
 
-export const singlePlay = function () {
+export const playerSetup = (playerName, mode = null) => {
+  if(mode === "bot" || mode === null || mode === "undefined"){
+    document.querySelector(".container").innerHTML = "";
+  }
+  
+  if (playerName === "" || playerName === " ") {
+    playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
+  }
+  let newPlayer = new Player(playerName, new Gameboard(10, 10));
+const colors = [
+  "#58B8F8", // Blue
+  "#63D47C", // Green
+  "#FFD84D", // Yellow
+  "#FFA640", // Orange
+  "#FF6F61", // Red
+  "#9B7CF6", // Purple
+  "#FF7EB6", // Pink
+  "#3FD5C8", // Cyan
+  "#C9A86A", // Brown
+  "#CFCFCF", // Gray
+];
+  let randomColor = colors[Math.floor(Math.random() * (colors.length))];
+  createBoard(newPlayer, randomColor, true);
+  chooseShip(newPlayer);
+  interactWithBoard(newPlayer, mode);
+};
+
+
+export const singlePlay = function (player, mode = "bot") { //default is play with bot
   //show play button and click to navigation to game
-  const colorBoard = boardData(this.player).board.querySelector(
+  const colorBoard = boardData(player).board.querySelector(
     ".wrapper__grid",
   ).style.backgroundColor;
-  createPlayBtn(colorBoard);
+
+  //add button for go to battle
+  createPlayBtn(player, colorBoard);
   //play with bot
-  boardData(this.player)
+  if(mode === "bot" || mode === null || mode === "undefined"){
+    boardData(player)
     .shipguide.querySelector(".battle__btn")
     .addEventListener("click", (e) => {
-      document.querySelector(".container").innerHTML = "";
-      document.querySelector(".container").removeAttribute("style");
-      createBoard(this.player, colorBoard, false);
-      renderShip.call({ autoPlace: true }, this.player);
-      this.bot.arrangeAllShip();
-      createBoard(this.bot, "var(--opponent-background)", false);
-      //renderShip.call({ autoPlace: true }, this.bot); //make ship on board not show
-      botPlayGame(this.player, this.bot);
+      e.stopImmediatePropagation();
+        document.querySelector(".container").innerHTML = "";
+        document.querySelector(".container").removeAttribute("style");
+        createBoard(player, colorBoard, false);
+        renderShip.call({ autoPlace: true }, player);
+
+        //make an bot board
+        let botIdx = Math.abs(crypto.getRandomValues(new Int8Array(1)));
+        let bot = new Bot(`Bot${botIdx}`, new Gameboard(10, 10));
+        bot.arrangeAllShip();
+        createBoard(bot, "var(--opponent-background)", false);
+        //renderShip.call({ autoPlace: true }, this.bot); //make ship on board not show
+        botPlayGame(player, bot);
     });
+  }
+  else if(mode === "2player"){ //two player versus
+    let allBoard = document.querySelectorAll(".board"); //take all board on web
+    boardData(player)
+    .shipguide.querySelector(".battle__btn")
+    .addEventListener("click", (e) => {
+      e.stopImmediatePropagation();
+
+      //logic for sequence hide board
+      if(allBoard[1].style.display === "none"){
+        allBoard[1].style.removeProperty("display");
+      }
+
+      boardData(player).board.style.display = "none";
+
+      // both ship are placed
+      if(allBoard[0].style.display === "none" && allBoard[1].style.display === "none"){
+        //play the game
+        document.querySelector(".container").textContent = "Play Now!";
+      }
+
+    });
+  }
+};
+
+export const mainForSinglePlayer = () => {
+  let selectMode = `
+    <button id="bot__player" title="player vs bot">👥 VS 🤖</button>
+    <button id="two__player" title="player vs player">👥 VS 👥</button>
+  `;
+  document.querySelector(".container").innerHTML = "";
+  document.querySelector(".container").setHTMLUnsafe(selectMode);
+  const botPlayerBtn = document.querySelector("#bot__player");
+  const versusPlayerBtn = document.querySelector("#two__player");
+
+  botPlayerBtn.addEventListener("click", (e) => {
+    e.stopImmediatePropagation();
+    console.log("bot mode");
+    botMode();
+  });
+
+  versusPlayerBtn.addEventListener("click", (e) => {
+    e.stopImmediatePropagation();
+    console.log("vs one device mode");
+    versusMode();
+  });
+
+  //for play with bot
+  const botMode = function(){
+    let fieldName = `
+      <div class="main">
+        <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
+        <input type="text" class="user__name--input" placeholder="Your name...">
+        <button id="enter__battle">Enter</button>
+      </div>
+  `;
+    document.querySelector(".container").setHTMLUnsafe(fieldName);
+    document.querySelector(".main").style.display = "block";
+    //reset name input when refresh page
+    document.querySelector(".user__name--input").value = "";
+    let playerName = document.querySelector(".user__name--input");
+    document.querySelector("#enter__battle").addEventListener("click", (e) => {
+      playerSetup(playerName.value, "bot");
+    });
+  };
+
+  //for 2 player mode
+  const versusMode = function(){
+    let fieldName = `
+      <div class="main">
+        <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
+        <div>
+          <label for="player1">Player1</lable>      
+          <input type="text" class="user__name--input p1__name" id="player1" placeholder="Your name...">
+        </div>
+
+        <div>
+          <label for="player2">Player2</lable>
+          <input type="text" class="user__name--input p2__name" id="player2" placeholder="Your name...">
+        </div>
+        <button id="enter__battle">Enter</button>
+      </div>
+    `;
+
+    document.querySelector(".container").setHTMLUnsafe(fieldName);
+    //reset name input when refresh page
+    document.querySelector(".user__name--input.p1__name").value = "";
+    document.querySelector(".user__name--input.p2__name").value = "";
+    let player1Name = document.querySelector(".user__name--input.p1__name");
+    let player2Name = document.querySelector(".user__name--input.p2__name");
+
+    document.querySelector("#enter__battle").addEventListener("click", (e) => {
+      document.querySelector(".container").innerHTML = "";
+      //place ship for two player
+        playerSetup(player1Name.value, "2player");
+        playerSetup(player2Name.value, "2player");
+        let allBoard = document.querySelectorAll(".board"); //take all board on web
+        allBoard[1].style.display = "none";
+    });
+  };
 };
 
 

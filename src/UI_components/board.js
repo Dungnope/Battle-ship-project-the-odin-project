@@ -115,19 +115,18 @@ const boardData = (player) => {
   };
 };
 
-const autoPlaceShip = (player) => {
+//for autoplace button of guide board
+const autoPlaceShip = (player, mode) => {
   clearAllShip(player);
   player.arrangeAllShip();
 
   boardData(player).shiplist.forEach((ship) => {
     ship.classList.add("had__placed");
   });
+
   renderShip.call({ autoPlace: true }, player);
 
-  singlePlay.apply({
-    player: player,
-    bot: new Bot("Bot1", new Gameboard(10, 10)),
-  });
+  singlePlay(player, mode);
 };
 
 const clearAllShip = (player) => {
@@ -184,30 +183,14 @@ const boardGuide = function (color) {
   autoPlaceBtn.textContent = "Auto place";
   autoPlaceBtn.style.backgroundColor = color;
 
-  autoPlaceBtn.addEventListener("click", (e) => {
-    autoPlaceShip(this.player);
-    e.stopImmediatePropagation();
-  });
-
   const clearBoardBtn = document.createElement("button");
   clearBoardBtn.classList.add("function__btn--clear");
   clearBoardBtn.textContent = "Clear All";
+
   clearBoardBtn.setAttribute(
     "style",
     `border: 1px solid ${color}; outline: 1px solid ${color};color: ${color};`,
   );
-  clearBoardBtn.addEventListener("mouseover", function (e) {
-    e.currentTarget.style.backgroundColor = color;
-    e.currentTarget.style.color = "var(--background)";
-  });
-  clearBoardBtn.addEventListener("mouseout", function (e) {
-    e.currentTarget.style.backgroundColor = "transparent";
-    e.currentTarget.style.color = `${color}`;
-  });
-  clearBoardBtn.addEventListener("click", (e) => {
-    clearAllShip(this.player);
-    e.stopImmediatePropagation();
-  });
 
   const warnSign = document.createElement("span");
   warnSign.classList.add("warn__sign");
@@ -480,8 +463,8 @@ const isAllPlace = (playerBoard) => {
   return true;
 };
 
-export const createPlayBtn = (color) => {
-  let shipGuide = document.querySelector(".guide__ship");
+export const createPlayBtn = (player, color) => {
+  let shipGuide = boardData(player).shipguide;
   //ready to battle and check it appeared or not
   if (!shipGuide.lastElementChild.classList.contains("battle__btn")) {
     let playBtn = document.createElement("button");
@@ -492,10 +475,10 @@ export const createPlayBtn = (color) => {
   }
 };
 
-const interactWithBoard = (playerBoard) => {
+const interactWithBoard = (playerBoard, mode) => {
   let axis = ["vertical", "horizontal"];
   let current = 1;
-
+  
   try {
     //prevent right click on board
     boardData(playerBoard).board.addEventListener("contextmenu", (e) => {
@@ -509,10 +492,7 @@ const interactWithBoard = (playerBoard) => {
 
         //check all ship placed or not
         if (isAllPlace(playerBoard)) {
-          singlePlay.apply({
-            player: playerBoard,
-            bot: new Bot("Bot1", new Gameboard(10, 10)),
-          });
+          singlePlay(playerBoard, mode);
         }
       });
 
@@ -547,8 +527,34 @@ const interactWithBoard = (playerBoard) => {
         );
       });
     });
-  } catch {
-    console.log("play game");
+
+    //board guide function
+    const autoPlaceBtn = boardData(playerBoard).board.querySelector(".function__btn--autoplace");
+
+    autoPlaceBtn.addEventListener("click", (e) => {
+      e.stopImmediatePropagation();
+      autoPlaceShip(playerBoard, mode);
+    });
+
+    //delete all ships on board
+    const clearBoardBtn = boardData(playerBoard).board.querySelector(".function__btn--clear");
+    const clearBoardBtnColor = clearBoardBtn.style.color;
+    clearBoardBtn.addEventListener("mouseover", function (e) {
+      e.currentTarget.style.backgroundColor = clearBoardBtnColor;
+      e.currentTarget.style.color = "var(--background)";
+    });
+
+    clearBoardBtn.addEventListener("mouseout", function (e) {
+      e.currentTarget.style.backgroundColor = "transparent";
+      e.currentTarget.style.color = clearBoardBtnColor;
+    });
+
+    clearBoardBtn.addEventListener("click", (e) => {
+      clearAllShip(playerBoard);
+      e.stopImmediatePropagation();
+    });
+  } catch(error) {
+    console.log(error);
   }
 };
 
