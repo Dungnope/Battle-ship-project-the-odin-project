@@ -51,6 +51,8 @@ export const gameMenu = () => {
 
   //show singleplay UI
   singlePlayerBtn.addEventListener("click", (e) => {
+    //delete old player
+    localStorage.clear();
     console.log("play singleplayer");
     let background = document.querySelector("body");
     background.style.backgroundImage = `url(${beachBackgroundImg})`;
@@ -66,6 +68,52 @@ export const gameMenu = () => {
   settingBtn.addEventListener("click", (e) => {
     console.log("setting");
   });
+};
+
+export const updateShipOnGame = function (playerboard){
+  if(playerboard.gameboard.sunkShip.length !== 0){
+    const board = document.getElementById(`${playerboard.id}`);
+    const grid = board.querySelector(`.wrapper__grid`);
+    let sunkShipInfo = {
+      texture: playerboard.gameboard.sunkShip[0].texture,
+      shipSize: playerboard.gameboard.sunkShip[0].length,
+      axis: playerboard.gameboard.sunkShip[0].axis,
+      //take first coordinate of first ship on sunkShip list
+      coordinate: playerboard.gameboard.sunkShip[0].coordinate[0],
+    };
+    let placeCoordinate = grid.querySelector(
+    `[x="${sunkShipInfo.coordinate.x}"][y="${sunkShipInfo.coordinate.y}"]`);
+    shipAppeal(sunkShipInfo.texture, placeCoordinate, sunkShipInfo.shipSize, sunkShipInfo.axis);
+    playerboard.gameboard.sunkShip.pop();
+  }
+};
+
+export const playerSetup = function(playerName, mode = null){
+  if(mode === "bot" || mode === null || mode === "undefined"){
+    document.querySelector(".container").innerHTML = "";
+  }
+  
+  if (playerName === "" || playerName === " ") {
+    playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
+  }
+  let newPlayer = new Player(playerName, new Gameboard(10, 10));
+  const colors = [
+    "#58B8F8", // Blue
+    "#63D47C", // Green
+    "#FFD84D", // Yellow
+    "#FFA640", // Orange
+    "#FF6F61", // Red
+    "#9B7CF6", // Purple
+    "#FF7EB6", // Pink
+    "#3FD5C8", // Cyan
+    "#C9A86A", // Brown
+    "#CFCFCF", // Gray
+  ];
+
+  let randomColor = colors[Math.floor(Math.random() * (colors.length))];
+  createBoard(newPlayer, randomColor, true);
+  chooseShip(newPlayer);
+  interactWithBoard(newPlayer, mode);
 };
 
 export const botPlayGame = (player, bot) => {
@@ -140,51 +188,22 @@ export const botPlayGame = (player, bot) => {
   });
 };
 
-export const updateShipOnGame = function (playerboard){
-  if(playerboard.gameboard.sunkShip.length !== 0){
-    const board = document.getElementById(`${playerboard.id}`);
-    const grid = board.querySelector(`.wrapper__grid`);
-    let sunkShipInfo = {
-      texture: playerboard.gameboard.sunkShip[0].texture,
-      shipSize: playerboard.gameboard.sunkShip[0].length,
-      axis: playerboard.gameboard.sunkShip[0].axis,
-      //take first coordinate of first ship on sunkShip list
-      coordinate: playerboard.gameboard.sunkShip[0].coordinate[0],
-    };
-    let placeCoordinate = grid.querySelector(
-    `[x="${sunkShipInfo.coordinate.x}"][y="${sunkShipInfo.coordinate.y}"]`);
-    shipAppeal(sunkShipInfo.texture, placeCoordinate, sunkShipInfo.shipSize, sunkShipInfo.axis);
-    playerboard.gameboard.sunkShip.pop();
-  }
-};
+export const versusPlayGame = (player1, player2) => {
+  const colorBoard1 = boardData(player1).board.querySelector(
+    ".wrapper__grid",
+  ).style.backgroundColor;
 
-export const playerSetup = (playerName, mode = null) => {
-  if(mode === "bot" || mode === null || mode === "undefined"){
-    document.querySelector(".container").innerHTML = "";
-  }
-  
-  if (playerName === "" || playerName === " ") {
-    playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
-  }
-  let newPlayer = new Player(playerName, new Gameboard(10, 10));
-const colors = [
-  "#58B8F8", // Blue
-  "#63D47C", // Green
-  "#FFD84D", // Yellow
-  "#FFA640", // Orange
-  "#FF6F61", // Red
-  "#9B7CF6", // Purple
-  "#FF7EB6", // Pink
-  "#3FD5C8", // Cyan
-  "#C9A86A", // Brown
-  "#CFCFCF", // Gray
-];
-  let randomColor = colors[Math.floor(Math.random() * (colors.length))];
-  createBoard(newPlayer, randomColor, true);
-  chooseShip(newPlayer);
-  interactWithBoard(newPlayer, mode);
-};
+  const colorBoard2 = boardData(player2).board.querySelector(
+    ".wrapper__grid",
+  ).style.backgroundColor;
 
+  //reset all element on screen
+  document.querySelector(".container").innerHTML = "";
+  createBoard(player1, colorBoard1, false);
+  createBoard(player2, colorBoard2, false);
+  renderShip.call({autoPlace: true}, player1, false);
+  renderShip.call({autoPlace: true}, player2, false);
+};
 
 export const singlePlay = function (player, mode = "bot") { //default is play with bot
   //show play button and click to navigation to game
@@ -227,11 +246,17 @@ export const singlePlay = function (player, mode = "bot") { //default is play wi
       }
 
       boardData(player).board.style.display = "none";
-
+      //add player value to local storage
+      let idPlayerData = document.querySelector(`#${player.id} .name__display span`).textContent;
+      localStorage.setItem(`${idPlayerData}`, JSON.stringify(player));
       // both ship are placed
       if(allBoard[0].style.display === "none" && allBoard[1].style.display === "none"){
         //play the game
-        document.querySelector(".container").textContent = "Play Now!";
+        let player1Tag = allBoard[0].querySelector(".name__display span").textContent;
+        let player2Tag = allBoard[1].querySelector(".name__display span").textContent;
+        let player1 = JSON.parse(localStorage.getItem(player1Tag));
+        let player2 = JSON.parse(localStorage.getItem(player2Tag));
+        versusPlayGame(player1, player2);
       }
 
     });
@@ -303,13 +328,12 @@ export const mainForSinglePlayer = () => {
     document.querySelector(".user__name--input.p2__name").value = "";
     let player1Name = document.querySelector(".user__name--input.p1__name");
     let player2Name = document.querySelector(".user__name--input.p2__name");
-
     document.querySelector("#enter__battle").addEventListener("click", (e) => {
       document.querySelector(".container").innerHTML = "";
       //place ship for two player
         playerSetup(player1Name.value, "2player");
         playerSetup(player2Name.value, "2player");
-        let allBoard = document.querySelectorAll(".board"); //take all board on web
+        let allBoard = document.querySelectorAll(".board");
         allBoard[1].style.display = "none";
     });
   };

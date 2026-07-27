@@ -38,10 +38,10 @@ const createBoard = (player, boardColor, withShipList) => {
   wrapper.classList.add("wrapper__grid");
   wrapper.style.backgroundColor = boardColor;
 
-  const playerID = `#${player.nameTag}`;
+  const playerID = `${player.nameTag}`;
   boardContainer.setAttribute("name", playerID);
   if (player.id === undefined || player.id === null) {
-    boardContainer.id = `#tar_${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
+    boardContainer.id = `tar_${Math.abs(crypto.getRandomValues(new Int16Array(1)))}`;
     player.id = boardContainer.id;
   } else {
     boardContainer.id = player.id;
@@ -49,7 +49,7 @@ const createBoard = (player, boardColor, withShipList) => {
 
   //show player info
   const showName = document.createElement("p");
-  showName.innerHTML = `<span>(${player.id})</span> ${player.nameTag}'s board`;
+  showName.innerHTML = `<span>#${player.id}</span> ${player.nameTag}'s board`;
   showName.classList.add("name__display");
 
   //grid container
