@@ -70,7 +70,7 @@ export class Gameboard {
   }
 
   //take all possible coors of a specific position
-  #adjacentFromXY = (x, y, position) => {
+  #adjacentFromXY (x, y, position) {
     return position
       .map((value) => {
         let dx, dy;
@@ -93,7 +93,7 @@ export class Gameboard {
   };
 
   //check around position whether adjacent with any ships
-  adjacentShip = (x, y, shipLength, axis, adjacentPosition) => {
+  adjacentShip (x, y, shipLength, axis, adjacentPosition){
     for (let i = 0; i < shipLength; i++) {
       //take all possible around coor
       let aroundCoordinates = null;

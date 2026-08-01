@@ -96,6 +96,7 @@ export const playerSetup = function(playerName, mode = null){
   if (playerName === "" || playerName === " ") {
     playerName = `Guest${Math.abs(crypto.getRandomValues(new Int8Array(1)))}`;
   }
+
   let newPlayer = new Player(playerName, new Gameboard(10, 10));
   const colors = [
     "#58B8F8", // Blue
@@ -113,7 +114,8 @@ export const playerSetup = function(playerName, mode = null){
   let randomColor = colors[Math.floor(Math.random() * (colors.length))];
   createBoard(newPlayer, randomColor, true);
   chooseShip(newPlayer);
-  interactWithBoard(newPlayer, mode);
+  this.setupList.push(newPlayer);
+  interactWithBoard.call({interactList: this.setupList}, newPlayer, mode);
 };
 
 export const botPlayGame = (player, bot) => {
@@ -145,7 +147,7 @@ export const botPlayGame = (player, bot) => {
           renderShip.call({ x: dx, y: dy }, bot, false);
 
           //show bot ship in case a ship sunk
-          setTimeout(() => {updateShipOnGame(bot)}, 1000);
+          setTimeout(() => {updateShipOnGame(bot);}, 1000);
           
           if (checkWinner(player, bot)) {
             //add time before show end game
@@ -201,8 +203,61 @@ export const versusPlayGame = (player1, player2) => {
   document.querySelector(".container").innerHTML = "";
   createBoard(player1, colorBoard1, false);
   createBoard(player2, colorBoard2, false);
-  renderShip.call({autoPlace: true}, player1, false);
-  renderShip.call({autoPlace: true}, player2, false);
+
+  const player1Board = document.getElementById(`${player1.id}`);
+  const player2Board = document.getElementById(`${player2.id}`);
+  const boxesPlayer1 = player1Board.querySelectorAll(".wrapper__grid .box");
+  const boxesPlayer2 = player2Board.querySelectorAll(".wrapper__grid .box");
+  let turn = player1.id;
+  player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--target)";
+  //let player1 fire first
+  boxesPlayer1.forEach((box, idx) => {
+    box.addEventListener("click", (e) => {
+      if(turn === player2.id){
+        let dx = Number(e.currentTarget.getAttribute("x"));
+        let dy = Number(e.currentTarget.getAttribute("y"));
+        console.log("player2 fire");
+        player1.gameboard.receiveAttack(dx, dy);
+        renderShip.call({ x: dx, y: dy }, player1, false);
+
+        //show bot ship in case a ship sunk
+        setTimeout(() => {updateShipOnGame(player1);}, 1000);
+
+        if (checkWinner(player1, player2)) {
+          //add time before show end game
+          setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+        } else {
+          player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--target)";
+          player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+          turn = player1.id;
+        }
+      }
+    });
+  });
+
+  boxesPlayer2.forEach((box, idx) => {
+    box.addEventListener("click", (e) => {
+      if(turn === player1.id){
+        let dx = Number(e.currentTarget.getAttribute("x"));
+        let dy = Number(e.currentTarget.getAttribute("y"));
+        console.log("player1 fire");
+        player2.gameboard.receiveAttack(dx, dy);
+        renderShip.call({ x: dx, y: dy }, player2, false);
+
+        //show bot ship in case a ship sunk
+        setTimeout(() => {updateShipOnGame(player2);}, 1000);
+
+        if (checkWinner(player1, player2)) {
+          //add time before show end game
+          setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+        } else {
+          player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--target)";
+          player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+          turn = player2.id;
+        }
+      }
+    });
+  });
 };
 
 export const singlePlay = function (player, mode = "bot") { //default is play with bot
@@ -244,19 +299,12 @@ export const singlePlay = function (player, mode = "bot") { //default is play wi
       if(allBoard[1].style.display === "none"){
         allBoard[1].style.removeProperty("display");
       }
-
       boardData(player).board.style.display = "none";
-      //add player value to local storage
-      let idPlayerData = document.querySelector(`#${player.id} .name__display span`).textContent;
-      localStorage.setItem(`${idPlayerData}`, JSON.stringify(player));
       // both ship are placed
       if(allBoard[0].style.display === "none" && allBoard[1].style.display === "none"){
-        //play the game
-        let player1Tag = allBoard[0].querySelector(".name__display span").textContent;
-        let player2Tag = allBoard[1].querySelector(".name__display span").textContent;
-        let player1 = JSON.parse(localStorage.getItem(player1Tag));
-        let player2 = JSON.parse(localStorage.getItem(player2Tag));
-        versusPlayGame(player1, player2);
+        if(this.singleplayList.length >= 2){
+          versusPlayGame(this.singleplayList[0], this.singleplayList[1]);
+        }
       }
 
     });
@@ -331,8 +379,9 @@ export const mainForSinglePlayer = () => {
     document.querySelector("#enter__battle").addEventListener("click", (e) => {
       document.querySelector(".container").innerHTML = "";
       //place ship for two player
-        playerSetup(player1Name.value, "2player");
-        playerSetup(player2Name.value, "2player");
+      let twoPlayer = [];
+        playerSetup.call({setupList: twoPlayer},player1Name.value, "2player");
+        playerSetup.call({setupList: twoPlayer},player2Name.value, "2player");
         let allBoard = document.querySelectorAll(".board");
         allBoard[1].style.display = "none";
     });

@@ -116,7 +116,7 @@ const boardData = (player) => {
 };
 
 //for autoplace button of guide board
-const autoPlaceShip = (player, mode) => {
+const autoPlaceShip = function(player, mode){
   clearAllShip(player);
   player.arrangeAllShip();
 
@@ -126,7 +126,12 @@ const autoPlaceShip = (player, mode) => {
 
   renderShip.call({ autoPlace: true }, player);
 
-  singlePlay(player, mode);
+  if(mode === "2player"){
+    singlePlay.call({singleplayList: this.autoplaceList}, player, mode);
+  }
+  else{
+    singlePlay(playerBoard, mode);
+  }
 };
 
 const clearAllShip = (player) => {
@@ -475,40 +480,45 @@ export const createPlayBtn = (player, color) => {
   }
 };
 
-const interactWithBoard = (playerBoard, mode) => {
+const interactWithBoard = function(player, mode){
   let axis = ["vertical", "horizontal"];
   let current = 1;
   
   try {
     //prevent right click on board
-    boardData(playerBoard).board.addEventListener("contextmenu", (e) => {
+    boardData(player).board.addEventListener("contextmenu", (e) => {
       e.preventDefault();
     });
 
-    boardData(playerBoard).boxes.forEach((box) => {
+    boardData(player).boxes.forEach((box) => {
       //to place ship
       box.addEventListener("click", (e) => {
-        placeShipOnBoard(playerBoard, e, current);
+        placeShipOnBoard(player, e, current);
 
         //check all ship placed or not
-        if (isAllPlace(playerBoard)) {
-          singlePlay(playerBoard, mode);
+        if (isAllPlace(player)) {
+          if(mode === "2player"){
+            singlePlay.call({singleplayList: this.interactList}, player, mode);
+          }
+          else{
+            singlePlay(player, mode);
+          }
         }
       });
 
       //hover to see ship location
       box.addEventListener("mouseover", (e) => {
-        takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+        takeShipFromList(e.currentTarget, e.type, player, axis[current]);
       });
 
       //hover out a box made them become default state
       box.addEventListener("mouseout", (e) => {
-        takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+        takeShipFromList(e.currentTarget, e.type, player, axis[current]);
       });
 
       //right click for change axis
       box.addEventListener("contextmenu", (e) => {
-        takeShipFromList(e.currentTarget, e.type, playerBoard, axis[current]);
+        takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         if (!current) {
           current = 1;
         } else {
@@ -522,22 +532,22 @@ const interactWithBoard = (playerBoard, mode) => {
         takeShipFromList(
           e.currentTarget,
           "mouseover",
-          playerBoard,
+          player,
           axis[current],
         );
       });
     });
 
     //board guide function
-    const autoPlaceBtn = boardData(playerBoard).board.querySelector(".function__btn--autoplace");
+    const autoPlaceBtn = boardData(player).board.querySelector(".function__btn--autoplace");
 
     autoPlaceBtn.addEventListener("click", (e) => {
       e.stopImmediatePropagation();
-      autoPlaceShip(playerBoard, mode);
+      autoPlaceShip.call({autoplaceList: this.interactList}, player, mode);
     });
 
     //delete all ships on board
-    const clearBoardBtn = boardData(playerBoard).board.querySelector(".function__btn--clear");
+    const clearBoardBtn = boardData(player).board.querySelector(".function__btn--clear");
     const clearBoardBtnColor = clearBoardBtn.style.color;
     clearBoardBtn.addEventListener("mouseover", function (e) {
       e.currentTarget.style.backgroundColor = clearBoardBtnColor;
@@ -550,7 +560,7 @@ const interactWithBoard = (playerBoard, mode) => {
     });
 
     clearBoardBtn.addEventListener("click", (e) => {
-      clearAllShip(playerBoard);
+      clearAllShip(player);
       e.stopImmediatePropagation();
     });
   } catch(error) {
