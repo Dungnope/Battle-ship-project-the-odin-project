@@ -197,14 +197,12 @@ export const botAutoPlay = async function(bot, player){
       //check whether miss or not
         if(player.gameboard.missedAttacksPos.has(`${xRan * 10 + yRan}`)){
           this.miss = true;
-          console.log("had miss");
         }
         
         if (checkWinner(player, bot)) {
           //add time before show end game
           setTimeout(() =>{showEndGame(player, bot);}, 2000);
         } else if(this.miss) {
-          //add more time before can continue fire
           this.turn = "Player";
           this.clickNumber++;
         }
@@ -243,34 +241,47 @@ export const versusPlayGame = (player1, player2) => {
   const boxesPlayer2 = player2Board.querySelectorAll(".wrapper__grid .box");
   let turn = player1.id;
   let isClickAble = true;
+  let isMiss = false;
   player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
   //let player1 fire first
   boxesPlayer1.forEach((box, idx) => {
     box.addEventListener("click", async (e) => {
       if(turn === player2.id && isClickAble){
         //after fire can not fire more until done current action
-        isClickAble = !isClickAble;
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
-        player1.gameboard.receiveAttack(dx, dy);
+        
+        if(player1.gameboard.board[dx][dy] === 0 ||
+          player1.gameboard.board[dx][dy] === 1)
+        {
+          isClickAble = !isClickAble;
+          player1.gameboard.receiveAttack(dx, dy);
 
-        //wait until end an fire
-        await renderShip.call({ x: dx, y: dy }, player1, false);
-
-        await new Promise(() => {
-          //show bot ship in case a ship sunk
-          updateShipOnGame(player1);
-
-          if (checkWinner(player1, player2)) {
-            //add time before show end game
-            setTimeout(() =>{showEndGame(player1, player2);}, 2000);
-          } else {
-            player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
-            player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
-            turn = player1.id;
-            isClickAble = !isClickAble;
+          //check fire miss or not
+          if(player1.gameboard.missedAttacksPos.has(`${dx * 10 + dy}`)){
+            isMiss = true;
           }
-        });
+
+          //wait until end an fire
+          await renderShip.call({ x: dx, y: dy }, player1, false);
+
+          await new Promise(() => {
+            //show bot ship in case a ship sunk
+            updateShipOnGame(player1);
+
+            if (checkWinner(player1, player2)) {
+              //add time before show end game
+              setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+            } else if(isMiss) {
+              player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
+              player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+              turn = player1.id;
+              isClickAble = !isClickAble;
+              isMiss = false; //make default value
+            }
+            else isClickAble = !isClickAble; //if hit a ship fragment of opponet can fire next turn
+          });
+        }
       }
     });
   });
@@ -279,29 +290,40 @@ export const versusPlayGame = (player1, player2) => {
     box.addEventListener("click", async (e) => {
       if(turn === player1.id && isClickAble){
         //after fire can not fire more until done current action
-        isClickAble = !isClickAble;
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
         
-        player2.gameboard.receiveAttack(dx, dy);
+        if(player2.gameboard.board[dx][dy] === 0 ||
+          player2.gameboard.board[dx][dy] === 1)
+        {
+          player2.gameboard.receiveAttack(dx, dy);
+          isClickAble = !isClickAble;
 
-        //wait until end an fire
-        await renderShip.call({ x: dx, y: dy }, player2, false);
+          //check fire miss or not
+          if(player2.gameboard.missedAttacksPos.has(`${dx * 10 + dy}`)){
+            isMiss = true;
+          }          
 
-        await new Promise(() => {
-          //show bot ship in case a ship sunk
-          updateShipOnGame(player2);
+          //wait until end an fire
+          await renderShip.call({ x: dx, y: dy }, player2, false);
 
-          if (checkWinner(player1, player2)) {
-            //add time before show end game
-            setTimeout(() =>{showEndGame(player1, player2);}, 2000);
-          } else {
-            player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
-            player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
-            turn = player2.id;
-            isClickAble = !isClickAble;
-          }
-        });
+          await new Promise(() => {
+            //show bot ship in case a ship sunk
+            updateShipOnGame(player2);
+
+            if (checkWinner(player1, player2)) {
+              //add time before show end game
+              setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+            } else if(isMiss) {
+              player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
+              player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+              turn = player2.id;
+              isClickAble = !isClickAble;
+              isMiss = false;
+            }
+            else isClickAble = !isClickAble; //if hit a ship fragment of opponet can fire next turn
+          });
+        }
       }
     });
   });
