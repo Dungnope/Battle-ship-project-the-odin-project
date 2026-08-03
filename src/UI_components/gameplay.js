@@ -135,8 +135,6 @@ export const botPlayGame = (player, bot) => {
           ) {
         //attack bot
 
-        //after click, can not click until done one shot action
-        isValid.hasClicked = !isValid.hasClicked;
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
         //check whether player click on pure stated position or not
@@ -144,7 +142,9 @@ export const botPlayGame = (player, bot) => {
           bot.gameboard.board[dx][dy] === 0 || //only allow attack on status 0 and 1
           bot.gameboard.board[dx][dy] === 1
         ) {
-
+          
+          //after click, can not click until done one shot action
+          isValid.hasClicked = !isValid.hasClicked;
           bot.gameboard.receiveAttack(dx, dy);
           await renderShip.call({ x: dx, y: dy }, bot, false);
           await new Promise(() => {
@@ -242,52 +242,66 @@ export const versusPlayGame = (player1, player2) => {
   const boxesPlayer1 = player1Board.querySelectorAll(".wrapper__grid .box");
   const boxesPlayer2 = player2Board.querySelectorAll(".wrapper__grid .box");
   let turn = player1.id;
+  let isClickAble = true;
   player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
   //let player1 fire first
   boxesPlayer1.forEach((box, idx) => {
-    box.addEventListener("click", (e) => {
-      if(turn === player2.id){
+    box.addEventListener("click", async (e) => {
+      if(turn === player2.id && isClickAble){
+        //after fire can not fire more until done current action
+        isClickAble = !isClickAble;
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
-        console.log("player2 fire");
         player1.gameboard.receiveAttack(dx, dy);
-        renderShip.call({ x: dx, y: dy }, player1, false);
 
-        //show bot ship in case a ship sunk
-        setTimeout(() => {updateShipOnGame(player1);}, 1000);
+        //wait until end an fire
+        await renderShip.call({ x: dx, y: dy }, player1, false);
 
-        if (checkWinner(player1, player2)) {
-          //add time before show end game
-          setTimeout(() =>{showEndGame(player1, player2);}, 2000);
-        } else {
-          player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
-          player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
-          turn = player1.id;
-        }
+        await new Promise(() => {
+          //show bot ship in case a ship sunk
+          updateShipOnGame(player1);
+
+          if (checkWinner(player1, player2)) {
+            //add time before show end game
+            setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+          } else {
+            player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
+            player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+            turn = player1.id;
+            isClickAble = !isClickAble;
+          }
+        });
       }
     });
   });
 
   boxesPlayer2.forEach((box, idx) => {
-    box.addEventListener("click", (e) => {
-      if(turn === player1.id){
+    box.addEventListener("click", async (e) => {
+      if(turn === player1.id && isClickAble){
+        //after fire can not fire more until done current action
+        isClickAble = !isClickAble;
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
-        console.log("player1 fire");
+        
         player2.gameboard.receiveAttack(dx, dy);
-        renderShip.call({ x: dx, y: dy }, player2, false);
 
-        //show bot ship in case a ship sunk
-        setTimeout(() => {updateShipOnGame(player2);}, 1000);
+        //wait until end an fire
+        await renderShip.call({ x: dx, y: dy }, player2, false);
 
-        if (checkWinner(player1, player2)) {
-          //add time before show end game
-          setTimeout(() =>{showEndGame(player1, player2);}, 2000);
-        } else {
-          player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
-          player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
-          turn = player2.id;
-        }
+        await new Promise(() => {
+          //show bot ship in case a ship sunk
+          updateShipOnGame(player2);
+
+          if (checkWinner(player1, player2)) {
+            //add time before show end game
+            setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+          } else {
+            player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
+            player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+            turn = player2.id;
+            isClickAble = !isClickAble;
+          }
+        });
       }
     });
   });
