@@ -31,8 +31,6 @@ const createBoard = (player, boardColor, withShipList) => {
   const maxWidth =
     boxSize * numberBox + characterSize + gap * numberBox + layout;
 
-  boardContainer.style.width = `min(100%, ${maxWidth}px)`;
-
   //wrapper board
   const wrapper = document.createElement("div");
   wrapper.classList.add("wrapper__grid");
@@ -52,6 +50,11 @@ const createBoard = (player, boardColor, withShipList) => {
   showName.innerHTML = `<span>#${player.id}</span> ${player.nameTag}'s board`;
   showName.classList.add("name__display");
 
+  //show outside box of name and board
+  const outsideBox = document.createElement("div");
+  outsideBox.append(showName, wrapper);
+  outsideBox.classList.add("outside__box");
+
   //grid container
   const grid = document.createElement("div");
   grid.classList.add("grid");
@@ -65,12 +68,13 @@ const createBoard = (player, boardColor, withShipList) => {
 
   if (withShipList) {
     boardContainer.append(
-      showName,
-      wrapper,
+      outsideBox,
       boardGuide.call({ player: player }, boardColor),
     );
   } else {
-    boardContainer.append(showName, wrapper);
+    //add maximum board width at game play
+    boardContainer.style.width = `min(100%, ${maxWidth}px)`;
+    boardContainer.append(outsideBox);
   }
 
   //create board

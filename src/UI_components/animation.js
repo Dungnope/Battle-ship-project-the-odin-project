@@ -54,7 +54,7 @@ export const getHit = async (texture, boxPosition) => {
   ];
 
   const timeAnimation = {
-    duration: 250,
+    duration: 200,
     iterations: 1,
   };
 
@@ -113,7 +113,7 @@ export const waterSplashEffect = async (texture, boxPosition) => {
   ];
 
   const timeAnimation = {
-    duration: 800,
+    duration: 600,
     iterations: 1,
   };
 

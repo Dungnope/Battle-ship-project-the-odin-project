@@ -178,6 +178,7 @@ body{
 }
 
 .board{
+    width: 100%;
     margin: 16px 0;
     border-radius: 16px;
     position: relative;
@@ -186,7 +187,12 @@ body{
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    gap: 52px 48px;
     font-weight: 600;
+
+    & .outside__box{
+        width: min(100%, 572px);
+    }
 
     & .name__display{
         font-size: 1.6rem;
@@ -238,7 +244,7 @@ body{
         width: 100%;
         position: relative;
         gap: 8px;
-            height: 100%;
+        height: 100%;
 
         & .row_board{
             display: flex;
@@ -336,8 +342,7 @@ body{
 }
 
 .guide__ship{
-    margin-top: 52px;
-    width: min(100%, 800px);
+    width: min(100%, 572px);
     background-color: var(--background);
     box-shadow: 8px 8px 0 2px var(--text);
     border-radius: 16px;
@@ -350,7 +355,7 @@ body{
     flex-direction: column;
     gap: 24px;
     padding: min(100em, 32px);
-
+    align-self: self-end;
     & p{
         font-weight: 400;
     }
@@ -374,6 +379,7 @@ body{
     gap: 16px;
     justify-content: flex-start;
     flex-wrap: wrap;
+    margin: 16px 0;
 
 }
 
