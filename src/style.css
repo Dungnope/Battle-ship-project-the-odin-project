@@ -116,7 +116,7 @@ body{
 
 .neon__title-hollow {
   letter-spacing: 5px;
-  
+  user-select: none;
   /* 1. Make the inside of the text invisible to merge with the background */
   color: transparent; 
   

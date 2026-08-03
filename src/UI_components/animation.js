@@ -70,6 +70,7 @@ export const getHit = async (texture, boxPosition) => {
 
   newAudio.addEventListener("ended", () => {
     boxPosition.removeChild(newAudio);
+    return new Promise(resolve => resolve());
   });
 
 

@@ -130,7 +130,7 @@ const autoPlaceShip = function(player, mode){
     singlePlay.call({singleplayList: this.autoplaceList}, player, mode);
   }
   else{
-    singlePlay(playerBoard, mode);
+    singlePlay(player, mode);
   }
 };
 
@@ -423,9 +423,9 @@ function renderShip(playerBoard, isPrepare = true) {
     const positionStated = playerBoard.gameboard.board[this.x][this.y];
     //use fire effect for hit target
     if (positionStated === 2) {
-        fireEffect(boxStatus).then(() => getHit(fireHit, boxStatus));
+        return fireEffect(boxStatus).then(() => getHit(fireHit, boxStatus));
     } else if (positionStated === 3) {
-      fireEffect(boxStatus).then(async() => {
+      return fireEffect(boxStatus).then(async() => {
          await waterSplashEffect(waterSpashTexture, boxStatus);
          boxStatus.innerHTML = missShot;
       }); //show water pop effect
@@ -543,7 +543,9 @@ const interactWithBoard = function(player, mode){
 
     autoPlaceBtn.addEventListener("click", (e) => {
       e.stopImmediatePropagation();
-      autoPlaceShip.call({autoplaceList: this.interactList}, player, mode);
+      if(mode === "2player")
+        {autoPlaceShip.call({autoplaceList: this.interactList}, player, mode);} //2 player mode
+      else autoPlaceShip(player, mode); //play vs bot mode
     });
 
     //delete all ships on board

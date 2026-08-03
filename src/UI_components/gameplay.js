@@ -51,11 +51,7 @@ export const gameMenu = () => {
 
   //show singleplay UI
   singlePlayerBtn.addEventListener("click", (e) => {
-    //delete old player
-    localStorage.clear();
     console.log("play singleplayer");
-    let background = document.querySelector("body");
-    background.style.backgroundImage = `url(${beachBackgroundImg})`;
     mainForSinglePlayer(); //for one player with bot
   });
 
@@ -114,80 +110,117 @@ export const playerSetup = function(playerName, mode = null){
   let randomColor = colors[Math.floor(Math.random() * (colors.length))];
   createBoard(newPlayer, randomColor, true);
   chooseShip(newPlayer);
-  this.setupList.push(newPlayer);
-  interactWithBoard.call({interactList: this.setupList}, newPlayer, mode);
+  if(mode === "2player"){
+    this.setupList.push(newPlayer);
+    interactWithBoard.call({interactList: this.setupList}, newPlayer, mode);
+  }
+  else {
+    interactWithBoard(newPlayer, mode);
+  }
 };
 
 export const botPlayGame = (player, bot) => {
-  let turn = player.constructor.name;
-  let hasClicked = false;
   const botBoard = document.getElementById(`${bot.id}`);
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
-  let clickNumber = 0; //avoid stackoverflow when can not find any position
+  let isValid = {miss: false, hasClicked: false, turn: player.constructor.name, clickNumber: 0};
   // play turn by turn
   botField.forEach((box) => {
-    box.addEventListener("click", (e) => {
+    box.addEventListener("click", async (e) => {
       //only clickable if not winner and right turn
-      if (
-        turn === "Player" &&
-        !hasClicked &&
-        !player.isWinner &&
-        !bot.isWinner
-      ) {
+      if (isValid.turn === "Player" && 
+          !isValid.hasClicked &&
+          !player.isWinner &&
+          !bot.isWinner && 
+          !isValid.miss
+          ) {
         //attack bot
+
+        //after click, can not click until done one shot action
+        isValid.hasClicked = !isValid.hasClicked;
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
         //check whether player click on pure stated position or not
         if (
-          bot.gameboard.board[dx][dy] === 0 ||
+          bot.gameboard.board[dx][dy] === 0 || //only allow attack on status 0 and 1
           bot.gameboard.board[dx][dy] === 1
         ) {
 
           bot.gameboard.receiveAttack(dx, dy);
-          renderShip.call({ x: dx, y: dy }, bot, false);
+          await renderShip.call({ x: dx, y: dy }, bot, false);
+          await new Promise(() => {
 
-          //show bot ship in case a ship sunk
-          setTimeout(() => {updateShipOnGame(bot);}, 1000);
-          
-          if (checkWinner(player, bot)) {
-            //add time before show end game
-            setTimeout(() =>{showEndGame(player, bot);}, 2000);
-          } else {
-            hasClicked = !hasClicked;
-            turn = "Bot";
-          }
-          
-          if (!player.isWinner && !bot.isWinner && turn === "Bot")
-            setTimeout(() => {
-              let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
-              let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
-              //check position has used or not
-              while (
-                clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
-                (player.gameboard.board[xRan][yRan] === 2 ||
-                  player.gameboard.board[xRan][yRan] === 3)
-              ) {
-                xRan = Math.round(Math.random() * (player.gameboard.row - 1));
-                yRan = Math.round(Math.random() * (player.gameboard.row - 1));
-              }
-              player.gameboard.receiveAttack(xRan, yRan);
-              renderShip.call({ x: xRan, y: yRan }, player, false);
-              if (checkWinner(player, bot)) {
-                //add time before show end game
-                setTimeout(() =>{showEndGame(player, bot);}, 2000);
-              } else {
-                //add more time before can continue fire
-                setTimeout(() => {
-                  turn = "Player";
-                }, 1500);
-                hasClicked = !hasClicked;
-                clickNumber++;
-              }
-            }, 1500);
+            //check whether miss or not
+            if(bot.gameboard.missedAttacksPos.has(`${dx * 10 + dy}`)){
+              isValid.miss = true;
+            }
+
+            //show bot ship in case a ship sunk
+            updateShipOnGame(bot);
+
+            if (checkWinner(player, bot)) {
+              //add time before show end game
+              setTimeout(() =>{showEndGame(player, bot);}, 2000);
+            } else if(isValid.miss){
+              isValid.turn = "Bot";
+            }
+            else{ //if just hit a target, continue fire
+              isValid.hasClicked = !isValid.hasClicked;
+            }
+            // isMiss go to default value;
+            isValid.miss = false;
+
+            if (!player.isWinner && !bot.isWinner && isValid.turn === "Bot"){
+              botAutoPlay.call(isValid, bot, player);
+            }
+          });
         }
       }
     });
   });
+};
+
+export const botAutoPlay = async function(bot, player){
+      let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
+      let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
+      //check position has used or not
+      while (
+        this.clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
+        (player.gameboard.board[xRan][yRan] === 2 ||
+          player.gameboard.board[xRan][yRan] === 3)
+      ) {
+        xRan = Math.round(Math.random() * (player.gameboard.row - 1));
+        yRan = Math.round(Math.random() * (player.gameboard.row - 1));
+      }
+      player.gameboard.receiveAttack(xRan, yRan);
+      await renderShip.call({ x: xRan, y: yRan }, player, false);
+      return await new Promise((resolve) => {
+      //check whether miss or not
+        if(player.gameboard.missedAttacksPos.has(`${xRan * 10 + yRan}`)){
+          this.miss = true;
+          console.log("had miss");
+        }
+        
+        if (checkWinner(player, bot)) {
+          //add time before show end game
+          setTimeout(() =>{showEndGame(player, bot);}, 2000);
+        } else if(this.miss) {
+          //add more time before can continue fire
+          this.turn = "Player";
+          this.clickNumber++;
+        }
+        else{
+          botAutoPlay.call(this, bot, player);
+        }
+        //go to default value
+        this.miss = false;
+        resolve("Done");
+      }).then(() => {
+        //check in case bot hit a target
+        if(this.hasClicked){
+          this.hasClicked = !this.hasClicked;
+        }
+        console.log(this.hasClicked);
+      });
 };
 
 export const versusPlayGame = (player1, player2) => {
@@ -209,7 +242,7 @@ export const versusPlayGame = (player1, player2) => {
   const boxesPlayer1 = player1Board.querySelectorAll(".wrapper__grid .box");
   const boxesPlayer2 = player2Board.querySelectorAll(".wrapper__grid .box");
   let turn = player1.id;
-  player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--target)";
+  player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
   //let player1 fire first
   boxesPlayer1.forEach((box, idx) => {
     box.addEventListener("click", (e) => {
@@ -227,7 +260,7 @@ export const versusPlayGame = (player1, player2) => {
           //add time before show end game
           setTimeout(() =>{showEndGame(player1, player2);}, 2000);
         } else {
-          player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--target)";
+          player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
           player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
           turn = player1.id;
         }
@@ -251,7 +284,7 @@ export const versusPlayGame = (player1, player2) => {
           //add time before show end game
           setTimeout(() =>{showEndGame(player1, player2);}, 2000);
         } else {
-          player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--target)";
+          player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
           player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
           turn = player2.id;
         }
@@ -312,7 +345,10 @@ export const singlePlay = function (player, mode = "bot") { //default is play wi
 };
 
 export const mainForSinglePlayer = () => {
+  let background = document.querySelector("body");
+  background.style.backgroundImage = `url(${beachBackgroundImg})`;
   let selectMode = `
+    <h1 class="header__menu neon__title-hollow">Battle Ship</h1>
     <button id="bot__player" title="player vs bot">👥 VS 🤖</button>
     <button id="two__player" title="player vs player">👥 VS 👥</button>
   `;
@@ -425,14 +461,14 @@ const showEndGame = (entity1, entity2) => {
   loseInfo = { name: entity2.nameTag, id: entity2.id, status: "Loser" };
   blur__screenWin = `
     <div class = "end__screen blur__screen">
-      <p>${winInfo.name}(${winInfo.id})</p>
+      <p>${winInfo.name}(#${winInfo.id})</p>
       <p style="color: ${entity1Color}">${winInfo.status}</p>
     </div>
   `;
 
   blur__screenLose = `
     <div class = "end__screen blur__screen">
-      <p>${loseInfo.name}(${loseInfo.id})</p>
+      <p>${loseInfo.name}(#${loseInfo.id})</p>
       <p style="color: ${entity2Color}">${loseInfo.status}</p>
     </div>
   `;
