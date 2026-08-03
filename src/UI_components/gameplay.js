@@ -123,6 +123,7 @@ export const botPlayGame = (player, bot) => {
   const botBoard = document.getElementById(`${bot.id}`);
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
   let isValid = {miss: false, hasClicked: false, turn: player.constructor.name, clickNumber: 0};
+  let mode = "bot"
   // play turn by turn
   botField.forEach((box) => {
     box.addEventListener("click", async (e) => {
@@ -159,7 +160,7 @@ export const botPlayGame = (player, bot) => {
 
             if (checkWinner(player, bot)) {
               //add time before show end game
-              setTimeout(() =>{showEndGame(player, bot);}, 2000);
+              setTimeout(() =>{showEndGame.call({"mode": mode}, player, bot);}, 2000);
             } else if(isValid.miss){
               isValid.turn = "Bot";
             }
@@ -201,7 +202,7 @@ export const botAutoPlay = async function(bot, player){
         
         if (checkWinner(player, bot)) {
           //add time before show end game
-          setTimeout(() =>{showEndGame(player, bot);}, 2000);
+          setTimeout(() =>{showEndGame.call({"mode": mode}, player, bot);}, 2000);
         } else if(this.miss) {
           this.turn = "Player";
           this.clickNumber++;
@@ -217,7 +218,6 @@ export const botAutoPlay = async function(bot, player){
         if(this.hasClicked){
           this.hasClicked = !this.hasClicked;
         }
-        console.log(this.hasClicked);
       });
 };
 
@@ -271,7 +271,7 @@ export const versusPlayGame = (player1, player2) => {
 
             if (checkWinner(player1, player2)) {
               //add time before show end game
-              setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+              setTimeout(() =>{showEndGame.call({mode: "2player"}, player1, player2);}, 2000);
             } else if(isMiss) {
               player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
               player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
@@ -313,7 +313,7 @@ export const versusPlayGame = (player1, player2) => {
 
             if (checkWinner(player1, player2)) {
               //add time before show end game
-              setTimeout(() =>{showEndGame(player1, player2);}, 2000);
+              setTimeout(() =>{showEndGame.call({mode: "2player"}, player1, player2);}, 2000);
             } else if(isMiss) {
               player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
               player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
@@ -474,7 +474,7 @@ const checkWinner = (entity1, entity2) => {
   }
 };
 
-const showEndGame = (entity1, entity2) => {
+const showEndGame = function(entity1, entity2){
   const entity1Board = document.getElementById(`${entity1.id}`);
   const entity2Board = document.getElementById(`${entity2.id}`);
 
@@ -510,7 +510,16 @@ const showEndGame = (entity1, entity2) => {
   `;
 
   playAgain.addEventListener("click", (e) => {
-    playerSetup(entity1.nameTag);
+    if(this.mode === "null" || this.mode === undefined || this.mode === "bot" || this.mode === "")
+    {playerSetup(entity1.nameTag);}
+    else if(this.mode === "2player"){
+      document.querySelector(".container").innerHTML = "";
+      let twoPlayer = [];
+      playerSetup.call({setupList: twoPlayer},entity1.nameTag, "2player");
+      playerSetup.call({setupList: twoPlayer},entity2.nameTag, "2player");
+      let allBoard = document.querySelectorAll(".board");
+      allBoard[1].style.display = "none";
+    }
   });
 
   hiddenBlur.addEventListener("click", (e) => {
