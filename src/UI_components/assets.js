@@ -50,7 +50,7 @@ const Carrier = `
     <li>
       <span class="ship__name" name="carrier">Carrier</span>
       <div class="ship" length="5">
-        <img src="${carrier}">
+        <img src="${carrier}" draggable="true">
       </div>
     </li>
 `;
@@ -60,7 +60,7 @@ const Patrol = `
     <li>
       <span class="ship__name" name="patrol">Patrol</span>
       <div class="ship" length="2">
-        <img src="${patrol}">
+        <img src="${patrol}" draggable="true">
       </div>
     </li>
 `;
@@ -70,7 +70,7 @@ const Battleship = `
     <li>
       <span class="ship__name" name="battleship">BattleShip</span>
       <div class="ship" length="4">
-        <img src="${battleship}">
+        <img src="${battleship}" draggable="true">
       </div>
     </li>
 `;
@@ -80,7 +80,7 @@ const Destroyer = `
     <li>
       <span class="ship__name" name="destroyer">Destroyer</span>
       <div class="ship" length="3">
-        <img src="${destroyer}">
+        <img src="${destroyer}" draggable="true">
       </div>
     </li>
 `;
@@ -90,7 +90,7 @@ const Submarine = `
     <li>
       <span class="ship__name" name="submarine">Submarine</span>
       <div class="ship" length="3">
-        <img src="${submarine}">
+        <img src="${submarine}" draggable="true">
       </div>
     </li>
 `;

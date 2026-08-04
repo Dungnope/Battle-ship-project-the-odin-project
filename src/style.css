@@ -575,6 +575,7 @@ body{
 
         & img{
             -webkit-user-select: none;
+            z-index: 1;
         }
     }
 }

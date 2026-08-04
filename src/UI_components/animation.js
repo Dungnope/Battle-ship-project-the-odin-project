@@ -10,10 +10,12 @@ export const shipAppeal = (texture, placePosition, shipSize, axis) => {
   let oneGridHeight = placePosition.getBoundingClientRect().height;
   const shipTexture = document.createElement("img");
   shipTexture.src = texture;
+  shipTexture.draggable = true;
   shipTexture.classList.add("texture");
   
   drawBox.append(shipTexture);
   drawBox.classList.add("drawing");
+  drawBox.draggable = true;
   drawBox.style.width = `${oneGridWidth * shipSize + 8 * (shipSize - 1)}px`;
   drawBox.style.height = `${(drawBox.style.width * 66) / 133}px`;
 
@@ -64,7 +66,7 @@ export const getHit = async (texture, boxPosition) => {
   //play explosive sound
   const newAudio = document.createElement("audio");
   newAudio.src = explosiveSound;
-  newAudio.volume = 0.5;
+  newAudio.volume = 0.4;
   boxPosition.append(newAudio);
   newAudio.play();
 
@@ -89,6 +91,7 @@ export const fireEffect = (boxPosition) => {
   return new Promise((resolve) => {
     const fireAudio = document.createElement("audio");
     fireAudio.classList.add("fire__audio");
+    fireAudio.volume = 0.4;
     fireAudio.src = fireSound;
     boxPosition.append(fireAudio);
     fireAudio.play();
@@ -123,7 +126,7 @@ export const waterSplashEffect = async (texture, boxPosition) => {
   //play explosive sound
   const newAudio = document.createElement("audio");
   newAudio.src = waterSplashSound;
-  newAudio.volume = 0.5;
+  newAudio.volume = 0.3;
   boxPosition.append(newAudio);
   newAudio.play();
 

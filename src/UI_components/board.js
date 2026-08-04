@@ -203,7 +203,7 @@ const boardGuide = function (color) {
 
   const warnSign = document.createElement("span");
   warnSign.classList.add("warn__sign");
-  warnSign.textContent = "Right click to change axis";
+  warnSign.textContent = "Right click on any grid to change axis";
 
   functionBox.append(autoPlaceBtn, clearBoardBtn);
 
@@ -452,7 +452,6 @@ const chooseShip = (player) => {
         if (!e.currentTarget.classList.contains("had__placed")) {
           e.currentTarget.classList.toggle("selected__ship");
         }
-        e.stopPropagation();
       });
     });
   } catch {
@@ -513,6 +512,7 @@ const interactWithBoard = function(player, mode){
       //hover to see ship location
       box.addEventListener("mouseover", (e) => {
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
+        console.log("hell");
       });
 
       //hover out a box made them become default state
@@ -572,6 +572,9 @@ const interactWithBoard = function(player, mode){
   } catch(error) {
     console.log(error);
   }
+
+  //drag and drop function
+
 };
 
 export {
