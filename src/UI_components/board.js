@@ -497,7 +497,7 @@ const interactWithBoard = function(player, mode){
       //to place ship
       box.addEventListener("click", (e) => {
         placeShipOnBoard(player, e, current);
-
+        console.log("test");
         //check all ship placed or not
         if (isAllPlace(player)) {
           if(mode === "2player"){
@@ -512,7 +512,6 @@ const interactWithBoard = function(player, mode){
       //hover to see ship location
       box.addEventListener("mouseover", (e) => {
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
-        console.log("hell");
       });
 
       //hover out a box made them become default state
