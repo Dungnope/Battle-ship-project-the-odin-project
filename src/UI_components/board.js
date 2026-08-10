@@ -264,13 +264,14 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
       axis,
     );
   } catch (error) {
-    // console.warn("Not ship selected");
+     console.warn(error);
   }
 };
 
 //hover with mark the ship size
 const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
   let pathTracker = []; //tracker by condition
+  console.log("hover");
   for (let i = 0; i < shipLength; i++) {
     //check valid horizontal
     if (currentPos.y + i < gameboard.column && axis === "horizontal") {
@@ -305,6 +306,8 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
     axis,
     adjacentPosition,
   );
+
+  console.log(collisionCheck);
    
   let pathLength = pathTracker.length;
   while (pathTracker.length) {
@@ -314,7 +317,7 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
       boxes[position].style.backgroundColor = "var(--valid)";
     } else if(pathLength === shipLength && status === "dragenter" && collisionCheck){
       boxes[position].style.backgroundColor = "var(--valid)";
-    } else if (pathLength < shipLength && !collisionCheck) {
+    } else if (pathLength < shipLength || !collisionCheck) {
       boxes[position].style.backgroundColor = "var(--target)";
     }
 
@@ -495,6 +498,7 @@ const chooseShip = (player) => {
     ships.forEach((ship) => {
       ship.classList.remove("selected__ship");
       ship.addEventListener("click", (e) => {
+        e.stopImmediatePropagation();
         ships.forEach((ship) => {
           if (!e.currentTarget.classList.contains("selected__ship")) {
             ship.classList.remove("selected__ship");
@@ -606,11 +610,13 @@ const interactWithBoard = function(player, mode){
       box.addEventListener("dragenter", (e) => {
         console.log("enter grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
+        e.stopImmediatePropagation();
       });
 
       box.addEventListener("dragleave", (e) => {
         console.log("leave grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
+        e.stopImmediatePropagation();
       });
 
       box.addEventListener("dragover", (e) => {
