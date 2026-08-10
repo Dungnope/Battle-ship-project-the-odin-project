@@ -4,8 +4,8 @@ import { fastPlayGameBot, playerSetup, fastPlayGameLocal, gameMenu, mainForSingl
 
 document.addEventListener("DOMContentLoaded", (e) => {
   //fastPlayGameBot(); // play immediately
-  //playerSetup("pepter"); //no need name input at screen
+  playerSetup("pepter"); //no need name input at screen
   //fastPlayGameLocal(); //play game with two players one device pass
   //gameMenu(); //show game menu
-  mainForSinglePlayer();
+  //mainForSinglePlayer();
 });

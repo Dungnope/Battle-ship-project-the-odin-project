@@ -290,6 +290,8 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
     const position = currentPos.x + currentPos.y;
     if (pathLength === shipLength && status === "mouseover") {
       boxes[position].style.backgroundColor = "var(--valid)";
+    } else if(pathLength === shipLength && status === "dragenter"){
+      boxes[position].style.backgroundColor = "var(--valid)";
     } else if (pathLength < shipLength) {
       boxes[position].style.backgroundColor = "var(--target)";
     }
@@ -298,39 +300,11 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
     if (
       status === "mouseout" ||
       status === "contextmenu" ||
-      status === "click"
+      status === "click" ||
+      status === "dragleave"
     ) {
       boxes[position].style.removeProperty("background-color");
     }
-  }
-};
-
-const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
-  let takenShip = selectedShip(playerBoard);
-  try {
-    if (takenShip.classList.contains("selected__ship")) {
-      const x = Number(boxTarget.currentTarget.getAttribute("x"));
-      const y = Number(boxTarget.currentTarget.getAttribute("y"));
-      const shipLength = Number(takenShip.children[1].getAttribute("length")); //take from ship structure
-      let currentBoard = playerBoard.gameboard;
-      //place ship on board
-      if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
-        //get texture and render them
-        let getTextureSrc = takenShip.querySelector("img").src;
-        let currentShip = playerBoard.gameboard.shipList.at(-1);
-        currentShip.texture = getTextureSrc;
-        renderShip.call(
-          {
-            ship: currentShip,
-            autoPlace: false,
-          },
-          playerBoard,
-        );
-      }
-    }
-  } catch (error) {
-    //console.warn(error);
-    console.warn("Go to github respository for more information this error");
   }
 };
 
@@ -437,28 +411,6 @@ function renderShip(playerBoard, isPrepare = true) {
   }
 }
 
-const chooseShip = (player) => {
-  try {
-    const boardProperty = boardData(player);
-    const ships = boardProperty.shiplist;
-    ships.forEach((ship) => {
-      ship.classList.remove("selected__ship");
-      ship.addEventListener("click", (e) => {
-        ships.forEach((ship) => {
-          if (!e.currentTarget.classList.contains("selected__ship")) {
-            ship.classList.remove("selected__ship");
-          }
-        });
-        if (!e.currentTarget.classList.contains("had__placed")) {
-          e.currentTarget.classList.toggle("selected__ship");
-        }
-      });
-    });
-  } catch {
-    console.log("this is game play not choose ship");
-  }
-};
-
 const isAllPlace = (playerBoard) => {
   //check all ships placed or not
   for (let i = 0; i < boardData(playerBoard).shiplist.length; i++) {
@@ -480,6 +432,86 @@ export const createPlayBtn = (player, color) => {
     playBtn.style.backgroundColor = color;
     playBtn.innerHTML += playBtnStyle;
     shipGuide.appendChild(playBtn);
+  }
+};
+
+const placeShipOnBoard = (playerBoard, boxTarget, axis) => {
+  let takenShip = selectedShip(playerBoard);
+  try {
+    if (takenShip.classList.contains("selected__ship")) {
+      const x = Number(boxTarget.currentTarget.getAttribute("x"));
+      const y = Number(boxTarget.currentTarget.getAttribute("y"));
+      const shipLength = Number(takenShip.children[1].getAttribute("length")); //take from ship structure
+      let currentBoard = playerBoard.gameboard;
+      //place ship on board
+      if (currentBoard.placeShip(new Ship(shipLength), x, y, axis)) {
+        //get texture and render them
+        let getTextureSrc = takenShip.querySelector("img").src;
+        let currentShip = playerBoard.gameboard.shipList.at(-1);
+        currentShip.texture = getTextureSrc;
+        renderShip.call(
+          {
+            ship: currentShip,
+            autoPlace: false,
+          },
+          playerBoard,
+        );
+      }
+    }
+  } catch (error) {
+    //console.warn(error);
+    console.warn("Go to github respository for more information this error");
+  }
+};
+
+
+const chooseShip = (player) => {
+  try {
+    const boardProperty = boardData(player);
+    const ships = boardProperty.shiplist;
+    ships.forEach((ship) => {
+      ship.classList.remove("selected__ship");
+      ship.addEventListener("click", (e) => {
+        ships.forEach((ship) => {
+          if (!e.currentTarget.classList.contains("selected__ship")) {
+            ship.classList.remove("selected__ship");
+          }
+        });
+
+        if (!e.currentTarget.classList.contains("had__placed")) {
+          e.currentTarget.classList.toggle("selected__ship");
+        }
+      });
+
+      // -- add drag and drop --
+
+      //start to drag item
+      ship.addEventListener("dragstart", (e) => {
+        ships.forEach((ship) => {
+          if (!e.currentTarget.classList.contains("selected__ship")) {
+            ship.classList.remove("selected__ship");
+          }
+        });
+
+        if (!e.currentTarget.classList.contains("had__placed")) {
+          e.currentTarget.classList.toggle("selected__ship");
+        }
+      });
+
+      //drag phase
+      ship.addEventListener("drag", (ev) => {
+        //console.log(ev);
+      }); // --> after that go to drag enter event of board at interactiveBoard function
+
+      //end drag phase
+      ship.addEventListener("dragend", (ev) => {
+        console.log("end");
+      });
+
+
+    });
+  } catch {
+    console.log("this is game play not choose ship");
   }
 };
 
@@ -538,6 +570,21 @@ const interactWithBoard = function(player, mode){
           player,
           axis[current],
         );
+      });
+
+      //use for target attachment item when an draggable item collision this element
+      box.addEventListener("dragenter", (e) => {
+        console.log("enter grid");
+        takeShipFromList(e.currentTarget, e.type, player, axis[current]);
+      });
+
+      box.addEventListener("dragleave", (e) => {
+        console.log("enter grid");
+        takeShipFromList(e.currentTarget, e.type, player, axis[current]);
+      });
+
+      box.addEventListener("dragover", (e) => {
+        e.preventDefault();
       });
     });
 
