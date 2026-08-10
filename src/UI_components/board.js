@@ -250,19 +250,23 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
   //take board from ship list
   let takenShip = selectedShip(player);
   try {
-    let realShipFragment = takenShip.children[1];
-    let shipLength = Number(realShipFragment.getAttribute("length"));
-    let getXBoard = Number(eventTarget.getAttribute("x"));
-    let getYBoard = Number(eventTarget.getAttribute("y"));
+    //if not have any ships were selected, not do nothing
+    if(takenShip !== undefined){
+      let realShipFragment = takenShip.children[1];
+      let shipLength = Number(realShipFragment.getAttribute("length"));
+      let getXBoard = Number(eventTarget.getAttribute("x"));
+      let getYBoard = Number(eventTarget.getAttribute("y"));
     //show hover color on grid
-    shipHover(
-      shipLength,
-      boardData(player).boxes,
-      { x: getXBoard, y: getYBoard },
-      eventType,
-      player.gameboard,
-      axis,
-    );
+      shipHover(
+        shipLength,
+        boardData(player).boxes,
+        { x: getXBoard, y: getYBoard },
+        eventType,
+        player.gameboard,
+        axis,
+      );
+    }
+
   } catch (error) {
      console.warn(error);
   }
@@ -306,8 +310,6 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
     axis,
     adjacentPosition,
   );
-
-  console.log(collisionCheck);
    
   let pathLength = pathTracker.length;
   while (pathTracker.length) {
@@ -563,7 +565,6 @@ const interactWithBoard = function(player, mode){
       //to place ship
       box.addEventListener("click", (e) => {
         placeShipOnBoard(player, e, current);
-        console.log("test");
         //check all ship placed or not
         if (isAllPlace(player)) {
           if(mode === "2player"){

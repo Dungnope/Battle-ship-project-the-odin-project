@@ -99,12 +99,12 @@ export class Gameboard {
       let aroundCoordinates = null;
 
       //horizontal
-      if (axis === "horizontal" && this.board[x][y + i] !== 1) {
+      if (axis === "horizontal" && y + i < this.column && this.board[x][y + i] !== 1) {
         //take all around positions from the x, y position
         aroundCoordinates = this.#adjacentFromXY(x, y + i, adjacentPosition);
       }
       // vertical
-      else if (axis === "vertical" && this.board[x + i][y] !== 1) {
+      else if (axis === "vertical" && x + i < this.row && this.board[x + i][y] !== 1) {
         //take all around positions from the x, y position
         aroundCoordinates = this.#adjacentFromXY(x + i, y, adjacentPosition);
       } else return false;
