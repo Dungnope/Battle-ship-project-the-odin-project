@@ -172,12 +172,14 @@ const boardGuide = function (color) {
 
   //ship guide description
   const guideTag = document.createElement("span");
+  guideTag.draggable = false;
   guideTag.classList.add("guide__tag");
   //add content
   guideTag.textContent = "Ships Guide";
   guideTag.style.backgroundColor = color;
 
   const paragraphContent = document.createElement("p");
+  paragraphContent.draggable = false;
   paragraphContent.textContent = Content;
 
   const shipList = document.createElement("ul");
@@ -203,6 +205,7 @@ const boardGuide = function (color) {
 
   const warnSign = document.createElement("span");
   warnSign.classList.add("warn__sign");
+  warnSign.draggable = false;
   warnSign.textContent = "Right click on any grid to change axis";
 
   functionBox.append(autoPlaceBtn, clearBoardBtn);
@@ -283,16 +286,35 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
       });
     }
   }
+
+  let adjacentPosition = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ]; //all around coordinates of a ship fragment
+
+  let collisionCheck = gameboard.adjacentShip(
+    currentPos.x,
+    currentPos.y,
+    shipLength,
+    axis,
+    adjacentPosition,
+  );
    
   let pathLength = pathTracker.length;
   while (pathTracker.length) {
     let currentPos = pathTracker.shift();
     const position = currentPos.x + currentPos.y;
-    if (pathLength === shipLength && status === "mouseover") {
+    if (pathLength === shipLength && status === "mouseover" && collisionCheck) {
       boxes[position].style.backgroundColor = "var(--valid)";
-    } else if(pathLength === shipLength && status === "dragenter"){
+    } else if(pathLength === shipLength && status === "dragenter" && collisionCheck){
       boxes[position].style.backgroundColor = "var(--valid)";
-    } else if (pathLength < shipLength) {
+    } else if (pathLength < shipLength && !collisionCheck) {
       boxes[position].style.backgroundColor = "var(--target)";
     }
 
@@ -301,7 +323,8 @@ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
       status === "mouseout" ||
       status === "contextmenu" ||
       status === "click" ||
-      status === "dragleave"
+      status === "dragleave" ||
+      status === "drop"
     ) {
       boxes[position].style.removeProperty("background-color");
     }
@@ -477,8 +500,7 @@ const chooseShip = (player) => {
             ship.classList.remove("selected__ship");
           }
         });
-
-        if (!e.currentTarget.classList.contains("had__placed")) {
+       if (!e.currentTarget.classList.contains("had__placed")) {
           e.currentTarget.classList.toggle("selected__ship");
         }
       });
@@ -487,6 +509,7 @@ const chooseShip = (player) => {
 
       //start to drag item
       ship.addEventListener("dragstart", (e) => {
+        e.stopImmediatePropagation();
         ships.forEach((ship) => {
           if (!e.currentTarget.classList.contains("selected__ship")) {
             ship.classList.remove("selected__ship");
@@ -494,20 +517,27 @@ const chooseShip = (player) => {
         });
 
         if (!e.currentTarget.classList.contains("had__placed")) {
-          e.currentTarget.classList.toggle("selected__ship");
+           e.currentTarget.classList.toggle("selected__ship");
         }
+        let shipImg = document.createElement("img");
+        shipImg.src = ship.querySelector(".ship").firstElementChild.src;
+        shipImg.classList.add("drag__image__element");
+        let middleVertical = ship.querySelector(".ship").firstElementChild.getBoundingClientRect().height;
+        e.dataTransfer.setDragImage(shipImg, 0, middleVertical / 2);
       });
 
       //drag phase
-      ship.addEventListener("drag", (ev) => {
-        //console.log(ev);
+      ship.addEventListener("drag", (e) => {
+
       }); // --> after that go to drag enter event of board at interactiveBoard function
 
       //end drag phase
-      ship.addEventListener("dragend", (ev) => {
+      ship.addEventListener("dragend", (e) => {
         console.log("end");
+        if (!e.currentTarget.classList.contains("had__placed")) {
+          e.currentTarget.classList.toggle("selected__ship");
+        }
       });
-
 
     });
   } catch {
@@ -579,13 +609,29 @@ const interactWithBoard = function(player, mode){
       });
 
       box.addEventListener("dragleave", (e) => {
-        console.log("enter grid");
+        console.log("leave grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
       });
 
       box.addEventListener("dragover", (e) => {
         e.preventDefault();
       });
+
+      //drop phase
+      box.addEventListener("drop", (e) => {
+        takeShipFromList(e.currentTarget, e.type, player, axis[current]);
+        placeShipOnBoard(player, e, current);
+        console.log("drop");
+        if (isAllPlace(player)) {
+          if(mode === "2player"){
+            singlePlay.call({singleplayList: this.interactList}, player, mode);
+          }
+          else{
+            singlePlay(player, mode);
+          }
+        }        
+      });
+      
     });
 
     //board guide function

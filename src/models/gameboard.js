@@ -29,14 +29,14 @@ export class Gameboard {
     //place ship horizontal
     if (this.board[x].length >= ship.length + y && horizontal) {
       //to create the position and length for a ship
-      let collisionCheck = this.adjacentShip(
+      let notCollisionCheck = this.adjacentShip(
         x,
         y,
         ship.length,
         "horizontal",
         adjacentPosition,
       );
-      if (collisionCheck) {
+      if (notCollisionCheck) {
         ship.axis = "horizontal";
         for (let i = 0; i < ship.length; i++) {
           this.board[x][y + i] = 1;

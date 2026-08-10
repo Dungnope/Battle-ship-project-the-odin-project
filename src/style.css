@@ -26,6 +26,14 @@ body{
     background-size: cover;
 }
 
+.drag__image__element{
+    position: absolute;
+    left: -10000px;
+    width: 120px;
+    height: 230px;
+    z-index: 3;
+}
+
 .main{
     text-align: center;
     width: 100%;
