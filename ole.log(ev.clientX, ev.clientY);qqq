@@ -1,0 +1,48 @@
+[33mcommit 85d2f2b632c215cb5282fe8b6afbd77f0d2d432f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtest_drag_function[m[33m)[m
+Author: unknown <140576667+Dungnope@users.noreply.github.com>
+Date:   Tue Aug 11 17:34:53 2026 +0700
+
+    delete drag and drop console.log
+
+[1mdiff --git a/src/UI_components/board.js b/src/UI_components/board.js[m
+[1mindex 8815775..404f28f 100644[m
+[1m--- a/src/UI_components/board.js[m
+[1m+++ b/src/UI_components/board.js[m
+[36m@@ -275,7 +275,6 @@[m [mconst takeShipFromList = (eventTarget, eventType, player, axis) => {[m
+ //hover with mark the ship size[m
+ const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {[m
+   let pathTracker = []; //tracker by condition[m
+[31m-  console.log("hover");[m
+   for (let i = 0; i < shipLength; i++) {[m
+     //check valid horizontal[m
+     if (currentPos.y + i < gameboard.column && axis === "horizontal") {[m
+[36m@@ -539,7 +538,6 @@[m [mconst chooseShip = (player) => {[m
+ [m
+       //end drag phase[m
+       ship.addEventListener("dragend", (e) => {[m
+[31m-        console.log("end");[m
+         if (!e.currentTarget.classList.contains("had__placed")) {[m
+           e.currentTarget.classList.toggle("selected__ship");[m
+         }[m
+[36m@@ -609,13 +607,11 @@[m [mconst interactWithBoard = function(player, mode){[m
+ [m
+       //use for target attachment item when an draggable item collision this element[m
+       box.addEventListener("dragenter", (e) => {[m
+[31m-        console.log("enter grid");[m
+         takeShipFromList(e.currentTarget, e.type, player, axis[current]);[m
+         e.stopImmediatePropagation();[m
+       });[m
+ [m
+       box.addEventListener("dragleave", (e) => {[m
+[31m-        console.log("leave grid");[m
+         takeShipFromList(e.currentTarget, e.type, player, axis[current]);[m
+         e.stopImmediatePropagation();[m
+       });[m
+[36m@@ -628,7 +624,6 @@[m [mconst interactWithBoard = function(player, mode){[m
+       box.addEventListener("drop", (e) => {[m
+         takeShipFromList(e.currentTarget, e.type, player, axis[current]);[m
+         placeShipOnBoard(player, e, current);[m
+[31m-        console.log("drop");[m
+         if (isAllPlace(player)) {[m
+           if(mode === "2player"){[m
+             singlePlay.call({singleplayList: this.interactList}, player, mode);[m

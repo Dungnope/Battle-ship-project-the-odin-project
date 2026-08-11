@@ -275,6 +275,7 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
 //hover with mark the ship size
 const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
   let pathTracker = []; //tracker by condition
+  console.log("hover");
   for (let i = 0; i < shipLength; i++) {
     //check valid horizontal
     if (currentPos.y + i < gameboard.column && axis === "horizontal") {
@@ -538,6 +539,7 @@ const chooseShip = (player) => {
 
       //end drag phase
       ship.addEventListener("dragend", (e) => {
+        console.log("end");
         if (!e.currentTarget.classList.contains("had__placed")) {
           e.currentTarget.classList.toggle("selected__ship");
         }
@@ -607,11 +609,13 @@ const interactWithBoard = function(player, mode){
 
       //use for target attachment item when an draggable item collision this element
       box.addEventListener("dragenter", (e) => {
+        console.log("enter grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         e.stopImmediatePropagation();
       });
 
       box.addEventListener("dragleave", (e) => {
+        console.log("leave grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         e.stopImmediatePropagation();
       });
@@ -624,6 +628,7 @@ const interactWithBoard = function(player, mode){
       box.addEventListener("drop", (e) => {
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         placeShipOnBoard(player, e, current);
+        console.log("drop");
         if (isAllPlace(player)) {
           if(mode === "2player"){
             singlePlay.call({singleplayList: this.interactList}, player, mode);
