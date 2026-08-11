@@ -263,7 +263,7 @@ export const versusPlayGame = (player1, player2) => {
   let turn = player1.id;
   let isClickAble = true;
   let isMiss = false;
-  player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
+  player2Board.querySelector(".wrapper__grid").classList.add("neon__border");
   //let player1 fire first
   boxesPlayer1.forEach((box, idx) => {
     box.addEventListener("click", async (e) => {
@@ -294,8 +294,8 @@ export const versusPlayGame = (player1, player2) => {
               //add time before show end game
               setTimeout(() =>{showEndGame.call({mode: "2player"}, player1, player2);}, 2000);
             } else if(isMiss) {
-              player1Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
-              player2Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+              player2Board.querySelector(".wrapper__grid").classList.add("neon__border");
+              player1Board.querySelector(".wrapper__grid").classList.remove("neon__border");
               turn = player1.id;
               isClickAble = !isClickAble;
               isMiss = false; //make default value
@@ -336,8 +336,8 @@ export const versusPlayGame = (player1, player2) => {
               //add time before show end game
               setTimeout(() =>{showEndGame.call({mode: "2player"}, player1, player2);}, 2000);
             } else if(isMiss) {
-              player2Board.querySelector(".wrapper__grid").style.outline = "8px solid var(--valid)";
-              player1Board.querySelector(".wrapper__grid").style.removeProperty("outline");
+              player1Board.querySelector(".wrapper__grid").classList.add("neon__border");
+              player2Board.querySelector(".wrapper__grid").classList.remove("neon__border");
               turn = player2.id;
               isClickAble = !isClickAble;
               isMiss = false;
