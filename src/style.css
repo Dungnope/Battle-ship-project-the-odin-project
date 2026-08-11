@@ -24,14 +24,22 @@ body{
     place-content: center;
     background-repeat: no-repeat;
     background-size: cover;
+    position: relative;
 }
 
-.drag__image__element{
-    position: absolute;
-    left: -10000px;
-    width: 120px;
-    height: 230px;
-    z-index: 3;
+.neon__border{
+  background: #121212;
+  outline: 4px solid var(--opponent-background);
+  
+  /* The Secret: Layered box-shadows */
+  /* format: x y blur spread color */
+  box-shadow: 
+    0 0 5px #fff,                /* Sharp white inner core */
+    0 0 10px #ff007f,            /* Close intense colored glow */
+    0 0 20px #ff007f,            /* Mid-range color bleed */
+    0 0 40px #ff007f,            /* Wide ambient room glow */
+    inset 0 0 10px #ff007f;      /* Inward reflection */
+
 }
 
 .main{

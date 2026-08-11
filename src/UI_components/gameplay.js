@@ -122,8 +122,12 @@ export const playerSetup = function(playerName, mode = null){
 export const botPlayGame = (player, bot) => {
   const botBoard = document.getElementById(`${bot.id}`);
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
+  const innerBoardBot = botBoard.querySelector(".wrapper__grid");
+
   let isValid = {miss: false, hasClicked: false, turn: player.constructor.name, clickNumber: 0};
-  let mode = "bot"
+  let mode = "bot";
+
+  innerBoardBot.classList.add("neon__border");
   // play turn by turn
   botField.forEach((box) => {
     box.addEventListener("click", async (e) => {
@@ -134,10 +138,16 @@ export const botPlayGame = (player, bot) => {
           !bot.isWinner && 
           !isValid.miss
           ) {
-        //attack bot
 
+        //attack bot
         let dx = Number(e.currentTarget.getAttribute("x"));
         let dy = Number(e.currentTarget.getAttribute("y"));
+
+        //add mark for opponent turn
+        if(!innerBoardBot.classList.contains("neon__border")){
+          innerBoardBot.classList.toggle("neon__border");
+        };
+
         //check whether player click on pure stated position or not
         if (
           bot.gameboard.board[dx][dy] === 0 || //only allow attack on status 0 and 1
@@ -163,6 +173,7 @@ export const botPlayGame = (player, bot) => {
               setTimeout(() =>{showEndGame.call({"mode": mode}, player, bot);}, 2000);
             } else if(isValid.miss){
               isValid.turn = "Bot";
+              innerBoardBot.classList.toggle("neon__border");
             }
             else{ //if just hit a target, continue fire
               isValid.hasClicked = !isValid.hasClicked;
@@ -181,6 +192,14 @@ export const botPlayGame = (player, bot) => {
 };
 
 export const botAutoPlay = async function(bot, player){
+    const innerBoardPlayer = document.querySelector(`#${player.id} .wrapper__grid`);
+    const innerBoardBot = document.querySelector(`#${bot.id} .wrapper__grid`);
+
+    innerBoardPlayer.classList.toggle("neon__border");
+
+    if(!innerBoardPlayer.classList.contains("neon__border")){
+      innerBoardPlayer.classList.toggle("neon__border");
+    }
       let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
       let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
       //check position has used or not
@@ -206,6 +225,8 @@ export const botAutoPlay = async function(bot, player){
         } else if(this.miss) {
           this.turn = "Player";
           this.clickNumber++;
+          innerBoardPlayer.classList.toggle("neon__border");
+          innerBoardBot.classList.add("neon__border");
         }
         else{
           botAutoPlay.call(this, bot, player);
