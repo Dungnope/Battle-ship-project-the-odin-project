@@ -602,6 +602,7 @@ const interactWithBoard = function(player, mode){
         } else {
           current = 0;
         }
+        changeAxisBtn.textContent = `Axis: ${axis[current]}`;
         e.preventDefault();
       });
 
