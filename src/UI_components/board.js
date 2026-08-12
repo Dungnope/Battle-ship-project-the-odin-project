@@ -197,8 +197,18 @@ const boardGuide = function (color) {
   const clearBoardBtn = document.createElement("button");
   clearBoardBtn.classList.add("function__btn--clear");
   clearBoardBtn.textContent = "Clear All";
-
+  
   clearBoardBtn.setAttribute(
+    "style",
+    `border: 1px solid ${color}; outline: 1px solid ${color};color: ${color};`,
+  );
+
+  const changeAxis = document.createElement("button");
+  changeAxis.classList.add("function__btn--axis");
+  this.axis = "horizontal";
+  changeAxis.textContent = `Axis: ${this.axis}`;
+
+  changeAxis.setAttribute(
     "style",
     `border: 1px solid ${color}; outline: 1px solid ${color};color: ${color};`,
   );
@@ -208,7 +218,7 @@ const boardGuide = function (color) {
   warnSign.draggable = false;
   warnSign.textContent = "Right click on any grid to change axis";
 
-  functionBox.append(autoPlaceBtn, clearBoardBtn);
+  functionBox.append(autoPlaceBtn, clearBoardBtn, changeAxis);
 
   //add margin bottom for shiplist
   const bottomMargin = document.createElement("div");
@@ -662,6 +672,31 @@ const interactWithBoard = function(player, mode){
     clearBoardBtn.addEventListener("click", (e) => {
       clearAllShip(player);
       e.stopImmediatePropagation();
+    });
+
+    //change axis
+    const changeAxisBtn = boardData(player).board.querySelector(".function__btn--axis");
+    const changeAxisBtnColor = clearBoardBtn.style.color;
+
+    //change style when hover
+    changeAxisBtn.addEventListener("mouseover", function (e) {
+      e.currentTarget.style.backgroundColor = changeAxisBtnColor;
+      e.currentTarget.style.color = "var(--background)";
+    });
+
+    changeAxisBtn.addEventListener("mouseout", function (e) {
+      e.currentTarget.style.backgroundColor = "transparent";
+      e.currentTarget.style.color = changeAxisBtnColor;
+    });
+
+    //click to change axis
+    changeAxisBtn.addEventListener("click", function (e) {
+        if (!current) {
+          current = 1;
+        } else {
+          current = 0;
+        }
+        changeAxisBtn.textContent = `Axis: ${axis[current]}`;
     });
   } catch(error) {
     console.log(error);
