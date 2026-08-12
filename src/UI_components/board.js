@@ -197,8 +197,18 @@ const boardGuide = function (color) {
   const clearBoardBtn = document.createElement("button");
   clearBoardBtn.classList.add("function__btn--clear");
   clearBoardBtn.textContent = "Clear All";
-
+  
   clearBoardBtn.setAttribute(
+    "style",
+    `border: 1px solid ${color}; outline: 1px solid ${color};color: ${color};`,
+  );
+
+  const changeAxis = document.createElement("button");
+  changeAxis.classList.add("function__btn--axis");
+  this.axis = "horizontal";
+  changeAxis.textContent = `Axis: ${this.axis}`;
+
+  changeAxis.setAttribute(
     "style",
     `border: 1px solid ${color}; outline: 1px solid ${color};color: ${color};`,
   );
@@ -208,7 +218,7 @@ const boardGuide = function (color) {
   warnSign.draggable = false;
   warnSign.textContent = "Right click on any grid to change axis";
 
-  functionBox.append(autoPlaceBtn, clearBoardBtn);
+  functionBox.append(autoPlaceBtn, clearBoardBtn, changeAxis);
 
   //add margin bottom for shiplist
   const bottomMargin = document.createElement("div");
@@ -275,7 +285,6 @@ const takeShipFromList = (eventTarget, eventType, player, axis) => {
 //hover with mark the ship size
 const shipHover = (shipLength, boxes, currentPos, status, gameboard, axis) => {
   let pathTracker = []; //tracker by condition
-  console.log("hover");
   for (let i = 0; i < shipLength; i++) {
     //check valid horizontal
     if (currentPos.y + i < gameboard.column && axis === "horizontal") {
@@ -539,7 +548,6 @@ const chooseShip = (player) => {
 
       //end drag phase
       ship.addEventListener("dragend", (e) => {
-        console.log("end");
         if (!e.currentTarget.classList.contains("had__placed")) {
           e.currentTarget.classList.toggle("selected__ship");
         }
@@ -609,13 +617,11 @@ const interactWithBoard = function(player, mode){
 
       //use for target attachment item when an draggable item collision this element
       box.addEventListener("dragenter", (e) => {
-        console.log("enter grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         e.stopImmediatePropagation();
       });
 
       box.addEventListener("dragleave", (e) => {
-        console.log("leave grid");
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         e.stopImmediatePropagation();
       });
@@ -628,7 +634,6 @@ const interactWithBoard = function(player, mode){
       box.addEventListener("drop", (e) => {
         takeShipFromList(e.currentTarget, e.type, player, axis[current]);
         placeShipOnBoard(player, e, current);
-        console.log("drop");
         if (isAllPlace(player)) {
           if(mode === "2player"){
             singlePlay.call({singleplayList: this.interactList}, player, mode);
@@ -667,6 +672,31 @@ const interactWithBoard = function(player, mode){
     clearBoardBtn.addEventListener("click", (e) => {
       clearAllShip(player);
       e.stopImmediatePropagation();
+    });
+
+    //change axis
+    const changeAxisBtn = boardData(player).board.querySelector(".function__btn--axis");
+    const changeAxisBtnColor = clearBoardBtn.style.color;
+
+    //change style when hover
+    changeAxisBtn.addEventListener("mouseover", function (e) {
+      e.currentTarget.style.backgroundColor = changeAxisBtnColor;
+      e.currentTarget.style.color = "var(--background)";
+    });
+
+    changeAxisBtn.addEventListener("mouseout", function (e) {
+      e.currentTarget.style.backgroundColor = "transparent";
+      e.currentTarget.style.color = changeAxisBtnColor;
+    });
+
+    //click to change axis
+    changeAxisBtn.addEventListener("click", function (e) {
+        if (!current) {
+          current = 1;
+        } else {
+          current = 0;
+        }
+        changeAxisBtn.textContent = `Axis: ${axis[current]}`;
     });
   } catch(error) {
     console.log(error);
