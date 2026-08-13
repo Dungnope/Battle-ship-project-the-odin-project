@@ -60,4 +60,8 @@ export class Bot extends Player {
       new Ship(2), //patrol
     ];
   }
+
+  adjacentfire(){
+    
+  }
 }
