@@ -1,4 +1,4 @@
-import { Ship } from "../src/ship";
+import { Ship } from "../src/models/ship";
 
 describe("Ship functions", () => {
   let shipTest = new Ship(20);

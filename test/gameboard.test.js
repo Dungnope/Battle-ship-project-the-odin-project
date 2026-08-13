@@ -1,5 +1,5 @@
-import { Gameboard } from "../src/gameboard";
-import { Ship } from "../src/ship";
+import { Gameboard } from "../src/models/gameboard";
+import { Ship } from "../src/models/ship";
 
 describe("board", () => {
   let newboard;
@@ -53,7 +53,8 @@ describe("board", () => {
   });
 
   test("out of board", () => {
-    expect(newboard.placeShip(new Ship(4), 3, 2, false)).toBe("out of board");
+    expect(newboard.placeShip(new Ship(4), 3, 2, false)).toBe(false);
+    //false mean can not place ship mean out of board or collison
   });
 
   test("collision ship", () => {

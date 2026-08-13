@@ -158,7 +158,7 @@ export const botPlayGame = (player, bot) => {
           isValid.hasClicked = !isValid.hasClicked;
           bot.gameboard.receiveAttack(dx, dy);
           await renderShip.call({ x: dx, y: dy }, bot, false);
-          await new Promise(() => {
+          await new Promise((resolve) => {
 
             //check whether miss or not
             if(bot.gameboard.missedAttacksPos.has(`${dx * 10 + dy}`)){
@@ -184,7 +184,8 @@ export const botPlayGame = (player, bot) => {
             if (!player.isWinner && !bot.isWinner && isValid.turn === "Bot"){
               botAutoPlay.call(isValid, bot, player);
             }
-          });
+            resolve();
+          }).catch((reject) => {});
         }
       }
     });
@@ -192,6 +193,7 @@ export const botPlayGame = (player, bot) => {
 };
 
 export const botAutoPlay = async function(bot, player){
+    let mode = "bot";
     const innerBoardPlayer = document.querySelector(`#${player.id} .wrapper__grid`);
     const innerBoardBot = document.querySelector(`#${bot.id} .wrapper__grid`);
 
@@ -221,7 +223,7 @@ export const botAutoPlay = async function(bot, player){
         
         if (checkWinner(player, bot)) {
           //add time before show end game
-          setTimeout(() =>{showEndGame.call({"mode": mode}, player, bot);}, 2000);
+          setTimeout(() =>{showEndGame.call({"mode": mode}, bot, player);}, 2000);
         } else if(this.miss) {
           this.turn = "Player";
           this.clickNumber++;
@@ -239,7 +241,8 @@ export const botAutoPlay = async function(bot, player){
         if(this.hasClicked){
           this.hasClicked = !this.hasClicked;
         }
-      });
+        resolve();
+      }).catch((reject) => {});
 };
 
 export const versusPlayGame = (player1, player2) => {
