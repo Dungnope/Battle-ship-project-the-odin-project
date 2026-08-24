@@ -5,9 +5,11 @@ export class Gameboard {
     this.board = new Array(this.row)
       .fill()
       .map(() => Array(this.column).fill(0));
-    this.missedAttacksPos = new Map();
-    this.shipList = [];
-    this.sunkShip = [];
+    this.missedAttacksPos = new Map(); //position doesn't have ship
+    this.shipList = []; //ship list after place ship
+    this.sunkShip = []; //ship list after sunk
+    this.queueAttackPos = []; //position of a single piece ship
+    this.getOpponentHitPos = new Map(); //any hits that shot accuracy a ship fragment of opponent
   }
 
   placeShip(ship, x, y, horizontal = true) {
@@ -144,6 +146,8 @@ export class Gameboard {
             let shipIndex = this.shipList.indexOf(this.shipList[i]);
             this.sunkShip.push(this.shipList.at(shipIndex));
             this.shipList.splice(shipIndex, 1);
+            this.getOpponentHitPos.clear(); //after a ship sunk, clear old data for next ship
+            this.queueAttackPos.splice(0, this.queueAttackPos.length); // refresh queueAttackPos
           }
           break;
         }

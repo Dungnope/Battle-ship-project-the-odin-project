@@ -196,24 +196,24 @@ export const botAutoPlay = async function(bot, player){
     let mode = "bot";
     const innerBoardPlayer = document.querySelector(`#${player.id} .wrapper__grid`);
     const innerBoardBot = document.querySelector(`#${bot.id} .wrapper__grid`);
-
     innerBoardPlayer.classList.toggle("neon__border");
-
+    
     if(!innerBoardPlayer.classList.contains("neon__border")){
       innerBoardPlayer.classList.toggle("neon__border");
     }
-      let xRan = Math.round(Math.random() * (player.gameboard.row - 1));
-      let yRan = Math.round(Math.random() * (player.gameboard.row - 1));
-      //check position has used or not
-      while (
-        this.clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
-        (player.gameboard.board[xRan][yRan] === 2 ||
-          player.gameboard.board[xRan][yRan] === 3)
-      ) {
-        xRan = Math.round(Math.random() * (player.gameboard.row - 1));
-        yRan = Math.round(Math.random() * (player.gameboard.row - 1));
-      }
+    
+    //check position has used or not
+    let xRan = null, yRan = null;
+    [xRan, yRan] = bot.adjacentSlot(player.gameboard);
+    while (
+      this.clickNumber < 100 && //use this to avoid fatal stackoverflow in the last game
+      (player.gameboard.board[xRan][yRan] === 2 || player.gameboard.board[xRan][yRan] === 3)){
+        [xRan, yRan] = bot.adjacentSlot(player.gameboard);
+    }
+
+      //player receive fire
       player.gameboard.receiveAttack(xRan, yRan);
+
       await renderShip.call({ x: xRan, y: yRan }, player, false);
       return await new Promise((resolve) => {
       //check whether miss or not
@@ -236,13 +236,13 @@ export const botAutoPlay = async function(bot, player){
         //go to default value
         this.miss = false;
         resolve("Done");
-      }).then(() => {
+      }).then((data) => {
         //check in case bot hit a target
         if(this.hasClicked){
           this.hasClicked = !this.hasClicked;
         }
-        resolve();
-      }).catch((reject) => {});
+        return "complete an animation sequence";
+      }).catch((reject) => {console.log(reject);});
 };
 
 export const versusPlayGame = (player1, player2) => {
@@ -483,7 +483,6 @@ export const mainForSinglePlayer = () => {
     });
   };
 };
-
 
 const checkWinner = (entity1, entity2) => {
   //check whether all ship collapsed or not
