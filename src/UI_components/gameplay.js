@@ -11,6 +11,7 @@ import {
 import backgroundImg from "../assets/battle_ship_background.webp";
 import beachBackgroundImg from "../assets/beach_background.webp";
 import {shipAppeal } from "./animation.js";
+import { botHackerWinner } from "../miscellaneous.js";
 
 export const fastPlayGameBot = () => {
   let player1 = new Player("Parker", new Gameboard(10, 10));
@@ -21,7 +22,19 @@ export const fastPlayGameBot = () => {
   createBoard(bot, "aqua", false);
   renderShip.call({ autoPlace: true }, player1, true);
   //renderShip.call({ autoPlace: true }, bot); //to show or hide ship
-  botPlayGame(player1, bot);
+
+  //to player normal
+  //botPlayGame(player1, bot);
+
+  //to bot win immediate
+  let result = botHackerWinner(player1);
+  console.log(result);
+  for (const item of result) {
+    player1.gameboard.receiveAttack(item[0], item[1]);
+    if(checkWinner(player1, bot)){
+      showEndGame(player1, bot);
+    }
+  }
 };
 
 export const fastPlayGameLocal = () => {
@@ -35,7 +48,7 @@ export const fastPlayGameLocal = () => {
   renderShip.call({ autoPlace: true }, player2, true); //to show or hide ship
 };
 
-//main menu of game
+//main menu of game (not use yet)
 export const gameMenu = () => {
   let background = document.querySelector("body");
   background.style.backgroundImage = `url(${backgroundImg})`;
@@ -244,6 +257,7 @@ export const botAutoPlay = async function(bot, player){
         return "complete an animation sequence";
       }).catch((reject) => {console.log(reject);});
 };
+
 
 export const versusPlayGame = (player1, player2) => {
   const colorBoard1 = boardData(player1).board.querySelector(
@@ -511,8 +525,11 @@ const showEndGame = function(entity1, entity2){
   let blur__screenLose;
   let playAgain = document.createElement("button");
   let hiddenBlur = document.createElement("button");
+  let returnMainMenu = document.createElement("button");
   playAgain.textContent = "Play again";
   playAgain.classList.add("play__again");
+  returnMainMenu.textContent = "Main menu";
+  returnMainMenu.classList.add("main__menu__btn");
   hiddenBlur.textContent = "Lose reveal: off";
   hiddenBlur.classList.add("hidden__blur");
 
@@ -545,6 +562,10 @@ const showEndGame = function(entity1, entity2){
     }
   });
 
+  returnMainMenu.addEventListener("click", (e) => {
+    mainForSinglePlayer();
+  });
+
   hiddenBlur.addEventListener("click", (e) => {
     let takeBlurScreen = e.currentTarget.parentNode.querySelector(".end__screen");
     takeBlurScreen.classList.toggle("blur__screen");
@@ -559,7 +580,7 @@ const showEndGame = function(entity1, entity2){
   });
 
   setTimeout(() => {
-    document.querySelector(".container").append(playAgain);
+    document.querySelector(".container").append(playAgain, returnMainMenu);
     entity1Board.innerHTML += blur__screenWin;
     entity2Board.innerHTML += blur__screenLose;
     entity2Board.append(hiddenBlur);
