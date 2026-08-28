@@ -398,7 +398,6 @@ function renderShip(playerBoard, isPrepare = true) {
     // }
   } else if (this.autoPlace) {
     const allShipOnBoard = playerBoard.gameboard.shipList;
-    console.log(playerBoard.gameboard);
     allShipOnBoard.forEach((ship) => {
       const shipCoordinate = ship.coordinate;
       for (let i = 0; i < shipCoordinate.length; i++) {

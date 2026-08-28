@@ -12,6 +12,7 @@ import backgroundImg from "../assets/battle_ship_background.webp";
 import beachBackgroundImg from "../assets/beach_background.webp";
 import {shipAppeal } from "./animation.js";
 import { botHackerWinner } from "../miscellaneous.js";
+import { AudioManager, backgroundSFX } from "./audioManager.js";
 
 export const fastPlayGameBot = () => {
   let player1 = new Player("Parker", new Gameboard(10, 10));
@@ -258,7 +259,6 @@ export const botAutoPlay = async function(bot, player){
       }).catch((reject) => {console.log(reject);});
 };
 
-
 export const versusPlayGame = (player1, player2) => {
   const colorBoard1 = boardData(player1).board.querySelector(
     ".wrapper__grid",
@@ -419,6 +419,13 @@ export const singlePlay = function (player, mode = "bot") { //default is play wi
 };
 
 export const mainForSinglePlayer = () => {
+  const audioPlay = new AudioManager();
+  //use IIFE function for audio loading
+  (async (loadAudio) => {
+    await audioPlay.loadAll();
+  })();
+
+  backgroundSFX();
   let background = document.querySelector("body");
   background.style.backgroundImage = `url(${beachBackgroundImg})`;
   let selectMode = `
