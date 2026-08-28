@@ -32,7 +32,7 @@ export const fastPlayGameBot = () => {
   for (const item of result) {
     player1.gameboard.receiveAttack(item[0], item[1]);
     if(checkWinner(player1, bot)){
-      showEndGame(player1, bot);
+      showEndGame.call({"mode": "bot"}, player1, bot);
     }
   }
 };
@@ -580,7 +580,7 @@ const showEndGame = function(entity1, entity2){
   });
 
   setTimeout(() => {
-    document.querySelector(".container").append(playAgain, returnMainMenu);
+    document.querySelector(".container").append(playAgain);
     entity1Board.innerHTML += blur__screenWin;
     entity2Board.innerHTML += blur__screenLose;
     entity2Board.append(hiddenBlur);

@@ -658,6 +658,19 @@ body{
     
 }
 
+.main__menu__btn{
+    padding: 20px 36px;
+    display: block;
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    font-size: 1.6em;
+    font-weight: 600;
+
+}
+
 .hidden__blur{
     background-color: var(--target);
     outline: 4px solid var(--text);
