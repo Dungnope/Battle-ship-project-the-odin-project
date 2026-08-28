@@ -418,6 +418,7 @@ export const singlePlay = function (player, mode = "bot") { //default is play wi
 };
 
 export const mainForSinglePlayer = async () => {
+  console.log("test deployment second time");
   let background = document.querySelector("body");
   background.style.backgroundImage = `url(${beachBackgroundImg})`;
   let selectMode = `
