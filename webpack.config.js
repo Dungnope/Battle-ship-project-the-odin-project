@@ -4,9 +4,12 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 
 export default {
   mode: "development",
-  entry: "./src/index.js",
+  entry: {
+    index: "./src/index.js",
+    miscellaneous: "./src/miscellaneous.js",
+  },
   output: {
-    filename: "main.js",
+    filename: '[name].bundle.js',
     path: path.resolve(import.meta.dirname, "dist"),
     clean: true,
   },

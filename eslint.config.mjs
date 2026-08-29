@@ -27,6 +27,7 @@ export default defineConfig([
       "no-unused-private-class-members": "warn",
       "no-useless-assignment": "warn",
       "no-debugger": "off",
+      "no-useless-escape": "warn",
     },
   },
 ]);
