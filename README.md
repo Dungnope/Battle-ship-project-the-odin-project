@@ -1,8 +1,6 @@
-# Battle-ship-project-the-odin-project
+# 🏴‍☠️ Battle-ship-project-the-odin-project
 
 <div align="center">
-
-# 🏴‍☠️ Battleship
 
 A browser-based Battleship game built with JavaScript.
 
@@ -68,8 +66,8 @@ This project helped me practice:
 4. Continue attacking until all enemy ships are destroyed.
 5. Sink all enemy ships to win the game.
 
-```md
 ## 📁 Project Structure
+```md
 
 src/
 ├── assets/              # Game assets such as images and sounds
