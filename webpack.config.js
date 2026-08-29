@@ -3,13 +3,12 @@ import path from "node:path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
 export default {
-  mode: "development",
+  mode: "production",
   entry: {
     index: "./src/index.js",
-    miscellaneous: "./src/miscellaneous.js",
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].js',
     path: path.resolve(import.meta.dirname, "dist"),
     clean: true,
   },

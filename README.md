@@ -57,7 +57,7 @@ This project helped me practice:
 - Managing game state (not too much details)
 - Webpack module bundling
 - Deploying a web application with GitHub Pages
-
+- `Avoiding reliance on `constructor.name` for application logic`
 ## ⚓ How to Play
 
 1. Place your ships on the board.

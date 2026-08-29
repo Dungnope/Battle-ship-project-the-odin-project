@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "test": "jest ./test --verbose ",
-    "build": "webpack --mode production",
+    "build": "webpack",
     "dev": "webpack --mode development"
     
   },

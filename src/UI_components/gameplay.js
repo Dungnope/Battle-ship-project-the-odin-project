@@ -137,9 +137,9 @@ export const botPlayGame = (player, bot) => {
   const botField = botBoard.querySelectorAll(".wrapper__grid .box");
   const innerBoardBot = botBoard.querySelector(".wrapper__grid");
 
-  let isValid = {miss: false, hasClicked: false, turn: player.constructor.name, clickNumber: 0};
+  let isValid = {miss: false, hasClicked: false, turn: "Player", clickNumber: 0};
   let mode = "bot";
-
+  console.log(isValid.turn);
   innerBoardBot.classList.add("neon__border");
   // play turn by turn
   botField.forEach((box) => {
