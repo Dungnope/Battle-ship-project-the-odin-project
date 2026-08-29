@@ -8,7 +8,7 @@ export default {
     index: "./src/index.js",
   },
   output: {
-    filename: '[name].js',
+    filename: 'main.js',
     path: path.resolve(import.meta.dirname, "dist"),
     clean: true,
   },
