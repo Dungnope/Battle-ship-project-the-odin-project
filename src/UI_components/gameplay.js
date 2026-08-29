@@ -139,7 +139,6 @@ export const botPlayGame = (player, bot) => {
 
   let isValid = {miss: false, hasClicked: false, turn: "Player", clickNumber: 0};
   let mode = "bot";
-  console.log(isValid.turn);
   innerBoardBot.classList.add("neon__border");
   // play turn by turn
   botField.forEach((box) => {
